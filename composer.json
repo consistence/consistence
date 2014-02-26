@@ -1,0 +1,13 @@
+{
+	"name": "consistence/consistence",
+	"description": "Consistence - consistent approach and additions to PHP's functionality",
+	"keywords": ["enum", "array", "time", "format", "strict", "type", "check"],
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Vašek Purchart",
+			"email": "me@vasekpurchart.cz",
+			"homepage": "http://vasekpurchart.cz"
+		}
+	]
+}

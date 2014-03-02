@@ -244,4 +244,24 @@ class ArrayType extends \Consistence\ObjectPrototype
 		return true;
 	}
 
+	/**
+	 * Removes key=>value pairs from given array if the key is present in $keys as value
+	 *
+	 * @param mixed[] $haystack reference to array
+	 * @param mixed[] $keys keys to be removed from $haystack
+	 * @return boolean returns true if the array was modified
+	 */
+	public static function removeKeys(array &$haystack, array $keys)
+	{
+		$modified = false;
+		foreach ($keys as $key) {
+			if (isset($haystack[$key])) {
+				unset($haystack[$key]);
+				$modified = true;
+			}
+		}
+
+		return $modified;
+	}
+
 }

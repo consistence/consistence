@@ -244,4 +244,19 @@ class ArrayTypeTest extends \Consistence\TestCase
 		$this->assertCount(3, $values);
 	}
 
+	public function testRemoveKeys()
+	{
+		$values = [1, 2, 3];
+		$this->assertTrue(ArrayType::removeKeys($values, [0, 2]));
+		$this->assertCount(1, $values);
+		$this->assertSame(2, $values[1]);
+	}
+
+	public function testRemoveKeysNoChange()
+	{
+		$values = [1, 2, 3];
+		$this->assertFalse(ArrayType::removeKeys($values, [4, 5]));
+		$this->assertCount(3, $values);
+	}
+
 }

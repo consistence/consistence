@@ -19,6 +19,15 @@ class KeyValuePair extends \Consistence\ObjectPrototype
 	 */
 	public function __construct($key, $value)
 	{
+		$this->setPair($key, $value);
+	}
+
+	/**
+	 * @param integer|string $key
+	 * @param mixed $value
+	 */
+	protected function setPair($key, $value)
+	{
 		Type::checkType($key, 'integer|string');
 		$this->key = $key;
 		$this->value = $value;

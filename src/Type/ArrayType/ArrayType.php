@@ -164,6 +164,27 @@ class ArrayType extends \Consistence\ObjectPrototype
 	}
 
 	/**
+	 * Filters arrays by callback(\Consistence\Type\ArrayType\KeyValuePair)
+	 *
+	 * @param mixed[] $haystack
+	 * @param \Closure $callback
+	 * @return mixed[] new filtered array
+	 */
+	public static function filterByCallback(array $haystack, Closure $callback)
+	{
+		$filtered = [];
+		$keyValuePair = new KeyValuePairMutable(0, 0);
+		foreach ($haystack as $key => $value) {
+			$keyValuePair->setPair($key, $value);
+			if ($callback($keyValuePair)) { // not strict comparison to be consistent with array_filter behavior
+				$filtered[$key] = $value;
+			}
+		}
+
+		return $filtered;
+	}
+
+	/**
 	 * Wrapper for PHP array_filter, executes loose comparison
 	 *
 	 * @param mixed[] $haystack

@@ -186,6 +186,16 @@ class ArrayTypeTest extends \Consistence\TestCase
 		});
 	}
 
+	public function testFilterByCallback()
+	{
+		$values = [1, 2, 3];
+		$result = ArrayType::filterByCallback($values, function (KeyValuePair $pair) {
+			return $pair->getKey() > 1;
+		});
+		$this->assertCount(1, $result);
+		$this->assertSame(3, $result[2]);
+	}
+
 	public function testFilterValueByCallback()
 	{
 		$values = [1, 2, 3];

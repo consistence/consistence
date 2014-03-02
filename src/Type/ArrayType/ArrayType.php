@@ -228,4 +228,20 @@ class ArrayType extends \Consistence\ObjectPrototype
 		return array_map($callback, $haystack);
 	}
 
+	/**
+	 * @param mixed[] $haystack reference to array
+	 * @param mixed $value
+	 * @return boolean returns true if the array was modified
+	 */
+	public static function removeValue(array &$haystack, $value)
+	{
+		$key = static::findKey($haystack, $value);
+		if ($key === null) {
+			return false;
+		}
+		unset($haystack[$key]);
+
+		return true;
+	}
+
 }

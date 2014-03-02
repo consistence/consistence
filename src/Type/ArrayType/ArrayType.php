@@ -163,4 +163,16 @@ class ArrayType extends \Consistence\ObjectPrototype
 		return $result;
 	}
 
+	/**
+	 * Wrapper for PHP array_filter, executes loose comparison
+	 *
+	 * @param mixed[] $haystack
+	 * @param \Closure $callback
+	 * @return mixed[] new filtered array
+	 */
+	public static function filterValuesByCallback(array $haystack, Closure $callback)
+	{
+		return array_filter($haystack, $callback);
+	}
+
 }

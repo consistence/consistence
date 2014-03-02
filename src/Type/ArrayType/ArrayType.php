@@ -2,6 +2,8 @@
 
 namespace Consistence\Type\ArrayType;
 
+use Closure;
+
 class ArrayType extends \Consistence\ObjectPrototype
 {
 
@@ -87,6 +89,26 @@ class ArrayType extends \Consistence\ObjectPrototype
 		}
 
 		return $result;
+	}
+
+	/**
+	 * Stops on first occurrence when callback(\Consistence\Type\ArrayType\KeyValuePair) is trueish or returns null
+	 *
+	 * @param mixed[] $haystack
+	 * @param \Closure $callback
+	 * @return \Consistence\Type\ArrayType\KeyValuePair|null
+	 */
+	public static function findByCallback(array $haystack, Closure $callback)
+	{
+		$keyValuePair = new KeyValuePairMutable(0, 0);
+		foreach ($haystack as $key => $value) {
+			$keyValuePair->setPair($key, $value);
+			if ($callback($keyValuePair)) { // not strict comparison to be consistent with array_filter behavior
+				return new KeyValuePair($key, $value);
+			}
+		}
+
+		return null;
 	}
 
 }

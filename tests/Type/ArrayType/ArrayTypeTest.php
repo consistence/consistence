@@ -106,4 +106,24 @@ class ArrayTypeTest extends \Consistence\TestCase
 		ArrayType::getValue($values, 2);
 	}
 
+	public function testFindByCallback()
+	{
+		$values = [1, 2, 3];
+		$result = ArrayType::findByCallback($values, function (KeyValuePair $pair) {
+			return ($pair->getValue() % 2) === 0;
+		});
+		$this->assertInstanceOf(KeyValuePair::class, $result);
+		$this->assertSame(2, $result->getValue());
+		$this->assertSame(1, $result->getKey());
+	}
+
+	public function testFindByCallbackNothingFound()
+	{
+		$values = [1, 2, 3];
+		$result = ArrayType::findByCallback($values, function (KeyValuePair $pair) {
+			return $pair->getValue() > 3;
+		});
+		$this->assertNull($result);
+	}
+
 }

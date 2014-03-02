@@ -26,4 +26,22 @@ class ArrayType extends \Consistence\ObjectPrototype
 		return in_array($needle, $haystack, $strict);
 	}
 
+	/**
+	 * Wrapper for PHP array_search, provides safer default parameter. Returns null when value is not found.
+	 *
+	 * @param mixed[] $haystack
+	 * @param mixed $needle
+	 * @param boolean $strict
+	 * @return integer|string|null
+	 */
+	public static function findKey(array $haystack, $needle, $strict = self::STRICT_TRUE)
+	{
+		$result = array_search($needle, $haystack, $strict);
+		if ($result === false) {
+			return null;
+		}
+
+		return $result;
+	}
+
 }

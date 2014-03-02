@@ -2,7 +2,9 @@
 
 namespace Consistence\Type;
 
+use ArrayObject;
 use DateTimeImmutable;
+use DateTimeInterface;
 
 class TypeTest extends \Consistence\TestCase
 {
@@ -60,6 +62,18 @@ class TypeTest extends \Consistence\TestCase
 				[[[1, 2], ['foo']], 'integer[][]', false],
 				[[['foo']], 'integer[][]', false],
 				[[1, 2], 'integer[][]', false],
+				[new ArrayObject([]), 'string[]'],
+				[new ArrayObject(['foo']), 'string[]'],
+				[new ArrayObject([1]), 'string[]', false],
+				[new ArrayObject(['foo', 'bar']), 'string[]'],
+				[new ArrayObject([]), 'string[]|integer[]'],
+				[new ArrayObject(['foo', 'bar']), 'string[]|integer[]'],
+				[new ArrayObject([1, 2]), 'string[]|integer[]'],
+				[new ArrayObject([new ArrayObject([1, 2])]), 'integer[][]'],
+				[new ArrayObject([new ArrayObject([1, 2]), new ArrayObject([3, 4])]), 'integer[][]'],
+				[new ArrayObject([new ArrayObject([1, 2]), new ArrayObject(['foo'])]), 'integer[][]', false],
+				[new ArrayObject([new ArrayObject(['foo'])]), 'integer[][]', false],
+				[new ArrayObject([1, 2]), 'integer[][]', false],
 			]
 		);
 	}
@@ -85,6 +99,48 @@ class TypeTest extends \Consistence\TestCase
 	public function testHasType($value, $expectedTypes, $result = true)
 	{
 		$this->assertSame($result, Type::hasType($value, $expectedTypes));
+	}
+
+	public function testCheckTypeOk()
+	{
+		Type::checkType('foo', 'string');
+		$this->ok();
+	}
+
+	public function testCheckTypeException()
+	{
+		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
+		$this->expectExceptionMessage('[string] given');
+
+		Type::checkType('foo', 'integer');
+	}
+
+	/**
+	 * @dataProvider typesProvider
+	 *
+	 * @param mixed $value
+	 * @param string $valueType
+	 */
+	public function testCheckTypeExceptionValues($value, $valueType)
+	{
+		try {
+			Type::checkType($value, 'resource');
+			$this->fail();
+		} catch (\Consistence\InvalidArgumentTypeException $e) {
+			$this->assertSame($value, $e->getValue());
+			$this->assertSame($valueType, $e->getValueType());
+			$this->assertSame('resource', $e->getExpectedTypes());
+		}
+	}
+
+	public function testAllowSubtypes()
+	{
+		$this->assertTrue(Type::hasType(new DateTimeImmutable(), DateTimeInterface::class));
+	}
+
+	public function testDisallowSubtypes()
+	{
+		$this->assertFalse(Type::hasType(new DateTimeImmutable(), DateTimeInterface::class, Type::SUBTYPES_DISALLOW));
 	}
 
 }

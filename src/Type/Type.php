@@ -2,6 +2,8 @@
 
 namespace Consistence\Type;
 
+use Traversable;
+
 class Type extends \Consistence\ObjectPrototype
 {
 
@@ -63,7 +65,7 @@ class Type extends \Consistence\ObjectPrototype
 		foreach ($types as $type) {
 			$typeLength = strlen($type);
 			if ($type[$typeLength - 1] === ']' && $type[$typeLength - 2] === '[') {
-				if (!is_array($value)) {
+				if (!is_array($value) && !($value instanceof Traversable)) {
 					continue; // skip to next type
 				}
 				foreach ($value as $item) {
@@ -80,6 +82,22 @@ class Type extends \Consistence\ObjectPrototype
 		}
 
 		return false;
+	}
+
+	/**
+	 * Checks if the $value has one of expected types, throws exception if not
+	 *
+	 * @see hasType for syntax rules
+	 *
+	 * @param mixed $value
+	 * @param string $expectedTypes
+	 * @param boolean $allowSubtypes decides if subtypes of given expected types should be considered a valid value
+	 */
+	public static function checkType($value, $expectedTypes, $allowSubtypes = self::SUBTYPES_ALLOW)
+	{
+		if (!self::hasType($value, $expectedTypes, $allowSubtypes)) {
+			throw new \Consistence\InvalidArgumentTypeException($value, $expectedTypes);
+		}
 	}
 
 }

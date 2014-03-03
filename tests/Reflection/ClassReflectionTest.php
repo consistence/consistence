@@ -46,4 +46,20 @@ class ClassReflectionTest extends \Consistence\TestCase
 		$this->assertFalse(ClassReflection::hasDeclaredProperty($classReflection, 'xxx'));
 	}
 
+	public function testGetDeclaredConstants()
+	{
+		$classReflection = new ReflectionClass(Bar::class);
+		$constants = ClassReflection::getDeclaredConstants($classReflection);
+		$this->assertCount(1, $constants);
+		$this->assertArrayHasKey('BAR', $constants);
+	}
+
+	public function testHasDeclaredConstant()
+	{
+		$classReflection = new ReflectionClass(Bar::class);
+		$this->assertTrue(ClassReflection::hasDeclaredConstant($classReflection, 'BAR'));
+		$this->assertFalse(ClassReflection::hasDeclaredConstant($classReflection, 'FOO'));
+		$this->assertFalse(ClassReflection::hasDeclaredConstant($classReflection, 'XXX'));
+	}
+
 }

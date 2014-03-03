@@ -82,4 +82,37 @@ class ClassReflection extends \Consistence\ObjectPrototype
 		}
 	}
 
+	/**
+	 * Retrieves constants defined only at the same level as given ReflectionClass
+	 *
+	 * WARNING: cannot detect redeclarations of the same constant
+	 *
+	 * @param \ReflectionClass $classReflection
+	 * @return string[] format: name(string) => value(mixed)
+	 */
+	public static function getDeclaredConstants(ReflectionClass $classReflection)
+	{
+		$constants = $classReflection->getConstants();
+		$processClass = $classReflection;
+		while (($processClass = $processClass->getParentClass()) !== false) {
+			ArrayType::removeKeysByArrayKeys($constants, $processClass->getConstants());
+		}
+
+		return $constants;
+	}
+
+	/**
+	 * Is constant of this name defined in this class?
+	 *
+	 * WARNING: cannot detect redeclarations of the same constant
+	 *
+	 * @param \ReflectionClass $classReflection
+	 * @param string $constantName
+	 * @return boolean
+	 */
+	public static function hasDeclaredConstant(ReflectionClass $classReflection, $constantName)
+	{
+		return isset(static::getDeclaredConstants($classReflection)[$constantName]);
+	}
+
 }

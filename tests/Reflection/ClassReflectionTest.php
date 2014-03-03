@@ -30,4 +30,20 @@ class ClassReflectionTest extends \Consistence\TestCase
 		$this->assertFalse(ClassReflection::hasDeclaredMethod($classReflection, 'xxx'));
 	}
 
+	public function testGetDeclaredProperties()
+	{
+		$classReflection = new ReflectionClass(Bar::class);
+		$properties = ClassReflection::getDeclaredProperties($classReflection);
+		$this->assertCount(1, $properties);
+		$this->assertSame('bar', $properties[0]->name);
+	}
+
+	public function testHasDeclaredProperty()
+	{
+		$classReflection = new ReflectionClass(Bar::class);
+		$this->assertTrue(ClassReflection::hasDeclaredProperty($classReflection, 'bar'));
+		$this->assertFalse(ClassReflection::hasDeclaredProperty($classReflection, 'foo'));
+		$this->assertFalse(ClassReflection::hasDeclaredProperty($classReflection, 'xxx'));
+	}
+
 }

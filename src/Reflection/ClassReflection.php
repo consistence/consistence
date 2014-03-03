@@ -6,6 +6,7 @@ use Consistence\Type\ArrayType\ArrayType;
 
 use ReflectionClass;
 use ReflectionMethod;
+use ReflectionProperty;
 
 class ClassReflection extends \Consistence\ObjectPrototype
 {
@@ -44,6 +45,38 @@ class ClassReflection extends \Consistence\ObjectPrototype
 	{
 		try {
 			return $classReflection->getMethod($methodName)->class === $classReflection->getName();
+		} catch (\ReflectionException $e) {
+			return false;
+		}
+	}
+
+	/**
+	 * Retrieves properties defined only at the same level as given ReflectionClass
+	 *
+	 * @param \ReflectionClass $classReflection
+	 * @param integer $filter
+	 * @return \ReflectionMethod[]
+	 */
+	public static function getDeclaredProperties(ReflectionClass $classReflection, $filter = self::FILTER_VISIBILITY_NONE)
+	{
+		$properties = $classReflection->getProperties($filter);
+		$className = $classReflection->getName();
+		return ArrayType::filterValuesByCallback($properties, function (ReflectionProperty $property) use ($className) {
+			return $property->class === $className;
+		});
+	}
+
+	/**
+	 * Is property of this name defined in this class?
+	 *
+	 * @param \ReflectionClass $classReflection
+	 * @param string $propertyName
+	 * @return boolean
+	 */
+	public static function hasDeclaredProperty(ReflectionClass $classReflection, $propertyName)
+	{
+		try {
+			return $classReflection->getProperty($propertyName)->class === $classReflection->getName();
 		} catch (\ReflectionException $e) {
 			return false;
 		}

@@ -9,5 +9,8 @@
 			"email": "me@vasekpurchart.cz",
 			"homepage": "http://vasekpurchart.cz"
 		}
-	]
+	],
+	"config": {
+		"bin-dir": "bin"
+	}
 }

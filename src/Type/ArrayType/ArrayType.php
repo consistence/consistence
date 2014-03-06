@@ -128,4 +128,22 @@ class ArrayType extends \Consistence\ObjectPrototype
 		return $result;
 	}
 
+	/**
+	 * Stops on first occurrence when callback(value) is trueish or returns null
+	 *
+	 * @param mixed[] $haystack
+	 * @param \Closure $callback
+	 * @return mixed|null
+	 */
+	public static function findValueByCallback(array $haystack, Closure $callback)
+	{
+		foreach ($haystack as $key => $value) {
+			if ($callback($value)) {
+				return $value;
+			}
+		}
+
+		return null;
+	}
+
 }

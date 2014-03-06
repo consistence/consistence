@@ -126,6 +126,24 @@ class ArrayTypeTest extends \Consistence\TestCase
 		$this->assertNull($result);
 	}
 
+	public function testFindValueByCallback()
+	{
+		$values = [1, 2, 3];
+		$result = ArrayType::findValueByCallback($values, function ($value) {
+			return ($value % 2) === 0;
+		});
+		$this->assertSame(2, $result);
+	}
+
+	public function testFindValueByCallbackNothingFound()
+	{
+		$values = [1, 2, 3];
+		$result = ArrayType::findValueByCallback($values, function ($value) {
+			return $value > 3;
+		});
+		$this->assertNull($result);
+	}
+
 	public function testGetByCallback()
 	{
 		$values = [1, 2, 3];

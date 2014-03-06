@@ -146,4 +146,21 @@ class ArrayType extends \Consistence\ObjectPrototype
 		return null;
 	}
 
+	/**
+	 * Stops on first occurrence when callback(value) is trueish or throws exception
+	 *
+	 * @param mixed[] $haystack
+	 * @param \Closure $callback
+	 * @return mixed
+	 */
+	public static function getValueByCallback(array $haystack, Closure $callback)
+	{
+		$result = static::findValueByCallback($haystack, $callback);
+		if ($result === null) {
+			throw new \Consistence\Type\ArrayType\ElementDoesNotExistException();
+		}
+
+		return $result;
+	}
+
 }

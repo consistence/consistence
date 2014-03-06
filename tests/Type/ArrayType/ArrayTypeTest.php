@@ -166,4 +166,24 @@ class ArrayTypeTest extends \Consistence\TestCase
 		});
 	}
 
+	public function testGetValueByCallback()
+	{
+		$values = [1, 2, 3];
+		$result = ArrayType::getValueByCallback($values, function ($value) {
+			return ($value % 2) === 0;
+		});
+		$this->assertSame(2, $result);
+	}
+
+	public function testGetValueByCallbackNothingFound()
+	{
+		$values = [1, 2, 3];
+
+		$this->expectException(\Consistence\Type\ArrayType\ElementDoesNotExistException::class);
+
+		ArrayType::getValueByCallback($values, function ($value) {
+			return $value > 3;
+		});
+	}
+
 }

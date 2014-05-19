@@ -33,4 +33,13 @@ class TimeFormatTest extends \Consistence\TestCase
 		$this->assertEquals($original->getTimezone(), $converted->getTimezone());
 	}
 
+	public function testCreateDateTimeImmutableFromDateTimeInterface()
+	{
+		$original = new DateTime();
+		$converted = TimeFormat::createDateTimeImmutableFromDateTimeInterface($original);
+		$this->assertInstanceOf(DateTimeImmutable::class, $converted);
+		$this->assertSame($original->getTimestamp(), $converted->getTimestamp());
+		$this->assertEquals($original->getTimezone(), $converted->getTimezone());
+	}
+
 }

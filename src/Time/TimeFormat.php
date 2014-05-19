@@ -88,4 +88,15 @@ class TimeFormat extends \Consistence\ObjectPrototype
 		return new DateTimeImmutable(date(self::ISO8601_WITHOUT_TIMEZONE, $timestamp));
 	}
 
+	/**
+	 * Create DateTime from DateTimeInterface while preserving original Timezone
+	 *
+	 * @param \DateTimeInterface $date
+	 * @return \DateTime
+	 */
+	public static function createDateTimeFromDateTimeInterface(DateTimeInterface $date)
+	{
+		return new DateTime($date->format(self::ISO8601_WITHOUT_TIMEZONE), $date->getTimezone());
+	}
+
 }

@@ -2,6 +2,12 @@
 
 namespace Consistence\Time;
 
+use Consistence\Type\Type;
+
+use DateTime;
+use DateTimeImmutable;
+use DateTimeInterface;
+
 /**
  * @see http://php.net/manual/en/function.date.php#refsect1-function.date-parameters
  * @see http://www.php.net/manual/en/class.datetime.php#datetime.constants.types
@@ -13,6 +19,7 @@ class TimeFormat extends \Consistence\ObjectPrototype
 	const COOKIE = DATE_COOKIE;
 	const ISO8601 = DATE_ISO8601;
 	const ISO8601_TIMEZONE_WITH_COLON = DATE_RFC3339;
+	const ISO8601_WITHOUT_TIMEZONE = 'Y-m-d\TH:i:s';
 	const RFC822 = DATE_RFC822;
 	const RFC850 = DATE_RFC850;
 	const RFC1036 = DATE_RFC1036;
@@ -56,5 +63,29 @@ class TimeFormat extends \Consistence\ObjectPrototype
 	const YEAR_IS_LEAP = 'L';
 	const YEAR_ISO8601 = 'o';
 	const YEAR_TWO_DIGIT = 'y';
+
+	/**
+	 * Convert unix timestamp to DateTime with current timezone
+	 *
+	 * @param integer $timestamp
+	 * @return \DateTime
+	 */
+	public static function createDateTimeFromTimestamp($timestamp)
+	{
+		Type::checkType($timestamp, 'integer');
+		return new DateTime(date(self::ISO8601_WITHOUT_TIMEZONE, $timestamp));
+	}
+
+	/**
+	 * Convert unix timestamp to DateTimeImmutable with current timezone
+	 *
+	 * @param integer $timestamp
+	 * @return \DateTimeImmutable
+	 */
+	public static function createDateTimeImmutableFromTimestamp($timestamp)
+	{
+		Type::checkType($timestamp, 'integer');
+		return new DateTimeImmutable(date(self::ISO8601_WITHOUT_TIMEZONE, $timestamp));
+	}
 
 }

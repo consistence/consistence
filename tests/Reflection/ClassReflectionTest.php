@@ -28,6 +28,24 @@ class ClassReflectionTest extends \Consistence\TestCase
 		$this->assertTrue(ClassReflection::hasDeclaredMethod($classReflection, 'barMethod'));
 		$this->assertFalse(ClassReflection::hasDeclaredMethod($classReflection, 'fooMethod'));
 		$this->assertFalse(ClassReflection::hasDeclaredMethod($classReflection, 'xxx'));
+		$this->assertTrue(ClassReflection::hasDeclaredMethod($classReflection, 'barMethod', ClassReflection::CASE_SENSITIVE));
+		$this->assertFalse(ClassReflection::hasDeclaredMethod($classReflection, 'barmethod', ClassReflection::CASE_SENSITIVE));
+	}
+
+	public function testHasDeclaredMethodCaseSensitive()
+	{
+		$classReflection = new ReflectionClass(Bar::class);
+		$this->assertTrue(ClassReflection::hasDeclaredMethod($classReflection, 'barMethod', ClassReflection::CASE_SENSITIVE));
+		$this->assertFalse(ClassReflection::hasDeclaredMethod($classReflection, 'barmethod', ClassReflection::CASE_SENSITIVE));
+		$this->assertFalse(ClassReflection::hasDeclaredMethod($classReflection, 'xxx', ClassReflection::CASE_SENSITIVE));
+	}
+
+	public function testHasDeclaredMethodCaseInsensitive()
+	{
+		$classReflection = new ReflectionClass(Bar::class);
+		$this->assertTrue(ClassReflection::hasDeclaredMethod($classReflection, 'barMethod', ClassReflection::CASE_INSENSITIVE));
+		$this->assertTrue(ClassReflection::hasDeclaredMethod($classReflection, 'barmethod', ClassReflection::CASE_INSENSITIVE));
+		$this->assertFalse(ClassReflection::hasDeclaredMethod($classReflection, 'xxx', ClassReflection::CASE_INSENSITIVE));
 	}
 
 	public function testGetDeclaredProperties()

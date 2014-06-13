@@ -13,6 +13,9 @@ class ClassReflection extends \Consistence\ObjectPrototype
 
 	const FILTER_VISIBILITY_NONE = -1;
 
+	const CASE_SENSITIVE = true;
+	const CASE_INSENSITIVE = false;
+
 	final public function __construct()
 	{
 		throw new \Consistence\StaticClassException();
@@ -39,12 +42,19 @@ class ClassReflection extends \Consistence\ObjectPrototype
 	 *
 	 * @param \ReflectionClass $classReflection
 	 * @param string $methodName
+	 * @param boolean $caseSensitive should the comparison be case-sensitive? (php methods are not by default, but you should)
 	 * @return boolean
 	 */
-	public static function hasDeclaredMethod(ReflectionClass $classReflection, $methodName)
+	public static function hasDeclaredMethod(
+		ReflectionClass $classReflection,
+		$methodName,
+		$caseSensitive = self::CASE_SENSITIVE
+	)
 	{
 		try {
-			return $classReflection->getMethod($methodName)->class === $classReflection->getName();
+			$methodReflection = $classReflection->getMethod($methodName);
+			return $methodReflection->class === $classReflection->getName()
+				&& (!$caseSensitive || $methodReflection->name === $methodName);
 		} catch (\ReflectionException $e) {
 			return false;
 		}

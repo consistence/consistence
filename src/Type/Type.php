@@ -7,6 +7,8 @@ use Traversable;
 class Type extends \Consistence\ObjectPrototype
 {
 
+	const SEPARATOR_KEY_TYPE = ':';
+
 	const SUBTYPES_ALLOW = true;
 	const SUBTYPES_DISALLOW = false;
 
@@ -54,6 +56,11 @@ class Type extends \Consistence\ObjectPrototype
 	 *  - integer[]|DateTime
 	 *  - integer[][]
 	 *
+	 * Optional validation of keys in traversable types:
+	 *  - integer:string[]
+	 *  - missing keys can be omitted on right - string:mixed:string[][] is the same as string:string[][]
+	 *  - key types cannot contain | sign to separate more accepted types
+	 *
 	 * @param mixed $value
 	 * @param string $expectedTypes
 	 * @param boolean $allowSubtypes decides if subtypes of given expected types should be considered a valid value
@@ -68,8 +75,14 @@ class Type extends \Consistence\ObjectPrototype
 				if (!is_array($value) && !($value instanceof Traversable)) {
 					continue; // skip to next type
 				}
-				foreach ($value as $item) {
-					if (!self::hasType($item, substr($type, 0, $typeLength - 2))) {
+				$itemsType = substr($type, 0, $typeLength - 2);
+				$firstKeyTypeSeparatorPosition = strpos($itemsType, self::SEPARATOR_KEY_TYPE);
+				if ($firstKeyTypeSeparatorPosition !== false) {
+					$keysType = substr($itemsType, 0, $firstKeyTypeSeparatorPosition);
+					$itemsType = substr($itemsType, $firstKeyTypeSeparatorPosition + 1);
+				}
+				foreach ($value as $key => $item) {
+					if (!self::hasType($item, $itemsType) || (isset($keysType) && !self::hasType($key, $keysType))) {
 						continue 2; // skip to next type
 					}
 				}

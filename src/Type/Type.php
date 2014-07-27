@@ -12,6 +12,8 @@ class Type extends \Consistence\ObjectPrototype
 	const SUBTYPES_ALLOW = true;
 	const SUBTYPES_DISALLOW = false;
 
+	const TYPE_MIXED = 'mixed';
+
 	final public function __construct()
 	{
 		throw new \Consistence\StaticClassException();
@@ -45,6 +47,7 @@ class Type extends \Consistence\ObjectPrototype
 	 *
 	 * Supported syntax:
 	 *  - integer
+	 *  - mixed (allow every type)
 	 *  - integer|string
 	 *  - integer|string|float
 	 *  - integer|null
@@ -55,6 +58,7 @@ class Type extends \Consistence\ObjectPrototype
 	 *  - integer[]|string[]
 	 *  - integer[]|DateTime
 	 *  - integer[][]
+	 *  - mixed[]|Collection
 	 *
 	 * Optional validation of keys in traversable types:
 	 *  - integer:string[]
@@ -89,7 +93,7 @@ class Type extends \Consistence\ObjectPrototype
 
 				return true;
 			}
-			if (strcasecmp(self::getType($value), $type) === 0 || ($allowSubtypes && is_a($value, $type))) {
+			if ($type === self::TYPE_MIXED || strcasecmp(self::getType($value), $type) === 0 || ($allowSubtypes && is_a($value, $type))) {
 				return true;
 			}
 		}

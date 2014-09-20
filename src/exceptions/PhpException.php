@@ -5,6 +5,8 @@ namespace Consistence;
 class PhpException extends \Exception
 {
 
+	use \Consistence\Type\ObjectMixinTrait;
+
 	/**
 	 * @param string|null $message
 	 * @param \Exception|null $previous

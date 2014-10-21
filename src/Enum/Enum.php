@@ -73,7 +73,7 @@ abstract class Enum extends \Consistence\ObjectPrototype
 	 */
 	public static function isValidValue($value)
 	{
-		return ArrayType::inArray(self::getAvailableValues(), $value);
+		return ArrayType::inArray(static::getAvailableValues(), $value);
 	}
 
 	/**
@@ -82,7 +82,7 @@ abstract class Enum extends \Consistence\ObjectPrototype
 	public static function checkValue($value)
 	{
 		if (!static::isValidValue($value)) {
-			throw new \Consistence\Enum\InvalidEnumValueException($value, self::getAvailableValues());
+			throw new \Consistence\Enum\InvalidEnumValueException($value, static::getAvailableValues());
 		}
 	}
 

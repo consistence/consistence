@@ -85,4 +85,25 @@ class ArrayTypeTest extends \Consistence\TestCase
 		$this->assertNull(ArrayType::findValue($values, 2));
 	}
 
+	public function testGetValue()
+	{
+		$values = [
+			'foo',
+			'bar',
+		];
+		$this->assertSame('bar', ArrayType::getValue($values, 1));
+	}
+
+	public function testGetValueNotFound()
+	{
+		$values = [
+			'foo',
+			'bar',
+		];
+
+		$this->expectException(\Consistence\Type\ArrayType\ElementDoesNotExistException::class);
+
+		ArrayType::getValue($values, 2);
+	}
+
 }

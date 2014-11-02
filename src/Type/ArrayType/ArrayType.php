@@ -74,4 +74,19 @@ class ArrayType extends \Consistence\ObjectPrototype
 		return $haystack[$key];
 	}
 
+	/**
+	 * @param mixed[] $haystack
+	 * @param integer|string $key
+	 * @return mixed
+	 */
+	public static function getValue(array $haystack, $key)
+	{
+		$result = static::findValue($haystack, $key);
+		if ($result === null) {
+			throw new \Consistence\Type\ArrayType\ElementDoesNotExistException();
+		}
+
+		return $result;
+	}
+
 }

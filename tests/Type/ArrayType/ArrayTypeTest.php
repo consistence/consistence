@@ -52,4 +52,19 @@ class ArrayTypeTest extends \Consistence\TestCase
 		$this->assertSame(1, ArrayType::findKey($values, '2', ArrayType::STRICT_FALSE));
 	}
 
+	public function testGetKey()
+	{
+		$values = [1, 2, 3];
+		$this->assertSame(1, ArrayType::getKey($values, 2));
+	}
+
+	public function testGetKeyNotFound()
+	{
+		$values = [1, 2, 3];
+
+		$this->expectException(\Consistence\Type\ArrayType\ElementDoesNotExistException::class);
+
+		ArrayType::getKey($values, '2');
+	}
+
 }

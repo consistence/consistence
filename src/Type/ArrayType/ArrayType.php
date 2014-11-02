@@ -44,4 +44,20 @@ class ArrayType extends \Consistence\ObjectPrototype
 		return $result;
 	}
 
+	/**
+	 * @param mixed[] $haystack
+	 * @param mixed $needle
+	 * @param boolean $strict
+	 * @return integer|string
+	 */
+	public static function getKey(array $haystack, $needle, $strict = self::STRICT_TRUE)
+	{
+		$result = static::findKey($haystack, $needle, $strict);
+		if ($result === null) {
+			throw new \Consistence\Type\ArrayType\ElementDoesNotExistException();
+		}
+
+		return $result;
+	}
+
 }

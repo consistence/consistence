@@ -219,4 +219,13 @@ class ArrayTypeTest extends \Consistence\TestCase
 		], $result);
 	}
 
+	public function testMapValuesByCallback()
+	{
+		$values = [1, 2, 3];
+		$result = ArrayType::mapValuesByCallback($values, function ($value) {
+			return $value * 2;
+		});
+		$this->assertSame([2, 4, 6], $result);
+	}
+
 }

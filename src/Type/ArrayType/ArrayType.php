@@ -216,4 +216,16 @@ class ArrayType extends \Consistence\ObjectPrototype
 		return $result;
 	}
 
+	/**
+	 * Maps array by callback(value)
+	 *
+	 * @param mixed[] $haystack
+	 * @param \Closure $callback
+	 * @return mixed[] new mapped array
+	 */
+	public static function mapValuesByCallback(array $haystack, Closure $callback)
+	{
+		return array_map($callback, $haystack);
+	}
+
 }

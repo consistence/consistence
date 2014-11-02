@@ -196,4 +196,24 @@ class ArrayType extends \Consistence\ObjectPrototype
 		return array_filter($haystack, $callback);
 	}
 
+	/**
+	 * Map array by callback(\Consistence\Type\ArrayType\KeyValuePair)
+	 *
+	 * @param mixed[] $haystack
+	 * @param \Closure $callback
+	 * @return mixed[] new mapped array
+	 */
+	public static function mapByCallback(array $haystack, Closure $callback)
+	{
+		$result = [];
+		$keyValuePair = new KeyValuePairMutable(0, 0);
+		foreach ($haystack as $key => $value) {
+			$keyValuePair->setPair($key, $value);
+			$mappedKeyValuePair = $callback($keyValuePair);
+			$result[$mappedKeyValuePair->getKey()] = $mappedKeyValuePair->getValue();
+		}
+
+		return $result;
+	}
+
 }

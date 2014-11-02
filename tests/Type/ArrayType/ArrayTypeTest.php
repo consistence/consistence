@@ -206,4 +206,17 @@ class ArrayTypeTest extends \Consistence\TestCase
 		$this->assertSame(2, $result[1]);
 	}
 
+	public function testMapByCallback()
+	{
+		$array = [
+			'foo' => 'bar',
+		];
+		$result = ArrayType::mapByCallback($array, function (KeyValuePair $pair) {
+			return new KeyValuePair(strtoupper($pair->getKey()), strtoupper($pair->getValue()));
+		});
+		$this->assertSame([
+			'FOO' => 'BAR',
+		], $result);
+	}
+
 }

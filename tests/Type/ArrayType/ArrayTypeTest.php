@@ -67,4 +67,22 @@ class ArrayTypeTest extends \Consistence\TestCase
 		ArrayType::getKey($values, '2');
 	}
 
+	public function testFindValue()
+	{
+		$values = [
+			'foo',
+			'bar',
+		];
+		$this->assertSame('bar', ArrayType::findValue($values, 1));
+	}
+
+	public function testFindValueNotFound()
+	{
+		$values = [
+			'foo',
+			'bar',
+		];
+		$this->assertNull(ArrayType::findValue($values, 2));
+	}
+
 }

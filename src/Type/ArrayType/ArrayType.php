@@ -60,4 +60,18 @@ class ArrayType extends \Consistence\ObjectPrototype
 		return $result;
 	}
 
+	/**
+	 * @param mixed[] $haystack
+	 * @param integer|string $key
+	 * @return mixed|null
+	 */
+	public static function findValue(array $haystack, $key)
+	{
+		if (!array_key_exists($key, $haystack)) {
+			return null;
+		}
+
+		return $haystack[$key];
+	}
+
 }

@@ -5,6 +5,7 @@ namespace Consistence\Type;
 use ArrayObject;
 use DateTimeImmutable;
 use DateTimeInterface;
+use stdClass;
 
 class TypeTest extends \Consistence\TestCase
 {
@@ -48,6 +49,8 @@ class TypeTest extends \Consistence\TestCase
 				[null, 'NULL|integer'],
 				[DateTimeImmutable::class, 'DateTimeImmutable|string'],
 				[new DateTimeImmutable(), 'DateTimeImmutable|string'],
+				[new DateTimeImmutable(), 'object'],
+				['foo', 'object', false],
 				[1, 'mixed'],
 				['foo', 'mixed'],
 				[DateTimeImmutable::class, 'mixed'],
@@ -61,6 +64,9 @@ class TypeTest extends \Consistence\TestCase
 				[['foo', 'bar'], 'string[]|integer[]'],
 				[2, 'string[]|integer'],
 				[[1, 2], 'string[]|integer[]'],
+				[[new DateTimeImmutable()], 'object[]'],
+				[[new DateTimeImmutable(), new stdClass()], 'object[]'],
+				[[new DateTimeImmutable(), 'foo'], 'object[]', false],
 				[[1, 'foo'], 'mixed[]'],
 				[1, 'mixed[]', false],
 				[[1, 'foo'], 'mixed'],

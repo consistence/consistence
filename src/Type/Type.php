@@ -13,6 +13,7 @@ class Type extends \Consistence\ObjectPrototype
 	const SUBTYPES_DISALLOW = false;
 
 	const TYPE_MIXED = 'mixed';
+	const TYPE_OBJECT = 'object';
 
 	final public function __construct()
 	{
@@ -48,6 +49,7 @@ class Type extends \Consistence\ObjectPrototype
 	 * Supported syntax:
 	 *  - integer
 	 *  - mixed (allow every type)
+	 *  - object
 	 *  - integer|string
 	 *  - integer|string|float
 	 *  - integer|null
@@ -93,7 +95,12 @@ class Type extends \Consistence\ObjectPrototype
 
 				return true;
 			}
-			if ($type === self::TYPE_MIXED || strcasecmp(self::getType($value), $type) === 0 || ($allowSubtypes && is_a($value, $type))) {
+			if (
+				$type === self::TYPE_MIXED
+				|| ($type === self::TYPE_OBJECT && is_object($value))
+				|| strcasecmp(self::getType($value), $type) === 0
+				|| ($allowSubtypes && is_a($value, $type))
+			) {
 				return true;
 			}
 		}

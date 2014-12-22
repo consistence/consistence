@@ -18,6 +18,9 @@ class ObjectMixin
 	 */
 	public static function magicCall($object, $name)
 	{
+		Type::checkType($object, 'object');
+		Type::checkType($name, 'string');
+
 		throw new \Consistence\UndefinedMethodException(get_class($object), $name);
 	}
 
@@ -29,6 +32,9 @@ class ObjectMixin
 	 */
 	public static function magicCallStatic($class, $name)
 	{
+		Type::checkType($class, 'string');
+		Type::checkType($name, 'string');
+
 		throw new \Consistence\UndefinedMethodException($class, $name);
 	}
 
@@ -40,6 +46,9 @@ class ObjectMixin
 	 */
 	public static function magicGet($object, $name)
 	{
+		Type::checkType($object, 'object');
+		Type::checkType($name, 'string');
+
 		throw new \Consistence\UndefinedPropertyException(get_class($object), $name);
 	}
 
@@ -51,6 +60,9 @@ class ObjectMixin
 	 */
 	public static function magicSet($object, $name)
 	{
+		Type::checkType($object, 'object');
+		Type::checkType($name, 'string');
+
 		throw new \Consistence\UndefinedPropertyException(get_class($object), $name);
 	}
 
@@ -62,6 +74,9 @@ class ObjectMixin
 	 */
 	public static function magicIsSet($object, $name)
 	{
+		Type::checkType($object, 'object');
+		Type::checkType($name, 'string');
+
 		throw new \Consistence\UndefinedPropertyException(get_class($object), $name);
 	}
 
@@ -73,6 +88,9 @@ class ObjectMixin
 	 */
 	public static function magicUnset($object, $name)
 	{
+		Type::checkType($object, 'object');
+		Type::checkType($name, 'string');
+
 		throw new \Consistence\UndefinedPropertyException(get_class($object), $name);
 	}
 

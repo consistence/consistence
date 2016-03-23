@@ -64,6 +64,10 @@ class TimeFormat extends \Consistence\ObjectPrototype
 	const YEAR_ISO8601 = 'o';
 	const YEAR_TWO_DIGIT = 'y';
 
+	const TIMEZONE_PHP_TYPE_OFFSET = 1;
+	const TIMEZONE_PHP_TYPE_ABBREVIATION = 2;
+	const TIMEZONE_PHP_TYPE_IDENTIFIER = 3;
+
 	/**
 	 * Convert unix timestamp to DateTime with current timezone
 	 *
@@ -108,6 +112,102 @@ class TimeFormat extends \Consistence\ObjectPrototype
 	public static function createDateTimeImmutableFromDateTimeInterface(DateTimeInterface $date)
 	{
 		return new DateTimeImmutable($date->format(self::ISO8601_WITHOUT_TIMEZONE), $date->getTimezone());
+	}
+
+	/**
+	 * Checks if given time string is valid, checking has two parts:
+	 *
+	 * 1) String must be parsable according to given format.
+	 *
+	 * 2) String must represent a valid point in time according to given details.
+	 *    This can be broken by simply giving 25:00 (invalid hour every time) or more nuanced
+	 *    ways such as giving 2015-02-29 - not existing year because 2015 is not a leap year.
+	 *
+	 * This is achieved by parsing the date and then filling missing time parts,
+	 * because if some parts are missing then the current time according to the system
+	 * is used to fill these, which is unpredictable. The chosen "neutral" date
+	 * is 2016-07-17\T12:30:30Z which is a leap year and a date where no daylight savings time
+	 * shifts occurred or are planned.
+	 *
+	 * This should ensure, that only time parts that are specified in the format are taken into
+	 * account while validating.
+	 *
+	 * @see http://php.net/manual/en/datetime.createfromformat.php for format syntax, but note that this method checks variants strictly
+	 *
+	 * @param string $format
+	 * @param string $timeString
+	 */
+	public static function checkTime($format, $timeString)
+	{
+		Type::checkType($format, 'string');
+		Type::checkType($timeString, 'string');
+
+		$parsedTime = date_parse_from_format($format, $timeString);
+		if ($parsedTime['error_count'] > 0) {
+			throw new \Consistence\Time\TimeDoesNotMatchFormatException($format, $timeString);
+		}
+		if ($parsedTime['warning_count'] > 0) {
+			throw new \Consistence\Time\TimeDoesNotExistException($timeString);
+		}
+		switch (true) {
+			case $parsedTime['is_localtime'] && $parsedTime['zone_type'] === self::TIMEZONE_PHP_TYPE_OFFSET:
+				$timezoneOffsetInMinutes = (-1) * $parsedTime['zone'];
+				$timezoneOffsetHours = (int) floor($timezoneOffsetInMinutes / 60);
+				$timezoneOffsetMinutes = $timezoneOffsetInMinutes % 60;
+				$timezone = sprintf('%+02d:%02d', $timezoneOffsetHours, $timezoneOffsetMinutes);
+				break;
+			case $parsedTime['is_localtime'] && $parsedTime['zone_type'] === self::TIMEZONE_PHP_TYPE_ABBREVIATION:
+				$timezone = $parsedTime['tz_abbr'];
+				break;
+			case $parsedTime['is_localtime'] && $parsedTime['zone_type'] === self::TIMEZONE_PHP_TYPE_IDENTIFIER:
+				$timezone = $parsedTime['tz_id'];
+				break;
+			default:
+				$timezone = 'UTC';
+		}
+		$completeTime = sprintf(
+			'%d-%02d-%02d %02d:%02d:%02d %s',
+			$parsedTime['year'] !== false ? $parsedTime['year'] : 2016, // leap year
+			$parsedTime['month'] !== false ? $parsedTime['month'] : 7, // no time shifts occurred on 7-17
+			$parsedTime['day'] !== false ? $parsedTime['day'] : 17,
+			$parsedTime['hour'] !== false ? $parsedTime['hour'] : 12,
+			$parsedTime['minute'] !== false ? $parsedTime['minute'] : 30,
+			$parsedTime['second'] !== false ? $parsedTime['second'] : 30,
+			$timezone
+		);
+		// timezone is parsed as abbreviation, but that does not matter, while parsing it recognizes all formats
+		$dateTime = DateTime::createFromFormat('Y-m-d H:i:s T', $completeTime);
+		if (
+			($parsedTime['year'] !== false && (int) $parsedTime['year'] !== (int) $dateTime->format(self::YEAR))
+			|| ($parsedTime['month'] !== false && (int) $parsedTime['month'] !== (int) $dateTime->format(self::MONTH_OF_YEAR))
+			|| ($parsedTime['day'] !== false && (int) $parsedTime['day'] !== (int) $dateTime->format(self::DAY_OF_MONTH))
+			|| ($parsedTime['hour'] !== false && (int) $parsedTime['hour'] !== (int) $dateTime->format(self::TIME_OF_DAY))
+			|| ($parsedTime['minute'] !== false && (int) $parsedTime['minute'] !== (int) $dateTime->format(self::MINUTE_OF_HOUR_LEADING_ZERO))
+			|| ($parsedTime['second'] !== false && (int) $parsedTime['second'] !== (int) $dateTime->format(self::SECOND_OF_MINUTE_LEADING_ZERO))
+		) {
+			throw new \Consistence\Time\TimeDoesNotExistException($timeString);
+		}
+		if ($timeString !== $dateTime->format($format)) {
+			throw new \Consistence\Time\TimeDoesNotMatchFormatException($format, $timeString);
+		}
+	}
+
+	/**
+	 * @see self::checkTime() for description
+	 *
+	 * @param string $format
+	 * @param string $timeString
+	 * @return boolean
+	 */
+	public static function isValidTime($format, $timeString)
+	{
+		try {
+			self::checkTime($format, $timeString);
+			return true;
+
+		} catch (\Consistence\Time\InvalidTimeForFormatException $e) {
+			return false;
+		}
 	}
 
 }

@@ -4,6 +4,7 @@ namespace Consistence\Time;
 
 use DateTime;
 use DateTimeImmutable;
+use DateTimeZone;
 
 class TimeFormatTest extends \Consistence\TestCase
 {
@@ -169,6 +170,104 @@ class TimeFormatTest extends \Consistence\TestCase
 			TimeFormat::isValidTime($format, $timeString),
 			sprintf('Expected that time %s given for format %s is invalid, because %s', $timeString, $format, $reason)
 		);
+	}
+
+	/**
+	 * @dataProvider validTimesProvider
+	 *
+	 * @param string $format
+	 * @param string $timeString
+	 */
+	public function testCreateValidDateTime($format, $timeString)
+	{
+		$time = TimeFormat::createDateTimeFromFormat(
+			$format,
+			$timeString,
+			new DateTimeZone('UTC')
+		);
+
+		$this->assertInstanceOf(DateTime::class, $time);
+		$this->assertEquals(DateTime::createFromFormat(
+			$format,
+			$timeString,
+			new DateTimeZone('UTC')
+		), $time);
+	}
+
+	public function testCreateDateTimeWithDefaultTimezone()
+	{
+		$this->assertInstanceOf(DateTime::class, TimeFormat::createDateTimeFromFormat('Y', '2016'));
+	}
+
+	/**
+	 * @dataProvider invalidTimesProvider
+	 *
+	 * @param string $format
+	 * @param string $timeString
+	 * @param string $reason
+	 */
+	public function testCreateInvalidDateTime($format, $timeString, $reason)
+	{
+		try {
+			TimeFormat::createDateTimeFromFormat(
+				$format,
+				$timeString,
+				new DateTimeZone('UTC')
+			);
+
+			$this->fail(sprintf('Exception was expected for time %s given for format %s, because %s', $timeString, $format, $reason));
+		} catch (\Consistence\Time\InvalidTimeForFormatException $e) {
+			$this->assertSame($timeString, $e->getTimeString());
+		}
+	}
+
+	/**
+	 * @dataProvider validTimesProvider
+	 *
+	 * @param string $format
+	 * @param string $timeString
+	 */
+	public function testCreateValidDateTimeImmutable($format, $timeString)
+	{
+		$time = TimeFormat::createDateTimeImmutableFromFormat(
+			$format,
+			$timeString,
+			new DateTimeZone('UTC')
+		);
+
+		$this->assertInstanceOf(DateTimeImmutable::class, $time);
+		$this->assertEquals(DateTimeImmutable::createFromFormat(
+			$format,
+			$timeString,
+			new DateTimeZone('UTC')
+		), $time);
+	}
+
+	public function testCreateDateTimeImmutableWithDefaultTimezone()
+	{
+		$this->assertInstanceOf(DateTimeImmutable::class, TimeFormat::createDateTimeImmutableFromFormat('Y', '2016'));
+	}
+
+	/**
+	 * @dataProvider invalidTimesProvider
+	 *
+	 * @param string $format
+	 * @param string $timeString
+	 * @param string $reason
+	 */
+	public function testCreateInvalidDateTimeImmutable($format, $timeString, $reason)
+	{
+		try {
+			TimeFormat::createDateTimeImmutableFromFormat(
+				$format,
+				$timeString,
+				new DateTimeZone('UTC')
+			);
+
+			$this->fail(sprintf('Exception was expected for time %s given for format %s, because %s', $timeString, $format, $reason));
+		} catch (\Consistence\Time\InvalidTimeForFormatException $e) {
+			$this->assertSame($timeString, $e->getTimeString());
+		}
 	}
 
 }

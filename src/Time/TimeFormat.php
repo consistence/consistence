@@ -7,6 +7,7 @@ use Consistence\Type\Type;
 use DateTime;
 use DateTimeImmutable;
 use DateTimeInterface;
+use DateTimeZone;
 
 /**
  * @see http://php.net/manual/en/function.date.php#refsect1-function.date-parameters
@@ -208,6 +209,46 @@ class TimeFormat extends \Consistence\ObjectPrototype
 		} catch (\Consistence\Time\InvalidTimeForFormatException $e) {
 			return false;
 		}
+	}
+
+	/**
+	 * Create DateTime from format, but check format strictly
+	 *
+	 * @see http://php.net/manual/en/datetime.createfromformat.php for signature description
+	 * @see self::checkTime() for additional checks
+	 *
+	 * @param string $format
+	 * @param string $timeString
+	 * @param \DateTimeZone|null $timezone
+	 * @return \DateTime
+	 */
+	public static function createDateTimeFromFormat($format, $timeString, DateTimeZone $timezone = null)
+	{
+		self::checkTime($format, $timeString);
+		if ($timezone === null) {
+			$timezone = new DateTimeZone(date_default_timezone_get());
+		}
+		return DateTime::createFromFormat($format, $timeString, $timezone);
+	}
+
+	/**
+	 * Create DateTimeImmutable from format, but check format strictly
+	 *
+	 * @see http://php.net/manual/en/datetimeimmutable.createfromformat.php for signature description
+	 * @see self::checkTime() for additional checks
+	 *
+	 * @param string $format
+	 * @param string $timeString
+	 * @param \DateTimeZone|null $timezone
+	 * @return \DateTimeImmutable
+	 */
+	public static function createDateTimeImmutableFromFormat($format, $timeString, DateTimeZone $timezone = null)
+	{
+		self::checkTime($format, $timeString);
+		if ($timezone === null) {
+			$timezone = new DateTimeZone(date_default_timezone_get());
+		}
+		return DateTimeImmutable::createFromFormat($format, $timeString, $timezone);
 	}
 
 }

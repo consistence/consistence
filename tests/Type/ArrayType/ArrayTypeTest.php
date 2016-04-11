@@ -56,6 +56,30 @@ class ArrayTypeTest extends \Consistence\TestCase
 		}));
 	}
 
+	public function testInArrayByValueCallback()
+	{
+		$values = [1, 2, 3];
+		$this->assertTrue(ArrayType::inArrayByValueCallback($values, function ($value) {
+			return ($value % 2) === 0;
+		}));
+	}
+
+	public function testInArrayByValueCallbackLoose()
+	{
+		$values = [1, 2, 3];
+		$this->assertTrue(ArrayType::inArrayByValueCallback($values, function ($value) {
+			return $value == '2';
+		}));
+	}
+
+	public function testInArrayByValueCallbackNotFound()
+	{
+		$values = [1, 2, 3];
+		$this->assertFalse(ArrayType::inArrayByValueCallback($values, function ($value) {
+			return $value === 0;
+		}));
+	}
+
 	public function testArraySearchDefault()
 	{
 		$values = [1, 2, 3];

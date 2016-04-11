@@ -32,6 +32,30 @@ class ArrayTypeTest extends \Consistence\TestCase
 		$this->assertTrue(ArrayType::inArray($values, '2', ArrayType::STRICT_FALSE));
 	}
 
+	public function testInArrayByCallback()
+	{
+		$values = [1, 2, 3];
+		$this->assertTrue(ArrayType::inArrayByCallback($values, function (KeyValuePair $pair) {
+			return ($pair->getValue() % 2) === 0;
+		}));
+	}
+
+	public function testInArrayByCallbackLoose()
+	{
+		$values = [1, 2, 3];
+		$this->assertTrue(ArrayType::inArrayByCallback($values, function (KeyValuePair $pair) {
+			return $pair->getValue() == '2';
+		}));
+	}
+
+	public function testInArrayByCallbackNotFound()
+	{
+		$values = [1, 2, 3];
+		$this->assertFalse(ArrayType::inArrayByCallback($values, function (KeyValuePair $pair) {
+			return $pair->getValue() === 0;
+		}));
+	}
+
 	public function testArraySearchDefault()
 	{
 		$values = [1, 2, 3];

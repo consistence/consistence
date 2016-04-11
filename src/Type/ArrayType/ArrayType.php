@@ -29,6 +29,19 @@ class ArrayType extends \Consistence\ObjectPrototype
 	}
 
 	/**
+	 * Returns true when callback(\Consistence\Type\ArrayType\KeyValuePair) is at least once trueish
+	 *
+	 * @param mixed[] $haystack
+	 * @param \Closure $callback
+	 * @return boolean
+	 */
+	public static function inArrayByCallback(array $haystack, Closure $callback)
+	{
+		$result = self::findByCallback($haystack, $callback);
+		return $result !== null;
+	}
+
+	/**
 	 * Wrapper for PHP array_search, provides safer default parameter. Returns null when value is not found.
 	 *
 	 * @param mixed[] $haystack

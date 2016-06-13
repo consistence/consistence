@@ -124,6 +124,23 @@ class ArrayType extends \Consistence\ObjectPrototype
 	}
 
 	/**
+	 * Returns key when callback(\Consistence\Type\ArrayType\KeyValuePair) is at least once trueish or throws exception
+	 *
+	 * @param mixed[] $haystack
+	 * @param \Closure $callback
+	 * @return integer|string
+	 */
+	public static function getKeyByCallback(array $haystack, Closure $callback)
+	{
+		$result = self::findKeyByCallback($haystack, $callback);
+		if ($result === null) {
+			throw new \Consistence\Type\ArrayType\ElementDoesNotExistException();
+		}
+
+		return $result;
+	}
+
+	/**
 	 * @param mixed[] $haystack
 	 * @param integer|string $key
 	 * @return mixed|null

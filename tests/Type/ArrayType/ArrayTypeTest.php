@@ -202,6 +202,37 @@ class ArrayTypeTest extends \Consistence\TestCase
 		}));
 	}
 
+	public function testGetKeyByValueCallback()
+	{
+		$values = [1, 2, 3];
+		$this->assertSame(1, ArrayType::getKeyByValueCallback($values, function ($value) {
+			return ($value % 2) === 0;
+		}));
+	}
+
+	public function testGetKeyByValueCallbackNotFound()
+	{
+		$values = [1, 2, 3];
+
+		$this->expectException(\Consistence\Type\ArrayType\ElementDoesNotExistException::class);
+
+		ArrayType::getKeyByValueCallback($values, function ($value) {
+			return $value === 0;
+		});
+	}
+
+	public function testGetKeyByValueCallbackCustomKeys()
+	{
+		$values = [
+			'one' => 1,
+			'two' => 2,
+			'three' => 3
+		];
+		$this->assertSame('two', ArrayType::getKeyByValueCallback($values, function ($value) {
+			return ($value % 2) === 0;
+		}));
+	}
+
 	public function testFindValue()
 	{
 		$values = [

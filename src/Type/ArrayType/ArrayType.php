@@ -90,6 +90,24 @@ class ArrayType extends \Consistence\ObjectPrototype
 	}
 
 	/**
+	 * Returns key when callback(value) is at least once trueish or returns null
+	 *
+	 * @param mixed[] $haystack
+	 * @param \Closure $callback
+	 * @return integer|string|null
+	 */
+	public static function findKeyByValueCallback(array $haystack, Closure $callback)
+	{
+		foreach ($haystack as $key => $value) {
+			if ($callback($value)) {
+				return $key;
+			}
+		}
+
+		return null;
+	}
+
+	/**
 	 * @param mixed[] $haystack
 	 * @param mixed $needle
 	 * @param boolean $strict

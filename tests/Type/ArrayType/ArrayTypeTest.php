@@ -128,6 +128,34 @@ class ArrayTypeTest extends \Consistence\TestCase
 		}));
 	}
 
+	public function testFindKeyByValueCallback()
+	{
+		$values = [1, 2, 3];
+		$this->assertSame(1, ArrayType::findKeyByValueCallback($values, function ($value) {
+			return ($value % 2) === 0;
+		}));
+	}
+
+	public function testFindKeyByValueCallbackNotFound()
+	{
+		$values = [1, 2, 3];
+		$this->assertNull(ArrayType::findKeyByValueCallback($values, function ($value) {
+			return $value === 0;
+		}));
+	}
+
+	public function testFindKeyByValueCallbackCustomKeys()
+	{
+		$values = [
+			'one' => 1,
+			'two' => 2,
+			'three' => 3
+		];
+		$this->assertSame('two', ArrayType::findKeyByValueCallback($values, function ($value) {
+			return ($value % 2) === 0;
+		}));
+	}
+
 	public function testGetKey()
 	{
 		$values = [1, 2, 3];

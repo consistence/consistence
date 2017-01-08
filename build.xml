@@ -16,6 +16,7 @@
 	<property name="path.root" value="${project.basedir}"/>
 	<property name="path.src" value="${path.root}/src"/>
 	<property name="path.tests" value="${path.root}/tests"/>
+	<property name="path.tests.coverage.clover" value="${path.build}/log/coverage/clover.xml"/>
 	<property name="path.vendor" value="${path.root}/vendor"/>
 
 	<target name="build" depends="
@@ -29,8 +30,23 @@
 		composer-validate,
 		phplint,
 		cs,
-		tests
+		ci-tests
 	"/>
+
+	<target name="ci-tests">
+		<exec
+			executable="${path.phpunit.executable}"
+			logoutput="true"
+			passthru="true"
+			checkreturn="true"
+		>
+			<arg value="--configuration"/>
+			<arg value="${path.phpunit.configuration}"/>
+			<arg value="--coverage-clover"/>
+			<arg value="${path.tests.coverage.clover}"/>
+			<arg path="${path.tests}"/>
+		</exec>
+	</target>
 
 	<target name="composer" depends="composer-validate">
 		<exec

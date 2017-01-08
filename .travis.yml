@@ -1,0 +1,29 @@
+language: php
+
+sudo: false
+
+php:
+  - 5.6
+  - 7.0
+  - 7.1
+  - nightly
+  - hhvm
+
+env:
+  - # default environment without variables
+  - COMPOSER_DEPENDENCIES_OPTIONS="--prefer-lowest --prefer-stable"
+
+matrix:
+  fast_finish: true
+  allow_failures:
+    - php: nightly
+    - php: hhvm
+
+before_install:
+  - composer self-update
+
+install:
+  - composer update --no-interaction --prefer-source --ignore-platform-reqs $COMPOSER_DEPENDENCIES_OPTIONS
+
+script:
+  - bin/phing ci-build

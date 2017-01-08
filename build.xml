@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project name="Consistence" default="build">
+
+	<property name="path.build" value="${project.basedir}/build"/>
+	<property name="path.build.properties.local" value="${path.build}/build.local.properties"/>
+
+	<property file="${path.build.properties.local}"/>
+
+	<property name="path.bin" value="${path.root}/bin"/>
+	<property name="path.composer.executable" value="composer"/>
+	<property name="path.phpcs.executable" value="${path.bin}/phpcs"/>
+	<property name="path.phpcs.ruleset" value="${path.vendor}/consistence/coding-standard/Consistence/ruleset.xml"/>
+	<property name="path.phplint.executable" value="${path.bin}/parallel-lint"/>
+	<property name="path.phpunit.configuration" value="${path.tests}/phpunit.xml"/>
+	<property name="path.phpunit.executable" value="${path.bin}/phpunit"/>
+	<property name="path.root" value="${project.basedir}"/>
+	<property name="path.src" value="${path.root}/src"/>
+	<property name="path.tests" value="${path.root}/tests"/>
+	<property name="path.vendor" value="${path.root}/vendor"/>
+
+	<target name="build" depends="
+		composer,
+		phplint,
+		cs,
+		tests
+	"/>
+
+	<target name="composer" depends="composer-validate">
+		<exec
+			executable="${path.composer.executable}"
+			logoutput="true"
+			passthru="true"
+			checkreturn="true"
+		>
+			<arg value="install"/>
+		</exec>
+	</target>
+
+	<target name="composer-validate">
+		<exec
+			executable="${path.composer.executable}"
+			logoutput="true"
+			passthru="true"
+			checkreturn="true"
+		>
+			<arg value="validate"/>
+		</exec>
+	</target>
+
+	<target name="cs">
+		<exec
+			executable="${path.phpcs.executable}"
+			logoutput="true"
+			passthru="true"
+			checkreturn="true"
+		>
+			<arg value="--standard=${path.phpcs.ruleset}"/>
+			<arg value="--extensions=php"/>
+			<arg value="--encoding=utf-8"/>
+			<arg value="-sp"/>
+			<arg path="${path.src}"/>
+			<arg path="${path.tests}"/>
+		</exec>
+	</target>
+
+	<target name="phplint">
+		<exec
+			executable="${path.phplint.executable}"
+			logoutput="true"
+			passthru="true"
+			checkreturn="true"
+		>
+			<arg path="${path.src}"/>
+			<arg path="${path.tests}"/>
+		</exec>
+	</target>
+
+	<target name="tests">
+		<exec
+			executable="${path.phpunit.executable}"
+			logoutput="true"
+			passthru="true"
+			checkreturn="true"
+		>
+			<arg value="--configuration"/>
+			<arg value="${path.phpunit.configuration}"/>
+			<arg path="${path.tests}"/>
+		</exec>
+	</target>
+
+</project>

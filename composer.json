@@ -18,6 +18,7 @@
 		"jakub-onderka/php-console-highlighter": "0.3.2",
 		"jakub-onderka/php-parallel-lint": "0.9.2",
 		"phing/phing": "2.16",
+		"phpstan/phpstan": "0.5.2",
 		"phpunit/phpunit": "5.7.5"
 	},
 	"autoload": {

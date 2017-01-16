@@ -608,4 +608,15 @@ class MultiEnumTest extends \Consistence\TestCase
 		$this->assertSame(RolesEnum::get(RoleEnum::USER), $newRoles);
 	}
 
+	public function testDuplicateSpecifiedValues()
+	{
+		try {
+			MultiEnumWithValuesNotPowerOfTwo::get(MultiEnumWithValuesNotPowerOfTwo::FOO);
+			$this->fail();
+		} catch (\Consistence\Enum\MultiEnumValueIsNotPowerOfTwoException $e) {
+			$this->assertSame(MultiEnumWithValuesNotPowerOfTwo::BAZ, $e->getValue());
+			$this->assertSame(MultiEnumWithValuesNotPowerOfTwo::class, $e->getClass());
+		}
+	}
+
 }

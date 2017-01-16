@@ -191,7 +191,7 @@ class TimeFormatTest extends \Consistence\TestCase
 			$format,
 			$timeString,
 			new DateTimeZone('UTC')
-		), $time);
+		)->format($format), $time->format($format));
 	}
 
 	public function testCreateDateTimeWithDefaultTimezone()
@@ -240,7 +240,7 @@ class TimeFormatTest extends \Consistence\TestCase
 			$format,
 			$timeString,
 			new DateTimeZone('UTC')
-		), $time);
+		)->format($format), $time->format($format));
 	}
 
 	public function testCreateDateTimeImmutableWithDefaultTimezone()

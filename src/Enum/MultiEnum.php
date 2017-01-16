@@ -133,9 +133,9 @@ abstract class MultiEnum extends \Consistence\Enum\Enum implements \IteratorAggr
 	 */
 	private static function getSingleEnumMappedAvailableValues($singleEnumClass)
 	{
-		return array_map(function ($singleEnumValue) {
+		return ArrayType::mapValuesByCallback($singleEnumClass::getAvailableValues(), function ($singleEnumValue) {
 			return static::convertSingleEnumValueToValue($singleEnumValue);
-		}, $singleEnumClass::getAvailableValues());
+		});
 	}
 
 	/**

@@ -246,7 +246,10 @@ class RolesEnum extends \Consistence\Enum\MultiEnum
 		RoleEnum::ADMIN => 4,
 	];
 
-	public static function getSingleEnumClass(): string
+	/**
+	 * @return string
+	 */
+	public static function getSingleEnumClass()
 	{
 		return RoleEnum::class;
 	}
@@ -257,7 +260,7 @@ class RolesEnum extends \Consistence\Enum\MultiEnum
 	 * @param string $singleEnumValue
 	 * @return integer
 	 */
-	protected static function convertSingleEnumValueToValue($singleEnumValue): int
+	protected static function convertSingleEnumValueToValue($singleEnumValue)
 	{
 		return ArrayType::getValue(self::$singleMultiMap, $singleEnumValue);
 	}
@@ -268,7 +271,7 @@ class RolesEnum extends \Consistence\Enum\MultiEnum
 	 * @param integer $value
 	 * @return string
 	 */
-	protected static function convertValueToSingleEnumValue($value): string
+	protected static function convertValueToSingleEnumValue($value)
 	{
 		return ArrayType::getKey(self::$singleMultiMap, $value);
 	}

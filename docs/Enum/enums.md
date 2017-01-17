@@ -248,3 +248,11 @@ Representing multiple values
 ----------------------------
 
 If you want to represent multiple values from the same set in one instance (e.g.: enabled, available options etc.), check out [MultiEnum](multi-enums.md).
+
+Integrations
+------------
+
+If you are using one of the following libraries/frameworks, check out these integrations:
+
+* [Doctrine ORM integration](https://github.com/consistence/consistence-doctrine) provides integration to store Enums in database through entities, there is also [Symfony bundle with this integration](https://github.com/consistence/consistence-doctrine-symfony)
+* [JMS Serializer integration](https://github.com/consistence/consistence-jms-serializer) provides integration to (de)serialize Enums, there is also [Symfony bundle with this integration](https://github.com/consistence/consistence-jms-serializer-symfony)

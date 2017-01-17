@@ -18,7 +18,14 @@ Install package [`consistence/consistence`](https://packagist.org/packages/consi
 composer require consistence/consistence
 ```
 
-There are no further steps needed, you can start using Consistence whenever suitable in your codebase, see features below. 
+There are no further steps needed, you can start using Consistence whenever suitable in your codebase, see features below.
+
+### Integrations
+
+If you are using one of the following libraries/frameworks, check out these integrations:
+
+* [Doctrine ORM integration](https://github.com/consistence/consistence-doctrine) provides integration to store Consistence value objects in database through entities, there is also [Symfony bundle with this integration](https://github.com/consistence/consistence-doctrine-symfony)
+* [JMS Serializer integration](https://github.com/consistence/consistence-jms-serializer) provides integration to (de)serialize Consistence value objects, there is also [Symfony bundle with this integration](https://github.com/consistence/consistence-jms-serializer-symfony)
 
 Documentation & features
 ------------------------

@@ -65,10 +65,9 @@ Type::checkType('foo', 'string');
 Type::checkType('foo', 'integer');
 ```
 
-Usable types are listed in the [Consistence Coding Standard](https://github.com/consistence/coding-standard/blob/master/consistence-coding-standard.md#allowed-types-for-param-return-var). Also note that:
+Usable types are listed in the [Consistence Coding Standard](https://github.com/consistence/coding-standard/blob/master/consistence-coding-standard.md#allowed-types-for-param-return-var).
 
-* short type variants such as `int` are not supported, use `integer`, this is in order to keep symmetry with `Type::getType()` and have only one variant
-* for custom type always write the FQN (fully qualified name) and do not use leading `\`
+Also note that for custom type always write the FQN (fully qualified name) and do not use leading `\`
 
 When checking custom types, subtypes are allowed to be passed in by default, but you can control this by the third parameter:
 

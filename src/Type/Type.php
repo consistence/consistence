@@ -33,12 +33,8 @@ class Type extends \Consistence\ObjectPrototype
 		}
 
 		$type = gettype($value);
-		switch ($type) {
-			case 'double':
-				return 'float';
-			case 'NULL':
-				return 'null';
-		}
+
+		$type = self::normalizeType($type);
 
 		return $type;
 	}
@@ -50,6 +46,7 @@ class Type extends \Consistence\ObjectPrototype
 	 *  - integer
 	 *  - mixed (allow every type)
 	 *  - object
+	 *  - int
 	 *  - integer|string
 	 *  - integer|string|float
 	 *  - integer|null
@@ -95,6 +92,9 @@ class Type extends \Consistence\ObjectPrototype
 
 				return true;
 			}
+
+			$type = self::normalizeType($type);
+
 			if (
 				$type === self::TYPE_MIXED
 				|| ($type === self::TYPE_OBJECT && is_object($value))
@@ -121,6 +121,26 @@ class Type extends \Consistence\ObjectPrototype
 	{
 		if (!self::hasType($value, $expectedTypes, $allowSubtypes)) {
 			throw new \Consistence\InvalidArgumentTypeException($value, $expectedTypes);
+		}
+	}
+
+	/**
+	 * @param string $type
+	 * @return string
+	 */
+	private static function normalizeType($type)
+	{
+		switch ($type) {
+			case 'double':
+				return 'float';
+			case 'int':
+				return 'integer';
+			case 'bool':
+				return 'boolean';
+			case 'NULL':
+				return 'null';
+			default:
+				return $type;
 		}
 	}
 

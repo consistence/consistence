@@ -2,6 +2,8 @@
 
 namespace Consistence\Enum;
 
+use Consistence\Type\ArrayType\ArrayType;
+
 class EnumTest extends \Consistence\TestCase
 {
 
@@ -153,6 +155,28 @@ class EnumTest extends \Consistence\TestCase
 				'PUBLISHED' => StatusEnum::PUBLISHED,
 			], $e->getAvailableValues());
 		}
+	}
+
+	/**
+	 * @return mixed[][]
+	 */
+	public function typesProvider()
+	{
+		return ArrayType::mapValuesByCallback(TypeEnum::getAvailableValues(), function ($value) {
+			return [$value];
+		});
+	}
+
+	/**
+	 * @dataProvider typesProvider
+	 *
+	 * @param mixed $value
+	 */
+	public function testTypes($value)
+	{
+		$enum = TypeEnum::get($value);
+		$this->assertInstanceOf(TypeEnum::class, $enum);
+		$this->assertSame($enum->getValue(), $value);
 	}
 
 }

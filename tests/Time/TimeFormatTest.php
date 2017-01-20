@@ -17,12 +17,34 @@ class TimeFormatTest extends \Consistence\TestCase
 		$this->assertEquals($original->getTimezone(), $converted->getTimezone());
 	}
 
+	public function testCreateDateTimeFromTimestampWithCustomTimezone()
+	{
+		$timezone = new DateTimeZone('UTC');
+		$original = new DateTime('now', $timezone);
+
+		$converted = TimeFormat::createDateTimeFromTimestamp($original->getTimestamp(), $timezone);
+
+		$this->assertSame($original->getTimestamp(), $converted->getTimestamp());
+		$this->assertEquals($timezone, $converted->getTimezone());
+	}
+
 	public function testCreateDateTimeImmutableFromTimestamp()
 	{
 		$original = new DateTimeImmutable();
 		$converted = TimeFormat::createDateTimeImmutableFromTimestamp($original->getTimestamp());
 		$this->assertSame($original->getTimestamp(), $converted->getTimestamp());
 		$this->assertEquals($original->getTimezone(), $converted->getTimezone());
+	}
+
+	public function testCreateDateTimeImmutableFromTimestampWithCustomTimezone()
+	{
+		$timezone = new DateTimeZone('UTC');
+		$original = new DateTimeImmutable('now', $timezone);
+
+		$converted = TimeFormat::createDateTimeImmutableFromTimestamp($original->getTimestamp(), $timezone);
+
+		$this->assertSame($original->getTimestamp(), $converted->getTimestamp());
+		$this->assertEquals($timezone, $converted->getTimezone());
 	}
 
 	public function testCreateDateTimeFromDateTimeInterface()

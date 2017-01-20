@@ -120,6 +120,8 @@ object(DateTimeImmutable)#2 (3) {
 */
 ```
 
+Both methods accept a second parameter, where you can specify a custom timezone of the created instance.
+
 DateTime and DateTimeImmutable conversion
 -----------------------------------------
 

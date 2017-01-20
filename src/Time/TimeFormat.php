@@ -75,24 +75,38 @@ class TimeFormat extends \Consistence\ObjectPrototype
 	 * Convert unix timestamp to DateTime with current timezone
 	 *
 	 * @param integer $timestamp
+	 * @param \DateTimeZone|null $timezone
 	 * @return \DateTime
 	 */
-	public static function createDateTimeFromTimestamp($timestamp)
+	public static function createDateTimeFromTimestamp($timestamp, DateTimeZone $timezone = null)
 	{
 		Type::checkType($timestamp, 'integer');
-		return new DateTime(date(self::ISO8601_WITHOUT_TIMEZONE, $timestamp));
+
+		$time = new DateTime(date(self::ISO8601_WITHOUT_TIMEZONE, $timestamp));
+		if ($timezone !== null) {
+			$time->setTimezone($timezone);
+		}
+
+		return $time;
 	}
 
 	/**
 	 * Convert unix timestamp to DateTimeImmutable with current timezone
 	 *
 	 * @param integer $timestamp
+	 * @param \DateTimeZone|null $timezone
 	 * @return \DateTimeImmutable
 	 */
-	public static function createDateTimeImmutableFromTimestamp($timestamp)
+	public static function createDateTimeImmutableFromTimestamp($timestamp, DateTimeZone $timezone = null)
 	{
 		Type::checkType($timestamp, 'integer');
-		return new DateTimeImmutable(date(self::ISO8601_WITHOUT_TIMEZONE, $timestamp));
+
+		$time = new DateTimeImmutable(date(self::ISO8601_WITHOUT_TIMEZONE, $timestamp));
+		if ($timezone !== null) {
+			$time = $time->setTimezone($timezone);
+		}
+
+		return $time;
 	}
 
 	/**

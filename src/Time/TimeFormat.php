@@ -19,6 +19,7 @@ class TimeFormat extends \Consistence\ObjectPrototype
 	const ATOM = DATE_ATOM;
 	const COOKIE = DATE_COOKIE;
 	const ISO8601 = DATE_ISO8601;
+	const ISO8601_WITH_MICROSECONDS_WITHOUT_TIMEZONE = 'Y-m-d\TH:i:s.u';
 	const ISO8601_TIMEZONE_WITH_COLON = DATE_RFC3339;
 	const ISO8601_WITHOUT_TIMEZONE = 'Y-m-d\TH:i:s';
 	const RFC822 = DATE_RFC822;
@@ -101,7 +102,7 @@ class TimeFormat extends \Consistence\ObjectPrototype
 	 */
 	public static function createDateTimeFromDateTimeInterface(DateTimeInterface $date)
 	{
-		return new DateTime($date->format(self::ISO8601_WITHOUT_TIMEZONE), $date->getTimezone());
+		return new DateTime($date->format(self::ISO8601_WITH_MICROSECONDS_WITHOUT_TIMEZONE), $date->getTimezone());
 	}
 
 	/**
@@ -112,7 +113,7 @@ class TimeFormat extends \Consistence\ObjectPrototype
 	 */
 	public static function createDateTimeImmutableFromDateTimeInterface(DateTimeInterface $date)
 	{
-		return new DateTimeImmutable($date->format(self::ISO8601_WITHOUT_TIMEZONE), $date->getTimezone());
+		return new DateTimeImmutable($date->format(self::ISO8601_WITH_MICROSECONDS_WITHOUT_TIMEZONE), $date->getTimezone());
 	}
 
 	/**

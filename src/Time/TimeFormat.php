@@ -19,6 +19,8 @@ class TimeFormat extends \Consistence\ObjectPrototype
 	const ATOM = DATE_ATOM;
 	const COOKIE = DATE_COOKIE;
 	const ISO8601 = DATE_ISO8601;
+	const ISO8601_WITH_MICROSECONDS = 'Y-m-d\TH:i:s.uO';
+	const ISO8601_WITH_MICROSECONDS_WITHOUT_TIMEZONE = 'Y-m-d\TH:i:s.u';
 	const ISO8601_TIMEZONE_WITH_COLON = DATE_RFC3339;
 	const ISO8601_WITHOUT_TIMEZONE = 'Y-m-d\TH:i:s';
 	const RFC822 = DATE_RFC822;
@@ -101,7 +103,7 @@ class TimeFormat extends \Consistence\ObjectPrototype
 	 */
 	public static function createDateTimeFromDateTimeInterface(DateTimeInterface $date)
 	{
-		return new DateTime($date->format(self::ISO8601_WITHOUT_TIMEZONE), $date->getTimezone());
+		return new DateTime($date->format(self::ISO8601_WITH_MICROSECONDS_WITHOUT_TIMEZONE), $date->getTimezone());
 	}
 
 	/**
@@ -112,7 +114,7 @@ class TimeFormat extends \Consistence\ObjectPrototype
 	 */
 	public static function createDateTimeImmutableFromDateTimeInterface(DateTimeInterface $date)
 	{
-		return new DateTimeImmutable($date->format(self::ISO8601_WITHOUT_TIMEZONE), $date->getTimezone());
+		return new DateTimeImmutable($date->format(self::ISO8601_WITH_MICROSECONDS_WITHOUT_TIMEZONE), $date->getTimezone());
 	}
 
 	/**
@@ -127,7 +129,7 @@ class TimeFormat extends \Consistence\ObjectPrototype
 	 * This is achieved by parsing the date and then filling missing time parts,
 	 * because if some parts are missing then the current time according to the system
 	 * is used to fill these, which is unpredictable. The chosen "neutral" date
-	 * is 2016-07-17\T12:30:30Z which is a leap year and a date where no daylight savings time
+	 * is 2016-07-17\T12:30:30.5Z which is a leap year and a date where no daylight savings time
 	 * shifts occurred or are planned.
 	 *
 	 * This should ensure, that only time parts that are specified in the format are taken into
@@ -167,17 +169,20 @@ class TimeFormat extends \Consistence\ObjectPrototype
 				$timezone = 'UTC';
 		}
 		$completeTime = sprintf(
-			'%d-%02d-%02d %02d:%02d:%02d %s',
+			'%d-%02d-%02d %02d:%02d:%09.6f %s',
 			$parsedTime['year'] !== false ? $parsedTime['year'] : 2016, // leap year
 			$parsedTime['month'] !== false ? $parsedTime['month'] : 7, // no time shifts occurred on 7-17
 			$parsedTime['day'] !== false ? $parsedTime['day'] : 17,
 			$parsedTime['hour'] !== false ? $parsedTime['hour'] : 12,
 			$parsedTime['minute'] !== false ? $parsedTime['minute'] : 30,
-			$parsedTime['second'] !== false ? $parsedTime['second'] : 30,
+			(
+				($parsedTime['second'] !== false ? $parsedTime['second'] : 30)
+				+ ($parsedTime['fraction'] !== false ? $parsedTime['fraction'] : 0.5)
+			),
 			$timezone
 		);
 		// timezone is parsed as abbreviation, but that does not matter, while parsing it recognizes all formats
-		$dateTime = DateTime::createFromFormat('Y-m-d H:i:s T', $completeTime);
+		$dateTime = DateTime::createFromFormat('Y-m-d H:i:s.u T', $completeTime);
 		if (
 			($parsedTime['year'] !== false && (int) $parsedTime['year'] !== (int) $dateTime->format(self::YEAR))
 			|| ($parsedTime['month'] !== false && (int) $parsedTime['month'] !== (int) $dateTime->format(self::MONTH_OF_YEAR))
@@ -185,6 +190,7 @@ class TimeFormat extends \Consistence\ObjectPrototype
 			|| ($parsedTime['hour'] !== false && (int) $parsedTime['hour'] !== (int) $dateTime->format(self::TIME_OF_DAY))
 			|| ($parsedTime['minute'] !== false && (int) $parsedTime['minute'] !== (int) $dateTime->format(self::MINUTE_OF_HOUR_LEADING_ZERO))
 			|| ($parsedTime['second'] !== false && (int) $parsedTime['second'] !== (int) $dateTime->format(self::SECOND_OF_MINUTE_LEADING_ZERO))
+			|| ($parsedTime['fraction'] !== false && (float) $parsedTime['fraction'] !== (float) $dateTime->format('0.' . self::MICROSECOND_OF_SECOND))
 		) {
 			throw new \Consistence\Time\TimeDoesNotExistException($timeString);
 		}

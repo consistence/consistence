@@ -59,6 +59,10 @@ class TimeFormatTest extends \Consistence\TestCase
 			['Y-m-d H:i:s e', '2016-03-21 14:30:00 Europe/Prague'],
 			['Y-m-d H:i:s T', '2016-03-21 14:30:00 CEST'],
 			[TimeFormat::ISO8601, '2016-03-21T14:30:32-0100'],
+			[TimeFormat::ISO8601_WITH_MICROSECONDS, '2016-03-21T14:30:32.000001+0100'],
+			[TimeFormat::ISO8601_WITH_MICROSECONDS, '2016-03-21T14:30:32.100000+0100'],
+			[TimeFormat::ISO8601_WITH_MICROSECONDS, '2016-03-21T14:30:32.123456+0100'],
+			[TimeFormat::ISO8601_WITH_MICROSECONDS, '2016-03-21T14:30:32.999999+0100'],
 		];
 	}
 
@@ -73,6 +77,8 @@ class TimeFormatTest extends \Consistence\TestCase
 			['H:i', '2:30', 'missing leading zero in hour'],
 			['Y-m-d', '2016-1-2', 'there are missing zeroes at the beginning of day and month'],
 			[TimeFormat::ISO8601_TIMEZONE_WITH_COLON, '2016-03-21T14:30:32+0100', '`:` is required as timezone hour:minute separator'],
+			['s.u', '25.2', 'microseconds must have 6 digits'],
+			['s.u', '25.1234567', 'microseconds must have 6 digits'],
 		];
 	}
 

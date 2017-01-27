@@ -39,4 +39,36 @@ class MathTest extends \Consistence\TestCase
 		}
 	}
 
+	/**
+	 * @return mixed[][]
+	 */
+	public function powersOfTwoProvider()
+	{
+		return [
+			[-2, false],
+			[-1, false],
+			[0, false],
+			[1, true],
+			[2, true],
+			[3, false],
+			[4, true],
+			[6, false],
+			[8, true],
+			[10, false],
+			[16, true],
+			[32, true],
+		];
+	}
+
+	/**
+	 * @dataProvider powersOfTwoProvider
+	 *
+	 * @param integer $value
+	 * @param boolean $result
+	 */
+	public function testIsPowerOfTwo($value, $result)
+	{
+		$this->assertSame(Math::isPowerOfTwo($value), $result);
+	}
+
 }

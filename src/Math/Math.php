@@ -32,4 +32,19 @@ class Math extends \Consistence\ObjectPrototype
 		return $result;
 	}
 
+	/**
+	 * @param integer $value
+	 * @return boolean
+	 */
+	public static function isPowerOfTwo($value)
+	{
+		Type::checkType($value, 'integer');
+
+		if ($value < 1) {
+			return false;
+		}
+
+		return ($value & ($value - 1)) === 0;
+	}
+
 }

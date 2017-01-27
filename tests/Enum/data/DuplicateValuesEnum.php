@@ -1,0 +1,12 @@
+<?php
+
+namespace Consistence\Enum;
+
+class DuplicateValuesEnum extends \Consistence\Enum\Enum
+{
+
+	const FOO = 'foo';
+	const BAR = 'foo';
+	const BAZ = 'baz';
+
+}

@@ -87,7 +87,7 @@ class MultiEnumTest extends \Consistence\TestCase
 		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
 		$this->assertEquals([
 			'USER' => RoleEnum::USER,
-			'ADMIN' => RoleEnum::ADMIN
+			'ADMIN' => RoleEnum::ADMIN,
 		], $userAndAdmin->getValues());
 	}
 

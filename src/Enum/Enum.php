@@ -135,9 +135,6 @@ abstract class Enum extends \Consistence\ObjectPrototype
 		return [];
 	}
 
-	/**
-	 * @param self $that
-	 */
 	protected function checkSameEnum(self $that)
 	{
 		if (get_class($this) !== get_class($that)) {

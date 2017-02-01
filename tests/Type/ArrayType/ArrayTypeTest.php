@@ -232,7 +232,7 @@ class ArrayTypeTest extends \Consistence\TestCase
 		$values = [
 			'one' => 1,
 			'two' => 2,
-			'three' => 3
+			'three' => 3,
 		];
 		$this->assertSame('two', ArrayType::findKeyByCallback($values, function (KeyValuePair $pair) {
 			return ($pair->getValue() % 2) === 0;
@@ -260,7 +260,7 @@ class ArrayTypeTest extends \Consistence\TestCase
 		$values = [
 			'one' => 1,
 			'two' => 2,
-			'three' => 3
+			'three' => 3,
 		];
 		$this->assertSame('two', ArrayType::findKeyByValueCallback($values, function ($value) {
 			return ($value % 2) === 0;
@@ -306,7 +306,7 @@ class ArrayTypeTest extends \Consistence\TestCase
 		$values = [
 			'one' => 1,
 			'two' => 2,
-			'three' => 3
+			'three' => 3,
 		];
 		$this->assertSame('two', ArrayType::getKeyByCallback($values, function (KeyValuePair $pair) {
 			return ($pair->getValue() % 2) === 0;
@@ -337,7 +337,7 @@ class ArrayTypeTest extends \Consistence\TestCase
 		$values = [
 			'one' => 1,
 			'two' => 2,
-			'three' => 3
+			'three' => 3,
 		];
 		$this->assertSame('two', ArrayType::getKeyByValueCallback($values, function ($value) {
 			return ($value % 2) === 0;

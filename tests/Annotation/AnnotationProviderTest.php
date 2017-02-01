@@ -63,14 +63,14 @@ class AnnotationProviderTest extends \Consistence\TestCase
 		$annotationProvider = $this->createMock(AnnotationProvider::class);
 		$annotationProvider
 			->expects($this->once())
-			->method('getPropertyAnnotation')
+			->method('getPropertyAnnotations')
 			->with($property, 'test')
 			->will($this->returnValue([
 				Annotation::createAnnotationWithoutParams('test'),
 				Annotation::createAnnotationWithoutParams('test'),
 			]));
 
-		$annotations = $annotationProvider->getPropertyAnnotation($property, 'test');
+		$annotations = $annotationProvider->getPropertyAnnotations($property, 'test');
 		$this->assertCount(2, $annotations);
 	}
 

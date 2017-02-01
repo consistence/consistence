@@ -2,6 +2,8 @@
 
 namespace Consistence\Type\ArrayType;
 
+use DateTimeImmutable;
+
 class ArrayTypeTest extends \Consistence\TestCase
 {
 
@@ -444,6 +446,64 @@ class ArrayTypeTest extends \Consistence\TestCase
 			5 => 'bar',
 		]));
 		$this->assertCount(3, $values);
+	}
+
+	public function testUniqueValuesStrict()
+	{
+		$values = ['1', 1];
+		$expected = ['1', 1];
+
+		$actual = ArrayType::uniqueValues($values);
+
+		$this->assertSame($expected, $actual);
+	}
+
+	public function testUniqueValuesStrictWithObjects()
+	{
+		$values = [
+			new DateTimeImmutable('2017-01-01T12:00:00.000000'),
+			new DateTimeImmutable('2017-01-01T12:00:00.000000'),
+		];
+
+		$actual = ArrayType::uniqueValues($values);
+
+		$this->assertSame($values, $actual);
+	}
+
+	public function testUniqueValuesNonStrictBehavesAsArrayUniqueWithRegularComparison()
+	{
+		$values = ['1', 1];
+
+		$actual = ArrayType::uniqueValues($values, ArrayType::STRICT_FALSE);
+
+		$this->assertContains(1, $actual);
+		$this->assertCount(1, $actual);
+	}
+
+	public function testUniqueValuesNonStrictWithObjects()
+	{
+		$values = [
+			new DateTimeImmutable('2017-01-01T12:00:00.000000'),
+			new DateTimeImmutable('2017-01-01T12:00:00.000000'),
+		];
+
+		$actual = ArrayType::uniqueValues($values, ArrayType::STRICT_FALSE);
+
+		$this->assertContains(new DateTimeImmutable('2017-01-01T12:00:00.000000'), $actual, '', false, false);
+		$this->assertCount(1, $actual);
+	}
+
+	public function testUniqueValuesKeepsKeys()
+	{
+		$values = [
+			'a' => 'green',
+			0 => 'red',
+			1 => 'blue',
+		];
+
+		$actual = ArrayType::uniqueValues($values);
+
+		$this->assertSame($values, $actual);
 	}
 
 }

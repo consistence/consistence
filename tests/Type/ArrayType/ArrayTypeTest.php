@@ -446,4 +446,34 @@ class ArrayTypeTest extends \Consistence\TestCase
 		$this->assertCount(3, $values);
 	}
 
+	public function testUniqueStrict()
+	{
+		$values = ['1', 1];
+		$expected = ['1', 1];
+		$actual = ArrayType::unique($values);
+		$this->assertSame($expected, $actual);
+	}
+
+	public function testUniqueNonStrictBehavesAsArrayUniqueWithRegularComparison()
+	{
+		$values = ['1', 1];
+		$expected = array_unique($values, SORT_REGULAR);
+		$actual = ArrayType::unique($values, ArrayType::STRICT_FALSE);
+		$this->assertSame($expected, $actual);
+	}
+
+	public function testUniqueNonStrictKeepsKeysAsArrayUniqueWould()
+	{
+		$values = [
+			'a' => 'green',
+			0 => 'red',
+			'b' => 'green',
+			1 => 'blue',
+			2 => 'red',
+		];
+		$expected = array_unique($values, SORT_REGULAR);
+		$actual = ArrayType::unique($values, ArrayType::STRICT_FALSE);
+		$this->assertSame($expected, $actual);
+	}
+
 }

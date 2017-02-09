@@ -506,4 +506,56 @@ class ArrayTypeTest extends \Consistence\TestCase
 		$this->assertSame($values, $actual);
 	}
 
+	public function testUniqueValuesByCallbackWithStrictComparison()
+	{
+		$values = ['1', 1];
+
+		$actual = ArrayType::uniqueValuesByCallback($values, function ($a, $b) {
+			return $a === $b;
+		});
+
+		$this->assertSame($values, $actual);
+	}
+
+	public function testUniqueValuesByCallbackWithStrictComparisonWithObjects()
+	{
+		$values = [
+			new DateTimeImmutable('2017-01-01T12:00:00.000000'),
+			new DateTimeImmutable('2017-01-01T12:00:00.000000'),
+		];
+
+		$actual = ArrayType::uniqueValuesByCallback($values, function ($a, $b) {
+			return $a === $b;
+		});
+
+		$this->assertSame($values, $actual);
+	}
+
+	public function testUniqueValuesByCallbackWithNonStrictComparison()
+	{
+		$values = ['1', 1];
+
+		$actual = ArrayType::uniqueValuesByCallback($values, function ($a, $b) {
+			return $a == $b;
+		});
+
+		$this->assertContains(1, $actual);
+		$this->assertCount(1, $actual);
+	}
+
+	public function testUniqueValuesByCallbackWithNonStrictComparisonWithObjects()
+	{
+		$values = [
+			new DateTimeImmutable('2017-01-01T12:00:00.000000'),
+			new DateTimeImmutable('2017-01-01T12:00:00.000000'),
+		];
+
+		$actual = ArrayType::uniqueValuesByCallback($values, function ($a, $b) {
+			return $a == $b;
+		});
+
+		$this->assertContains(new DateTimeImmutable('2017-01-01T12:00:00.000000'), $actual, '', false, false);
+		$this->assertCount(1, $actual);
+	}
+
 }

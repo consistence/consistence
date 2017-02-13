@@ -379,4 +379,47 @@ class ArrayType extends \Consistence\ObjectPrototype
 		return $modified;
 	}
 
+	/**
+	 * Mimics the behaviour of array_unique, but makes strict comparisons by default
+	 *
+	 * @param mixed[] $haystack
+	 * @param boolean $strict
+	 * @return mixed[] new array with unique values
+	 */
+	public static function uniqueValues(array $haystack, $strict = self::STRICT_TRUE)
+	{
+		$result = [];
+		foreach ($haystack as $key => $value) {
+			if (!self::inArray($result, $value, $strict)) {
+				$result[$key] = $value;
+			}
+		}
+
+		return $result;
+	}
+
+	/**
+	 * Returns new array with unique values using callback(valueA, valueB),
+	 * values are same if callback returns trueish value
+	 *
+	 * @param mixed[] $haystack
+	 * @param \Closure $callback
+	 * @return mixed[] new array with unique values
+	 */
+	public static function uniqueValuesByCallback(array $haystack, Closure $callback)
+	{
+		$result = [];
+		foreach ($haystack as $newKey => $newValue) {
+			foreach ($result as $existingValue) {
+				if ($callback($existingValue, $newValue)) {
+					continue 2; // skip to next $value
+				}
+			}
+
+			$result[$newKey] = $newValue;
+		}
+
+		return $result;
+	}
+
 }

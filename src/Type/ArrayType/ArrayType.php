@@ -379,4 +379,22 @@ class ArrayType extends \Consistence\ObjectPrototype
 		return $modified;
 	}
 
+	/**
+	 * Mimics the behaviour of array_unique, but makes strict comparisons by default
+	 *
+	 * @param array $array
+	 * @param boolean $strict
+	 * @return array returns the filtered array with unique values
+	 */
+	public static function unique(array $array, $strict = self::STRICT_TRUE)
+	{
+		$result = [];
+		foreach ($array as $key => $value) {
+			if (self::inArray($result, $value, $strict) === false) {
+				$result[$key] = $value;
+			}
+		}
+		return $result;
+	}
+
 }

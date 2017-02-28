@@ -74,6 +74,15 @@ class EnumTest extends \Consistence\TestCase
 		], StatusEnum::getAvailableValues());
 	}
 
+	public function testGetAvailableEnums()
+	{
+		$this->assertEquals([
+			'DRAFT' => StatusEnum::get(StatusEnum::DRAFT),
+			'REVIEW' => StatusEnum::get(StatusEnum::REVIEW),
+			'PUBLISHED' => StatusEnum::get(StatusEnum::PUBLISHED),
+		], StatusEnum::getAvailableEnums());
+	}
+
 	public function testIsValidValue()
 	{
 		$this->assertTrue(StatusEnum::isValidValue(StatusEnum::DRAFT));

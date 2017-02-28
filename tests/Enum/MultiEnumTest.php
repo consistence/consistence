@@ -154,6 +154,15 @@ class MultiEnumTest extends \Consistence\TestCase
 		], RolesEnum::getAvailableValues());
 	}
 
+	public function testGetAvailableEnums()
+	{
+		$this->assertEquals([
+			'USER' => RolesEnum::get(RoleEnum::USER),
+			'EMPLOYEE' => RolesEnum::get(RoleEnum::EMPLOYEE),
+			'ADMIN' => RolesEnum::get(RoleEnum::ADMIN),
+		], RolesEnum::getAvailableEnums());
+	}
+
 	public function testGetNoValue()
 	{
 		$empty = RolesEnum::get(0);

@@ -4,6 +4,7 @@ namespace Consistence\Enum;
 
 use Consistence\Reflection\ClassReflection;
 use Consistence\Type\ArrayType\ArrayType;
+use Consistence\Type\ArrayType\KeyValuePair;
 use Consistence\Type\Type;
 
 use ReflectionClass;
@@ -66,6 +67,17 @@ abstract class Enum extends \Consistence\ObjectPrototype
 		}
 
 		return self::$availableValues[$index];
+	}
+
+	/**
+	 * @return static[] format: const name (string) => instance (static)
+	 */
+	public static function getAvailableEnums()
+	{
+		$values = static::getAvailableValues();
+		return ArrayType::mapByCallback($values, function (KeyValuePair $pair) {
+			return new KeyValuePair($pair->getKey(), static::get($pair->getValue()));
+		});
 	}
 
 	/**

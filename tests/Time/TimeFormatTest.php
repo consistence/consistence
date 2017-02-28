@@ -215,7 +215,7 @@ class TimeFormatTest extends \Consistence\TestCase
 		);
 
 		$this->assertInstanceOf(DateTime::class, $time);
-		$this->assertEquals(DateTime::createFromFormat(
+		$this->assertSame(DateTime::createFromFormat(
 			$format,
 			$timeString,
 			new DateTimeZone('UTC')
@@ -264,7 +264,7 @@ class TimeFormatTest extends \Consistence\TestCase
 		);
 
 		$this->assertInstanceOf(DateTimeImmutable::class, $time);
-		$this->assertEquals(DateTimeImmutable::createFromFormat(
+		$this->assertSame(DateTimeImmutable::createFromFormat(
 			$format,
 			$timeString,
 			new DateTimeZone('UTC')

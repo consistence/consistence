@@ -24,7 +24,7 @@ In the previous example, there is logic of going through the array mixed with bu
 use Consistence\Type\ArrayType\ArrayType;
 
 $haystack = ['lorem', 'ipsum', 'dolor', 'sit', 'amet'];
-$value = ArrayType::findValueByCallback($haystack, function($value) {
+$value = ArrayType::findValueByCallback($haystack, function(string $value) {
 	return strlen($value) < 5;
 });
 if ($value !== null) {
@@ -129,7 +129,7 @@ $haystack = [
 	2 => 2,
 	3 => 3,
 ];
-var_dump(ArrayType::mapByCallback($haystack, function (KeyValuePair $pair) {
+var_dump(ArrayType::mapByCallback($haystack, function (KeyValuePair $pair): KeyValuePair {
 	return new KeyValuePair(
 		2 * $pair->getKey(),
 		3 * $pair->getValue()
@@ -157,7 +157,7 @@ $haystack = [
 	2 => 2,
 	3 => 3,
 ];
-var_dump(ArrayType::mapByCallback($haystack, function (KeyValuePairMutable $pair) {
+var_dump(ArrayType::mapByCallback($haystack, function (KeyValuePairMutable $pair): KeyValuePairMutable {
 	$pair->setPair(
 		2 * $pair->getKey(),
 		3 * $pair->getValue()

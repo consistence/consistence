@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Consistence\Enum;
 
 use Consistence\Reflection\ClassReflection;
@@ -34,7 +36,7 @@ abstract class Enum extends \Consistence\ObjectPrototype
 	 * @param mixed $value
 	 * @return static
 	 */
-	public static function get($value)
+	public static function get($value): self
 	{
 		$index = sprintf('%s::%s', get_called_class(), self::getValueIndex($value));
 		if (!isset(self::$instances[$index])) {
@@ -48,7 +50,7 @@ abstract class Enum extends \Consistence\ObjectPrototype
 	 * @param mixed $value
 	 * @return string
 	 */
-	private static function getValueIndex($value)
+	private static function getValueIndex($value): string
 	{
 		$type = Type::getType($value);
 		return $value . sprintf('[%s]', $type);
@@ -112,7 +114,7 @@ abstract class Enum extends \Consistence\ObjectPrototype
 	 * @param mixed $value
 	 * @return boolean
 	 */
-	public static function isValidValue($value)
+	public static function isValidValue($value): bool
 	{
 		return ArrayType::containsValue(static::getAvailableValues(), $value);
 	}
@@ -150,11 +152,7 @@ abstract class Enum extends \Consistence\ObjectPrototype
 		return $this->value;
 	}
 
-	/**
-	 * @param self $that
-	 * @return boolean
-	 */
-	public function equals(self $that)
+	public function equals(self $that): bool
 	{
 		$this->checkSameEnum($that);
 
@@ -165,7 +163,7 @@ abstract class Enum extends \Consistence\ObjectPrototype
 	 * @param mixed $value
 	 * @return boolean
 	 */
-	public function equalsValue($value)
+	public function equalsValue($value): bool
 	{
 		return $this->getValue() === $value;
 	}

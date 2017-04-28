@@ -1,14 +1,13 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Consistence\Enum;
 
 class RolesEnum extends \Consistence\Enum\MultiEnum
 {
 
-	/**
-	 * @return string
-	 */
-	public static function getSingleEnumClass()
+	public static function getSingleEnumClass(): string
 	{
 		return RoleEnum::class;
 	}

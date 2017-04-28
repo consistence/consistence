@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Consistence\Enum;
 
 class OperationSupportedOnlyForSameEnumException extends \Consistence\PhpException implements \Consistence\Enum\Exception
@@ -11,7 +13,7 @@ class OperationSupportedOnlyForSameEnumException extends \Consistence\PhpExcepti
 	/** @var \Consistence\Enum\Enum */
 	private $expected;
 
-	public function __construct(Enum $given, Enum $expected, \Exception $previous = null)
+	public function __construct(Enum $given, Enum $expected, \Throwable $previous = null)
 	{
 		parent::__construct(sprintf(
 			'Operation supported only for enum of same class: %s given, %s expected',
@@ -22,18 +24,12 @@ class OperationSupportedOnlyForSameEnumException extends \Consistence\PhpExcepti
 		$this->expected = $expected;
 	}
 
-	/**
-	 * @return \Consistence\Enum\Enum
-	 */
-	public function getGiven()
+	public function getGiven(): Enum
 	{
 		return $this->given;
 	}
 
-	/**
-	 * @return \Consistence\Enum\Enum
-	 */
-	public function getExpected()
+	public function getExpected(): Enum
 	{
 		return $this->expected;
 	}

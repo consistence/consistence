@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Consistence\Type;
 
 class ObjectMixin
@@ -16,10 +18,9 @@ class ObjectMixin
 	 * @param object $object
 	 * @param string $name method name
 	 */
-	public static function magicCall($object, $name)
+	public static function magicCall($object, string $name)
 	{
 		Type::checkType($object, 'object');
-		Type::checkType($name, 'string');
 
 		throw new \Consistence\UndefinedMethodException(get_class($object), $name);
 	}
@@ -30,11 +31,8 @@ class ObjectMixin
 	 * @param string $class
 	 * @param string $name method name
 	 */
-	public static function magicCallStatic($class, $name)
+	public static function magicCallStatic(string $class, string $name)
 	{
-		Type::checkType($class, 'string');
-		Type::checkType($name, 'string');
-
 		throw new \Consistence\UndefinedMethodException($class, $name);
 	}
 
@@ -44,10 +42,9 @@ class ObjectMixin
 	 * @param object $object
 	 * @param string $name property name
 	 */
-	public static function magicGet($object, $name)
+	public static function magicGet($object, string $name)
 	{
 		Type::checkType($object, 'object');
-		Type::checkType($name, 'string');
 
 		throw new \Consistence\UndefinedPropertyException(get_class($object), $name);
 	}
@@ -58,10 +55,9 @@ class ObjectMixin
 	 * @param object $object
 	 * @param string $name property name
 	 */
-	public static function magicSet($object, $name)
+	public static function magicSet($object, string $name)
 	{
 		Type::checkType($object, 'object');
-		Type::checkType($name, 'string');
 
 		throw new \Consistence\UndefinedPropertyException(get_class($object), $name);
 	}
@@ -72,10 +68,9 @@ class ObjectMixin
 	 * @param object $object
 	 * @param string $name property name
 	 */
-	public static function magicIsSet($object, $name)
+	public static function magicIsSet($object, string $name)
 	{
 		Type::checkType($object, 'object');
-		Type::checkType($name, 'string');
 
 		throw new \Consistence\UndefinedPropertyException(get_class($object), $name);
 	}
@@ -86,10 +81,9 @@ class ObjectMixin
 	 * @param object $object
 	 * @param string $name property name
 	 */
-	public static function magicUnset($object, $name)
+	public static function magicUnset($object, string $name)
 	{
 		Type::checkType($object, 'object');
-		Type::checkType($name, 'string');
 
 		throw new \Consistence\UndefinedPropertyException(get_class($object), $name);
 	}

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Consistence;
 
 use Consistence\Type\Type;
@@ -19,9 +21,9 @@ class InvalidArgumentTypeException extends \Consistence\InvalidArgumentException
 	/**
 	 * @param mixed $value
 	 * @param string $expectedTypes
-	 * @param \Exception $previous
+	 * @param \Throwable|null $previous
 	 */
-	public function __construct($value, $expectedTypes, \Exception $previous = null)
+	public function __construct($value, string $expectedTypes, \Throwable $previous = null)
 	{
 		$this->value = $value;
 		$this->valueType = Type::getType($value);
@@ -40,18 +42,12 @@ class InvalidArgumentTypeException extends \Consistence\InvalidArgumentException
 		return $this->value;
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getValueType()
+	public function getValueType(): string
 	{
 		return $this->valueType;
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getExpectedTypes()
+	public function getExpectedTypes(): string
 	{
 		return $this->expectedTypes;
 	}
@@ -60,7 +56,7 @@ class InvalidArgumentTypeException extends \Consistence\InvalidArgumentException
 	 * @param mixed $value
 	 * @return string
 	 */
-	private function getPrintedValue($value)
+	private function getPrintedValue($value): string
 	{
 		$printedValue = $value;
 		if (is_object($value) && method_exists($value, '__toString') === false) {
@@ -77,7 +73,7 @@ class InvalidArgumentTypeException extends \Consistence\InvalidArgumentException
 	 * @param object $value
 	 * @return string
 	 */
-	private function getObjectHash($value)
+	private function getObjectHash($value): string
 	{
 		return '#' . substr(md5(spl_object_hash($value)), 0, 4);
 	}

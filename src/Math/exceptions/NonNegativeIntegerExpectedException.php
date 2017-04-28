@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Consistence\Math;
 
 class NonNegativeIntegerExpectedException extends \Consistence\PhpException implements \Consistence\Math\Exception
@@ -10,9 +12,9 @@ class NonNegativeIntegerExpectedException extends \Consistence\PhpException impl
 
 	/**
 	 * @param mixed $value
-	 * @param \Exception|null $previous
+	 * @param \Throwable|null $previous
 	 */
-	public function __construct($value, \Exception $previous = null)
+	public function __construct($value, \Throwable $previous = null)
 	{
 		parent::__construct(
 			sprintf('Non-negative integer expected, [%s] given', $value),

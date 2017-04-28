@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Consistence\Type;
 
 use ArrayObject;
@@ -20,7 +22,7 @@ class TypeTest extends \Consistence\TestCase
 	/**
 	 * @return mixed[][]
 	 */
-	public function typesProvider()
+	public function typesProvider(): array
 	{
 		return [
 			['foo', 'string'],
@@ -36,7 +38,7 @@ class TypeTest extends \Consistence\TestCase
 	/**
 	 * @return mixed[][]
 	 */
-	public function typeChecksProvider()
+	public function typeChecksProvider(): array
 	{
 		return array_merge(
 			$this->typesProvider(),
@@ -154,7 +156,7 @@ class TypeTest extends \Consistence\TestCase
 	 * @param mixed $type
 	 * @param string $expected
 	 */
-	public function testTypes($type, $expected)
+	public function testTypes($type, string $expected)
 	{
 		$this->assertSame($expected, Type::getType($type));
 	}
@@ -166,7 +168,7 @@ class TypeTest extends \Consistence\TestCase
 	 * @param string $expectedTypes
 	 * @param boolean $result
 	 */
-	public function testHasType($value, $expectedTypes, $result = true)
+	public function testHasType($value, string $expectedTypes, bool $result = true)
 	{
 		$this->assertSame($result, Type::hasType($value, $expectedTypes));
 	}
@@ -191,7 +193,7 @@ class TypeTest extends \Consistence\TestCase
 	 * @param mixed $value
 	 * @param string $valueType
 	 */
-	public function testCheckTypeExceptionValues($value, $valueType)
+	public function testCheckTypeExceptionValues($value, string $valueType)
 	{
 		try {
 			Type::checkType($value, 'resource');

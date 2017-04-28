@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Consistence\Time;
 
 use DateTime;
@@ -68,7 +70,7 @@ class TimeFormatTest extends \Consistence\TestCase
 	/**
 	 * @return string[][]
 	 */
-	public function validTimesProvider()
+	public function validTimesProvider(): array
 	{
 		return [
 			['H:i', '02:00'],
@@ -91,7 +93,7 @@ class TimeFormatTest extends \Consistence\TestCase
 	/**
 	 * @return string[][]
 	 */
-	public function invalidTimesForFormatProvider()
+	public function invalidTimesForFormatProvider(): array
 	{
 		return [
 			['', TimeFormat::ISO8601, 'empty string'],
@@ -107,7 +109,7 @@ class TimeFormatTest extends \Consistence\TestCase
 	/**
 	 * @return string[][]
 	 */
-	public function nonExistingTimesProvider()
+	public function nonExistingTimesProvider(): array
 	{
 		return [
 			['H:i', '25:00', 'there is no 25th hour in the day'],
@@ -119,7 +121,7 @@ class TimeFormatTest extends \Consistence\TestCase
 	/**
 	 * @return string[][]
 	 */
-	public function invalidTimesProvider()
+	public function invalidTimesProvider(): array
 	{
 		return array_merge(
 			$this->invalidTimesForFormatProvider(),
@@ -133,7 +135,7 @@ class TimeFormatTest extends \Consistence\TestCase
 	 * @param string $format
 	 * @param string $timeString
 	 */
-	public function testCheckValidTimes($format, $timeString)
+	public function testCheckValidTimes(string $format, string $timeString)
 	{
 		TimeFormat::checkTime($format, $timeString);
 		$this->ok();
@@ -146,7 +148,7 @@ class TimeFormatTest extends \Consistence\TestCase
 	 * @param string $timeString
 	 * @param string $reason
 	 */
-	public function testCheckInvalidTimes($format, $timeString, $reason)
+	public function testCheckInvalidTimes(string $format, string $timeString, string $reason)
 	{
 		try {
 			TimeFormat::checkTime($format, $timeString);
@@ -164,7 +166,7 @@ class TimeFormatTest extends \Consistence\TestCase
 	 * @param string $timeString
 	 * @param string $reason
 	 */
-	public function testCheckNonExistingTimes($format, $timeString, $reason)
+	public function testCheckNonExistingTimes(string $format, string $timeString, string $reason)
 	{
 		try {
 			TimeFormat::checkTime($format, $timeString);
@@ -180,7 +182,7 @@ class TimeFormatTest extends \Consistence\TestCase
 	 * @param string $format
 	 * @param string $timeString
 	 */
-	public function testValidTimes($format, $timeString)
+	public function testValidTimes(string $format, string $timeString)
 	{
 		$this->assertTrue(TimeFormat::isValidTime($format, $timeString));
 	}
@@ -192,7 +194,7 @@ class TimeFormatTest extends \Consistence\TestCase
 	 * @param string $timeString
 	 * @param string $reason
 	 */
-	public function testInvalidTimes($format, $timeString, $reason)
+	public function testInvalidTimes(string $format, string $timeString, string $reason)
 	{
 		$this->assertFalse(
 			TimeFormat::isValidTime($format, $timeString),
@@ -206,7 +208,7 @@ class TimeFormatTest extends \Consistence\TestCase
 	 * @param string $format
 	 * @param string $timeString
 	 */
-	public function testCreateValidDateTime($format, $timeString)
+	public function testCreateValidDateTime(string $format, string $timeString)
 	{
 		$time = TimeFormat::createDateTimeFromFormat(
 			$format,
@@ -234,7 +236,7 @@ class TimeFormatTest extends \Consistence\TestCase
 	 * @param string $timeString
 	 * @param string $reason
 	 */
-	public function testCreateInvalidDateTime($format, $timeString, $reason)
+	public function testCreateInvalidDateTime(string $format, string $timeString, string $reason)
 	{
 		try {
 			TimeFormat::createDateTimeFromFormat(
@@ -255,7 +257,7 @@ class TimeFormatTest extends \Consistence\TestCase
 	 * @param string $format
 	 * @param string $timeString
 	 */
-	public function testCreateValidDateTimeImmutable($format, $timeString)
+	public function testCreateValidDateTimeImmutable(string $format, string $timeString)
 	{
 		$time = TimeFormat::createDateTimeImmutableFromFormat(
 			$format,
@@ -283,7 +285,7 @@ class TimeFormatTest extends \Consistence\TestCase
 	 * @param string $timeString
 	 * @param string $reason
 	 */
-	public function testCreateInvalidDateTimeImmutable($format, $timeString, $reason)
+	public function testCreateInvalidDateTimeImmutable(string $format, string $timeString, string $reason)
 	{
 		try {
 			TimeFormat::createDateTimeImmutableFromFormat(

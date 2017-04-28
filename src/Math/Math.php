@@ -1,8 +1,8 @@
 <?php
 
-namespace Consistence\Math;
+declare(strict_types = 1);
 
-use Consistence\Type\Type;
+namespace Consistence\Math;
 
 class Math extends \Consistence\ObjectPrototype
 {
@@ -17,10 +17,8 @@ class Math extends \Consistence\ObjectPrototype
 	 * @param integer $modulus n
 	 * @return integer
 	 */
-	public static function modulo($dividend, $modulus)
+	public static function modulo(int $dividend, int $modulus): int
 	{
-		Type::checkType($dividend, 'integer');
-		Type::checkType($modulus, 'integer');
 		if ($modulus < 0) {
 			throw new \Consistence\Math\NonNegativeIntegerExpectedException($modulus);
 		}
@@ -32,14 +30,8 @@ class Math extends \Consistence\ObjectPrototype
 		return $result;
 	}
 
-	/**
-	 * @param integer $value
-	 * @return boolean
-	 */
-	public static function isPowerOfTwo($value)
+	public static function isPowerOfTwo(int $value): bool
 	{
-		Type::checkType($value, 'integer');
-
 		if ($value < 1) {
 			return false;
 		}

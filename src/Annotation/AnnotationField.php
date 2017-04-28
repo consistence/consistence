@@ -1,8 +1,8 @@
 <?php
 
-namespace Consistence\Annotation;
+declare(strict_types = 1);
 
-use Consistence\Type\Type;
+namespace Consistence\Annotation;
 
 class AnnotationField extends \Consistence\ObjectPrototype
 {
@@ -17,17 +17,13 @@ class AnnotationField extends \Consistence\ObjectPrototype
 	 * @param string $name
 	 * @param mixed|null $value
 	 */
-	public function __construct($name, $value = null)
+	public function __construct(string $name, $value = null)
 	{
-		Type::checkType($name, 'string');
 		$this->name = $name;
 		$this->value = $value;
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getName()
+	public function getName(): string
 	{
 		return $this->name;
 	}

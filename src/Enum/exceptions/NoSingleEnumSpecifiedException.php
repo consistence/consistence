@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Consistence\Enum;
 
 class NoSingleEnumSpecifiedException extends \Consistence\PhpException implements \Consistence\Enum\Exception
@@ -8,11 +10,7 @@ class NoSingleEnumSpecifiedException extends \Consistence\PhpException implement
 	/** @var string */
 	private $class;
 
-	/**
-	 * @param string $class
-	 * @param \Exception|null $previous
-	 */
-	public function __construct($class, \Exception $previous = null)
+	public function __construct(string $class, \Throwable $previous = null)
 	{
 		parent::__construct(sprintf(
 			'There is no single Enum (implementing %s) defined for MultiEnum %s',
@@ -22,10 +20,7 @@ class NoSingleEnumSpecifiedException extends \Consistence\PhpException implement
 		$this->class = $class;
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getClass()
+	public function getClass(): string
 	{
 		return $this->class;
 	}

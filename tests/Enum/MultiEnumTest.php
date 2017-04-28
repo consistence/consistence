@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Consistence\Enum;
 
 class MultiEnumTest extends \Consistence\TestCase
@@ -600,7 +602,7 @@ class MultiEnumTest extends \Consistence\TestCase
 	public function testFilter()
 	{
 		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
-		$newRoles = $userAndAdmin->filter(function (Enum $singleEnum) {
+		$newRoles = $userAndAdmin->filter(function (Enum $singleEnum): bool {
 			return $singleEnum->equalsValue(RoleEnum::USER);
 		});
 
@@ -610,7 +612,7 @@ class MultiEnumTest extends \Consistence\TestCase
 	public function testFilterValue()
 	{
 		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
-		$newRoles = $userAndAdmin->filterValues(function ($value) {
+		$newRoles = $userAndAdmin->filterValues(function (int $value): bool {
 			return $value === RoleEnum::USER;
 		});
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Consistence\Time;
 
 class TimeDoesNotMatchFormatException extends \Consistence\PhpException implements \Consistence\Time\InvalidTimeForFormatException
@@ -11,12 +13,7 @@ class TimeDoesNotMatchFormatException extends \Consistence\PhpException implemen
 	/** @var string */
 	private $timeString;
 
-	/**
-	 * @param string $format
-	 * @param string $timeString
-	 * @param \Exception|null $previous
-	 */
-	public function __construct($format, $timeString, \Exception $previous = null)
+	public function __construct(string $format, string $timeString, \Throwable $previous = null)
 	{
 		parent::__construct(
 			sprintf('Time "%s" does not match format "%s"', $timeString, $format),
@@ -26,18 +23,12 @@ class TimeDoesNotMatchFormatException extends \Consistence\PhpException implemen
 		$this->timeString = $timeString;
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getFormat()
+	public function getFormat(): string
 	{
 		return $this->format;
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getTimeString()
+	public function getTimeString(): string
 	{
 		return $this->timeString;
 	}

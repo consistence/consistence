@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Consistence\Enum;
 
 use ArrayIterator;
@@ -58,7 +60,7 @@ abstract class MultiEnum extends \Consistence\Enum\Enum implements \IteratorAggr
 	 * @param integer ...$values
 	 * @return static
 	 */
-	public static function getMulti(...$values)
+	public static function getMulti(int ...$values): self
 	{
 		return self::getMultiByArray($values);
 	}
@@ -67,7 +69,7 @@ abstract class MultiEnum extends \Consistence\Enum\Enum implements \IteratorAggr
 	 * @param integer[] $values enum values
 	 * @return static
 	 */
-	public static function getMultiByArray(array $values)
+	public static function getMultiByArray(array $values): self
 	{
 		$state = 0;
 		foreach ($values as $value) {
@@ -81,7 +83,7 @@ abstract class MultiEnum extends \Consistence\Enum\Enum implements \IteratorAggr
 	 * @param \Consistence\Enum\Enum $singleEnum
 	 * @return static
 	 */
-	public static function getMultiByEnum(Enum $singleEnum)
+	public static function getMultiByEnum(Enum $singleEnum): self
 	{
 		return self::get(static::convertSingleEnumToValue($singleEnum));
 	}
@@ -90,9 +92,9 @@ abstract class MultiEnum extends \Consistence\Enum\Enum implements \IteratorAggr
 	 * @param \Consistence\Enum\Enum[] $singleEnums
 	 * @return static
 	 */
-	public static function getMultiByEnums(array $singleEnums)
+	public static function getMultiByEnums(array $singleEnums): self
 	{
-		return self::getMultiByArray(ArrayType::mapValuesByCallback($singleEnums, function (Enum $singleEnum) {
+		return self::getMultiByArray(ArrayType::mapValuesByCallback($singleEnums, function (Enum $singleEnum): int {
 			return static::convertSingleEnumToValue($singleEnum);
 		}));
 	}
@@ -103,7 +105,7 @@ abstract class MultiEnum extends \Consistence\Enum\Enum implements \IteratorAggr
 	 * @param mixed $singleEnumValue
 	 * @return integer
 	 */
-	protected static function convertSingleEnumValueToValue($singleEnumValue)
+	protected static function convertSingleEnumValueToValue($singleEnumValue): int
 	{
 		return $singleEnumValue;
 	}
@@ -114,7 +116,7 @@ abstract class MultiEnum extends \Consistence\Enum\Enum implements \IteratorAggr
 	 * @param integer $value
 	 * @return mixed
 	 */
-	protected static function convertValueToSingleEnumValue($value)
+	protected static function convertValueToSingleEnumValue(int $value)
 	{
 		return $value;
 	}
@@ -125,7 +127,7 @@ abstract class MultiEnum extends \Consistence\Enum\Enum implements \IteratorAggr
 	 * @param integer $value
 	 * @return \Consistence\Enum\Enum
 	 */
-	protected static function convertValueToSingleEnum($value)
+	protected static function convertValueToSingleEnum(int $value): Enum
 	{
 		$singleEnumClass = static::getSingleEnumClass();
 
@@ -138,7 +140,7 @@ abstract class MultiEnum extends \Consistence\Enum\Enum implements \IteratorAggr
 	 * @param \Consistence\Enum\Enum $singleEnum
 	 * @return integer
 	 */
-	protected static function convertSingleEnumToValue(Enum $singleEnum)
+	protected static function convertSingleEnumToValue(Enum $singleEnum): int
 	{
 		return static::convertSingleEnumValueToValue($singleEnum->getValue());
 	}
@@ -147,16 +149,13 @@ abstract class MultiEnum extends \Consistence\Enum\Enum implements \IteratorAggr
 	 * @param string $singleEnumClass
 	 * @return integer[] format: const name (string) => value (integer)
 	 */
-	private static function getSingleEnumMappedAvailableValues($singleEnumClass)
+	private static function getSingleEnumMappedAvailableValues(string $singleEnumClass)
 	{
-		return ArrayType::mapValuesByCallback($singleEnumClass::getAvailableValues(), function ($singleEnumValue) {
+		return ArrayType::mapValuesByCallback($singleEnumClass::getAvailableValues(), function ($singleEnumValue): int {
 			return static::convertSingleEnumValueToValue($singleEnumValue);
 		});
 	}
 
-	/**
-	 * @param \Consistence\Enum\Enum $singleEnum
-	 */
 	private function checkSingleEnum(Enum $singleEnum)
 	{
 		$singleEnumClass = static::getSingleEnumClass();
@@ -166,12 +165,8 @@ abstract class MultiEnum extends \Consistence\Enum\Enum implements \IteratorAggr
 		Type::checkType($singleEnum, $singleEnumClass);
 	}
 
-	/**
-	 * @param integer $value
-	 */
-	private static function checkSingleValue($value)
+	private static function checkSingleValue(int $value)
 	{
-		Type::checkType($value, 'integer');
 		parent::checkValue($value);
 	}
 
@@ -200,7 +195,7 @@ abstract class MultiEnum extends \Consistence\Enum\Enum implements \IteratorAggr
 	 */
 	public function getValues()
 	{
-		return ArrayType::filterValuesByCallback(self::getAvailableValues(), function ($value) {
+		return ArrayType::filterValuesByCallback(self::getAvailableValues(), function (int $value): bool {
 			return $this->containsValue($value);
 		});
 	}
@@ -215,7 +210,7 @@ abstract class MultiEnum extends \Consistence\Enum\Enum implements \IteratorAggr
 			throw new \Consistence\Enum\NoSingleEnumSpecifiedException(static::class);
 		}
 
-		return ArrayType::mapValuesByCallback($this->getValues(), function ($value) {
+		return ArrayType::mapValuesByCallback($this->getValues(), function (int $value): Enum {
 			return static::convertValueToSingleEnum($value);
 		});
 	}
@@ -225,58 +220,38 @@ abstract class MultiEnum extends \Consistence\Enum\Enum implements \IteratorAggr
 	 *
 	 * @return \ArrayIterator
 	 */
-	public function getIterator()
+	public function getIterator(): ArrayIterator
 	{
 		return new ArrayIterator($this->getEnums());
 	}
 
-	/**
-	 * @param self $that
-	 * @return boolean
-	 */
-	public function contains(self $that)
+	public function contains(self $that): bool
 	{
 		$this->checkSameEnum($that);
 
 		return $this->containsBitwise($this->getValue(), $that->getValue());
 	}
 
-	/**
-	 * @param \Consistence\Enum\Enum $singleEnum
-	 * @return boolean
-	 */
-	public function containsEnum(Enum $singleEnum)
+	public function containsEnum(Enum $singleEnum): bool
 	{
 		$this->checkSingleEnum($singleEnum);
 
 		return $this->containsBitwise($this->getValue(), static::convertSingleEnumToValue($singleEnum));
 	}
 
-	/**
-	 * @param integer $value
-	 * @return boolean
-	 */
-	public function containsValue($value)
+	public function containsValue(int $value): bool
 	{
 		self::checkSingleValue($value);
 
 		return $this->containsBitwise($this->getValue(), $value);
 	}
 
-	/**
-	 * @param integer $a
-	 * @param integer $b
-	 * @return boolean
-	 */
-	private function containsBitwise($a, $b)
+	private function containsBitwise(int $a, int $b): bool
 	{
 		return ($a & $b) === $b;
 	}
 
-	/**
-	 * @return boolean
-	 */
-	public function isEmpty()
+	public function isEmpty(): bool
 	{
 		return $this->getValue() === 0;
 	}
@@ -285,7 +260,7 @@ abstract class MultiEnum extends \Consistence\Enum\Enum implements \IteratorAggr
 	 * @param static $that
 	 * @return static different instance of enum
 	 */
-	public function add(self $that)
+	public function add(self $that): self
 	{
 		$this->checkSameEnum($that);
 
@@ -296,7 +271,7 @@ abstract class MultiEnum extends \Consistence\Enum\Enum implements \IteratorAggr
 	 * @param \Consistence\Enum\Enum $singleEnum
 	 * @return static different instance of enum
 	 */
-	public function addEnum(Enum $singleEnum)
+	public function addEnum(Enum $singleEnum): self
 	{
 		$this->checkSingleEnum($singleEnum);
 
@@ -307,19 +282,14 @@ abstract class MultiEnum extends \Consistence\Enum\Enum implements \IteratorAggr
 	 * @param integer $value
 	 * @return static different instance of enum
 	 */
-	public function addValue($value)
+	public function addValue(int $value): self
 	{
 		self::checkSingleValue($value);
 
 		return static::get($this->addBitwise($this->getValue(), $value));
 	}
 
-	/**
-	 * @param integer $a
-	 * @param integer $b
-	 * @return integer
-	 */
-	private function addBitwise($a, $b)
+	private function addBitwise(int $a, int $b): int
 	{
 		return $a | $b;
 	}
@@ -328,7 +298,7 @@ abstract class MultiEnum extends \Consistence\Enum\Enum implements \IteratorAggr
 	 * @param static $that
 	 * @return static different instance of enum
 	 */
-	public function remove(self $that)
+	public function remove(self $that): self
 	{
 		$this->checkSameEnum($that);
 
@@ -339,7 +309,7 @@ abstract class MultiEnum extends \Consistence\Enum\Enum implements \IteratorAggr
 	 * @param \Consistence\Enum\Enum $singleEnum
 	 * @return static different instance of enum
 	 */
-	public function removeEnum(Enum $singleEnum)
+	public function removeEnum(Enum $singleEnum): self
 	{
 		$this->checkSingleEnum($singleEnum);
 
@@ -350,19 +320,14 @@ abstract class MultiEnum extends \Consistence\Enum\Enum implements \IteratorAggr
 	 * @param integer $value
 	 * @return static different instance of enum
 	 */
-	public function removeValue($value)
+	public function removeValue(int $value): self
 	{
 		self::checkSingleValue($value);
 
 		return static::get($this->removeBitwise($this->getValue(), $value));
 	}
 
-	/**
-	 * @param integer $a
-	 * @param integer $b
-	 * @return integer
-	 */
-	private function removeBitwise($a, $b)
+	private function removeBitwise(int $a, int $b): int
 	{
 		return $a & (~ $b);
 	}
@@ -371,7 +336,7 @@ abstract class MultiEnum extends \Consistence\Enum\Enum implements \IteratorAggr
 	 * @param static $that
 	 * @return static different instance of enum
 	 */
-	public function intersect(self $that)
+	public function intersect(self $that): self
 	{
 		$this->checkSameEnum($that);
 
@@ -382,7 +347,7 @@ abstract class MultiEnum extends \Consistence\Enum\Enum implements \IteratorAggr
 	 * @param \Consistence\Enum\Enum $singleEnum
 	 * @return static different instance of enum
 	 */
-	public function intersectEnum(Enum $singleEnum)
+	public function intersectEnum(Enum $singleEnum): self
 	{
 		$this->checkSingleEnum($singleEnum);
 
@@ -393,19 +358,14 @@ abstract class MultiEnum extends \Consistence\Enum\Enum implements \IteratorAggr
 	 * @param integer $value
 	 * @return static different instance of enum
 	 */
-	public function intersectValue($value)
+	public function intersectValue(int $value): self
 	{
 		self::checkSingleValue($value);
 
 		return static::get($this->intersectBitwise($this->getValue(), $value));
 	}
 
-	/**
-	 * @param integer $a
-	 * @param integer $b
-	 * @return integer
-	 */
-	private function intersectBitwise($a, $b)
+	private function intersectBitwise(int $a, int $b): int
 	{
 		return $a & $b;
 	}
@@ -416,7 +376,7 @@ abstract class MultiEnum extends \Consistence\Enum\Enum implements \IteratorAggr
 	 * @param \Closure $callback
 	 * @return static
 	 */
-	public function filter(Closure $callback)
+	public function filter(Closure $callback): self
 	{
 		return static::getMultiByEnums(ArrayType::filterValuesByCallback($this->getEnums(), $callback));
 	}
@@ -427,7 +387,7 @@ abstract class MultiEnum extends \Consistence\Enum\Enum implements \IteratorAggr
 	 * @param \Closure $callback
 	 * @return static
 	 */
-	public function filterValues(Closure $callback)
+	public function filterValues(Closure $callback): self
 	{
 		return static::getMultiByArray(ArrayType::filterValuesByCallback($this->getValues(), $callback));
 	}

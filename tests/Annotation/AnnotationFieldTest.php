@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Consistence\Annotation;
 
 class AnnotationFieldTest extends \Consistence\TestCase

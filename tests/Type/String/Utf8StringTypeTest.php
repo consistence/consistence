@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Consistence\Type\String;
 
 class Utf8StringTypeTest extends \Consistence\TestCase

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Consistence\Type\ArrayType;
 
 use Closure;
@@ -22,7 +24,7 @@ class ArrayType extends \Consistence\ObjectPrototype
 	 * @param integer|string $key
 	 * @return boolean
 	 */
-	public static function containsKey(array $haystack, $key)
+	public static function containsKey(array $haystack, $key): bool
 	{
 		return array_key_exists($key, $haystack);
 	}
@@ -35,7 +37,7 @@ class ArrayType extends \Consistence\ObjectPrototype
 	 * @param boolean $strict
 	 * @return boolean
 	 */
-	public static function containsValue(array $haystack, $needle, $strict = self::STRICT_TRUE)
+	public static function containsValue(array $haystack, $needle, bool $strict = self::STRICT_TRUE): bool
 	{
 		return in_array($needle, $haystack, $strict);
 	}
@@ -47,7 +49,7 @@ class ArrayType extends \Consistence\ObjectPrototype
 	 * @param \Closure $callback
 	 * @return boolean
 	 */
-	public static function containsByCallback(array $haystack, Closure $callback)
+	public static function containsByCallback(array $haystack, Closure $callback): bool
 	{
 		$result = self::findByCallback($haystack, $callback);
 		return $result !== null;
@@ -60,7 +62,7 @@ class ArrayType extends \Consistence\ObjectPrototype
 	 * @param \Closure $callback
 	 * @return boolean
 	 */
-	public static function containsKeyByValueCallback(array $haystack, Closure $callback)
+	public static function containsKeyByValueCallback(array $haystack, Closure $callback): bool
 	{
 		$result = self::findKeyByValueCallback($haystack, $callback);
 		return $result !== null;
@@ -73,7 +75,7 @@ class ArrayType extends \Consistence\ObjectPrototype
 	 * @param \Closure $callback
 	 * @return boolean
 	 */
-	public static function containsValueByValueCallback(array $haystack, Closure $callback)
+	public static function containsValueByValueCallback(array $haystack, Closure $callback): bool
 	{
 		$result = self::findValueByCallback($haystack, $callback);
 		return $result !== null;
@@ -87,7 +89,7 @@ class ArrayType extends \Consistence\ObjectPrototype
 	 * @param boolean $strict
 	 * @return integer|string|null
 	 */
-	public static function findKey(array $haystack, $needle, $strict = self::STRICT_TRUE)
+	public static function findKey(array $haystack, $needle, bool $strict = self::STRICT_TRUE)
 	{
 		$result = array_search($needle, $haystack, $strict);
 		if ($result === false) {
@@ -138,7 +140,7 @@ class ArrayType extends \Consistence\ObjectPrototype
 	 * @param boolean $strict
 	 * @return integer|string
 	 */
-	public static function getKey(array $haystack, $needle, $strict = self::STRICT_TRUE)
+	public static function getKey(array $haystack, $needle, bool $strict = self::STRICT_TRUE)
 	{
 		$result = static::findKey($haystack, $needle, $strict);
 		if ($result === null) {
@@ -238,7 +240,7 @@ class ArrayType extends \Consistence\ObjectPrototype
 	 * @param \Closure $callback
 	 * @return \Consistence\Type\ArrayType\KeyValuePair
 	 */
-	public static function getByCallback(array $haystack, Closure $callback)
+	public static function getByCallback(array $haystack, Closure $callback): KeyValuePair
 	{
 		$result = static::findByCallback($haystack, $callback);
 		if ($result === null) {
@@ -353,7 +355,7 @@ class ArrayType extends \Consistence\ObjectPrototype
 	 * @param mixed $value
 	 * @return boolean returns true if the array was modified
 	 */
-	public static function removeValue(array &$haystack, $value)
+	public static function removeValue(array &$haystack, $value): bool
 	{
 		$key = static::findKey($haystack, $value);
 		if ($key === null) {
@@ -371,7 +373,7 @@ class ArrayType extends \Consistence\ObjectPrototype
 	 * @param mixed[] $keys keys to be removed from $haystack
 	 * @return boolean returns true if the array was modified
 	 */
-	public static function removeKeys(array &$haystack, array $keys)
+	public static function removeKeys(array &$haystack, array $keys): bool
 	{
 		$modified = false;
 		foreach ($keys as $key) {
@@ -391,7 +393,7 @@ class ArrayType extends \Consistence\ObjectPrototype
 	 * @param mixed[] $arrayWithKeysToRemove
 	 * @return boolean returns true if the array was modified
 	 */
-	public static function removeKeysByArrayKeys(array &$haystack, array $arrayWithKeysToRemove)
+	public static function removeKeysByArrayKeys(array &$haystack, array $arrayWithKeysToRemove): bool
 	{
 		$modified = false;
 		foreach ($arrayWithKeysToRemove as $key => $value) {
@@ -411,7 +413,7 @@ class ArrayType extends \Consistence\ObjectPrototype
 	 * @param boolean $strict
 	 * @return mixed[] new array with unique values
 	 */
-	public static function uniqueValues(array $haystack, $strict = self::STRICT_TRUE)
+	public static function uniqueValues(array $haystack, bool $strict = self::STRICT_TRUE)
 	{
 		$result = [];
 		foreach ($haystack as $key => $value) {

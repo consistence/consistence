@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Consistence\Reflection;
 
 use Consistence\Type\ArrayType\ArrayType;
@@ -28,11 +30,11 @@ class ClassReflection extends \Consistence\ObjectPrototype
 	 * @param integer $filter
 	 * @return \ReflectionMethod[]
 	 */
-	public static function getDeclaredMethods(ReflectionClass $classReflection, $filter = self::FILTER_VISIBILITY_NONE)
+	public static function getDeclaredMethods(ReflectionClass $classReflection, int $filter = self::FILTER_VISIBILITY_NONE)
 	{
 		$methods = $classReflection->getMethods($filter);
 		$className = $classReflection->getName();
-		return ArrayType::filterValuesByCallback($methods, function (ReflectionMethod $method) use ($className) {
+		return ArrayType::filterValuesByCallback($methods, function (ReflectionMethod $method) use ($className): bool {
 			return $method->class === $className;
 		});
 	}
@@ -47,9 +49,9 @@ class ClassReflection extends \Consistence\ObjectPrototype
 	 */
 	public static function hasDeclaredMethod(
 		ReflectionClass $classReflection,
-		$methodName,
-		$caseSensitive = self::CASE_SENSITIVE
-	)
+		string $methodName,
+		bool $caseSensitive = self::CASE_SENSITIVE
+	): bool
 	{
 		try {
 			$methodReflection = $classReflection->getMethod($methodName);
@@ -67,11 +69,11 @@ class ClassReflection extends \Consistence\ObjectPrototype
 	 * @param integer $filter
 	 * @return \ReflectionMethod[]
 	 */
-	public static function getDeclaredProperties(ReflectionClass $classReflection, $filter = self::FILTER_VISIBILITY_NONE)
+	public static function getDeclaredProperties(ReflectionClass $classReflection, int $filter = self::FILTER_VISIBILITY_NONE)
 	{
 		$properties = $classReflection->getProperties($filter);
 		$className = $classReflection->getName();
-		return ArrayType::filterValuesByCallback($properties, function (ReflectionProperty $property) use ($className) {
+		return ArrayType::filterValuesByCallback($properties, function (ReflectionProperty $property) use ($className): bool {
 			return $property->class === $className;
 		});
 	}
@@ -83,7 +85,7 @@ class ClassReflection extends \Consistence\ObjectPrototype
 	 * @param string $propertyName
 	 * @return boolean
 	 */
-	public static function hasDeclaredProperty(ReflectionClass $classReflection, $propertyName)
+	public static function hasDeclaredProperty(ReflectionClass $classReflection, string $propertyName): bool
 	{
 		try {
 			return $classReflection->getProperty($propertyName)->class === $classReflection->getName();
@@ -120,7 +122,7 @@ class ClassReflection extends \Consistence\ObjectPrototype
 	 * @param string $constantName
 	 * @return boolean
 	 */
-	public static function hasDeclaredConstant(ReflectionClass $classReflection, $constantName)
+	public static function hasDeclaredConstant(ReflectionClass $classReflection, string $constantName): bool
 	{
 		return isset(static::getDeclaredConstants($classReflection)[$constantName]);
 	}

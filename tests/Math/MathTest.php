@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Consistence\Math;
 
 class MathTest extends \Consistence\TestCase
@@ -8,7 +10,7 @@ class MathTest extends \Consistence\TestCase
 	/**
 	 * @return integer[][]
 	 */
-	public function moduloProvider()
+	public function moduloProvider(): array
 	{
 		return [
 			[4, 2, 0],
@@ -24,7 +26,7 @@ class MathTest extends \Consistence\TestCase
 	 * @param integer $modulo
 	 * @param integer $result
 	 */
-	public function testModulo($dividend, $modulo, $result)
+	public function testModulo(int $dividend, int $modulo, int $result)
 	{
 		$this->assertSame(Math::modulo($dividend, $modulo), $result);
 	}
@@ -42,7 +44,7 @@ class MathTest extends \Consistence\TestCase
 	/**
 	 * @return mixed[][]
 	 */
-	public function powersOfTwoProvider()
+	public function powersOfTwoProvider(): array
 	{
 		return [
 			[-2, false],
@@ -66,7 +68,7 @@ class MathTest extends \Consistence\TestCase
 	 * @param integer $value
 	 * @param boolean $result
 	 */
-	public function testIsPowerOfTwo($value, $result)
+	public function testIsPowerOfTwo(int $value, bool $result)
 	{
 		$this->assertSame(Math::isPowerOfTwo($value), $result);
 	}

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Consistence\Enum;
 
 use Consistence\Type\Type;
@@ -16,9 +18,9 @@ class InvalidEnumValueException extends \Consistence\PhpException implements \Co
 	/**
 	 * @param mixed $value
 	 * @param mixed[] $availableValues
-	 * @param \Exception|null $previous
+	 * @param \Throwable|null $previous
 	 */
-	public function __construct($value, array $availableValues, \Exception $previous = null)
+	public function __construct($value, array $availableValues, \Throwable $previous = null)
 	{
 		parent::__construct(sprintf(
 			'%s [%s] is not a valid value, accepted values: %s',
@@ -39,9 +41,9 @@ class InvalidEnumValueException extends \Consistence\PhpException implements \Co
 	}
 
 	/**
-	 * @return mixed[] format: const name (string) => value (mixed)
+	 * @return mixed[]
 	 */
-	public function getAvailableValues()
+	public function getAvailableValues(): array
 	{
 		return $this->availableValues;
 	}

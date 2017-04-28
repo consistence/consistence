@@ -155,7 +155,7 @@ use Consistence\Type\ArrayType\ArrayType;
 $allowedRoles = RolesEnum::getMulti(RolesEnum::USER);
 
 $userAndAdmin = RolesEnum::getMulti(RolesEnum::USER, RolesEnum::ADMIN);
-$user = $userAndAdmin->filterValues(function ($singleValue) use ($allowedRoles) {
+$user = $userAndAdmin->filterValues(function (int $singleValue) use ($allowedRoles): bool {
 	return ArrayType::containsValue($allowedRoles->getAvailableValues(), $singleValue);
 });
 ```
@@ -260,7 +260,7 @@ class RolesEnum extends \Consistence\Enum\MultiEnum
 	 * @param string $singleEnumValue
 	 * @return integer
 	 */
-	protected static function convertSingleEnumValueToValue($singleEnumValue)
+	protected static function convertSingleEnumValueToValue($singleEnumValue): int
 	{
 		return ArrayType::getValue(self::$singleMultiMap, $singleEnumValue);
 	}
@@ -271,7 +271,7 @@ class RolesEnum extends \Consistence\Enum\MultiEnum
 	 * @param integer $value
 	 * @return string
 	 */
-	protected static function convertValueToSingleEnumValue($value)
+	protected static function convertValueToSingleEnumValue(int $value)
 	{
 		return ArrayType::getKey(self::$singleMultiMap, $value);
 	}

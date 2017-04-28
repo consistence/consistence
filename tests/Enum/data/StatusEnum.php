@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Consistence\Enum;
 
 class StatusEnum extends \Consistence\Enum\Enum
@@ -11,6 +13,9 @@ class StatusEnum extends \Consistence\Enum\Enum
 
 	const BAR = 'yy';
 
+	/**
+	 * @return string[]
+	 */
 	protected static function getIgnoredConstantNames()
 	{
 		return [

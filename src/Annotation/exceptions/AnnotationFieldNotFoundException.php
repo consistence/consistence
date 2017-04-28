@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Consistence\Annotation;
 
 class AnnotationFieldNotFoundException extends \Consistence\PhpException implements \Consistence\Annotation\Exception
@@ -8,20 +10,13 @@ class AnnotationFieldNotFoundException extends \Consistence\PhpException impleme
 	/** @var string */
 	private $fieldName;
 
-	/**
-	 * @param string $fieldName
-	 * @param \Exception|null $previous
-	 */
-	public function __construct($fieldName, \Exception $previous = null)
+	public function __construct(string $fieldName, \Throwable $previous = null)
 	{
 		parent::__construct(sprintf('Field name \'%s\' not found on annotation', $fieldName), $previous);
 		$this->fieldName = $fieldName;
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getFieldName()
+	public function getFieldName(): string
 	{
 		return $this->fieldName;
 	}

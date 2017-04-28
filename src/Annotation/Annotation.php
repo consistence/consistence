@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Consistence\Annotation;
 
 use Consistence\Type\ArrayType\ArrayType;
@@ -22,7 +24,7 @@ class Annotation extends \Consistence\ObjectPrototype
 	 * @param \Consistence\Annotation\AnnotationField[] $fields
 	 * @param mixed|null $value
 	 */
-	private function __construct($name, array $fields = [], $value = null)
+	private function __construct(string $name, array $fields = [], $value = null)
 	{
 		Type::checkType($name, 'string');
 		$this->name = $name;
@@ -30,10 +32,7 @@ class Annotation extends \Consistence\ObjectPrototype
 		$this->value = $value;
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getName()
+	public function getName(): string
 	{
 		return $this->name;
 	}
@@ -46,17 +45,16 @@ class Annotation extends \Consistence\ObjectPrototype
 		return $this->fields;
 	}
 
-	/**
-	 * @param string $fieldName
-	 * @return \Consistence\Annotation\AnnotationField
-	 */
-	public function getField($fieldName)
+	public function getField(string $fieldName): AnnotationField
 	{
 		Type::checkType($fieldName, 'string');
 		try {
-			return ArrayType::getValueByCallback($this->getFields(), function (AnnotationField $annotationField) use ($fieldName) {
-				return $annotationField->getName() === $fieldName;
-			});
+			return ArrayType::getValueByCallback(
+				$this->getFields(),
+				function (AnnotationField $annotationField) use ($fieldName): bool {
+					return $annotationField->getName() === $fieldName;
+				}
+			);
 		} catch (\Consistence\Type\ArrayType\ElementDoesNotExistException $e) {
 			throw new \Consistence\Annotation\AnnotationFieldNotFoundException($fieldName, $e);
 		}
@@ -70,11 +68,7 @@ class Annotation extends \Consistence\ObjectPrototype
 		return $this->value;
 	}
 
-	/**
-	 * @param string $name
-	 * @return self
-	 */
-	public static function createAnnotationWithoutParams($name)
+	public static function createAnnotationWithoutParams(string $name): self
 	{
 		return new self($name);
 	}
@@ -84,7 +78,7 @@ class Annotation extends \Consistence\ObjectPrototype
 	 * @param mixed $value
 	 * @return self
 	 */
-	public static function createAnnotationWithValue($name, $value)
+	public static function createAnnotationWithValue(string $name, $value): self
 	{
 		return new self($name, [], $value);
 	}
@@ -94,7 +88,7 @@ class Annotation extends \Consistence\ObjectPrototype
 	 * @param \Consistence\Annotation\AnnotationField[] $fields
 	 * @return self
 	 */
-	public static function createAnnotationWithFields($name, array $fields)
+	public static function createAnnotationWithFields(string $name, array $fields): self
 	{
 		return new self($name, $fields);
 	}

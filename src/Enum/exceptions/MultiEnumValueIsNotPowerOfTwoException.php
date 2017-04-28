@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Consistence\Enum;
 
 class MultiEnumValueIsNotPowerOfTwoException extends \Consistence\PhpException implements \Consistence\Enum\Exception
@@ -11,12 +13,7 @@ class MultiEnumValueIsNotPowerOfTwoException extends \Consistence\PhpException i
 	/** @var string */
 	private $class;
 
-	/**
-	 * @param integer $value
-	 * @param string $class
-	 * @param \Exception|null $previous
-	 */
-	public function __construct($value, $class, \Exception $previous = null)
+	public function __construct(int $value, string $class, \Throwable $previous = null)
 	{
 		parent::__construct(sprintf(
 			'Value %s in %s is not a power of two, which is needed for MultiEnum to work as expected',
@@ -27,18 +24,12 @@ class MultiEnumValueIsNotPowerOfTwoException extends \Consistence\PhpException i
 		$this->class = $class;
 	}
 
-	/**
-	 * @return integer
-	 */
-	public function getValue()
+	public function getValue(): int
 	{
 		return $this->value;
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getClass()
+	public function getClass(): string
 	{
 		return $this->class;
 	}

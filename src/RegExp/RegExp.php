@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Consistence\RegExp;
 
 class RegExp extends \Consistence\ObjectPrototype
@@ -15,9 +17,9 @@ class RegExp extends \Consistence\ObjectPrototype
 	 * @param string $pattern
 	 * @param integer $flags
 	 * @param integer $offset
-	 * @return string[] array matches of matches
+	 * @return string[] array of matches
 	 */
-	public static function match($subject, $pattern, $flags = 0, $offset = 0)
+	public static function match(string $subject, string $pattern, int $flags = 0, int $offset = 0)
 	{
 		if ($offset > strlen($subject)) {
 			return [];
@@ -34,14 +36,7 @@ class RegExp extends \Consistence\ObjectPrototype
 		return $matches;
 	}
 
-	/**
-	 * @param string $subject
-	 * @param string $pattern
-	 * @param integer $flags
-	 * @param integer $offset
-	 * @return boolean
-	 */
-	public static function matches($subject, $pattern, $flags = 0, $offset = 0)
+	public static function matches(string $subject, string $pattern, int $flags = 0, int $offset = 0): bool
 	{
 		$matches = self::match($subject, $pattern, $flags, $offset);
 		return count($matches) !== 0;

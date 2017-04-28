@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Consistence\Time;
 
 class TimeDoesNotExistException extends \Consistence\PhpException implements \Consistence\Time\InvalidTimeForFormatException
@@ -8,11 +10,7 @@ class TimeDoesNotExistException extends \Consistence\PhpException implements \Co
 	/** @var string */
 	private $timeString;
 
-	/**
-	 * @param string $timeString
-	 * @param \Exception|null $previous
-	 */
-	public function __construct($timeString, \Exception $previous = null)
+	public function __construct(string $timeString, \Throwable $previous = null)
 	{
 		parent::__construct(
 			sprintf('Time given in "%s" does not exist', $timeString),
@@ -21,10 +19,7 @@ class TimeDoesNotExistException extends \Consistence\PhpException implements \Co
 		$this->timeString = $timeString;
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getTimeString()
+	public function getTimeString(): string
 	{
 		return $this->timeString;
 	}

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Consistence;
 
 class UndefinedMethodException extends \Consistence\PhpException implements \Consistence\Exception
@@ -11,30 +13,19 @@ class UndefinedMethodException extends \Consistence\PhpException implements \Con
 	/** @var string */
 	private $methodName;
 
-	/**
-	 * @param string $className
-	 * @param string $methodName
-	 * @param \Exception|null $previous
-	 */
-	public function __construct($className, $methodName, \Exception $previous = null)
+	public function __construct(string $className, string $methodName, \Throwable $previous = null)
 	{
 		parent::__construct(sprintf('Method %s::%s() is not defined or is not accessible', $className, $methodName), $previous);
 		$this->className = $className;
 		$this->methodName = $methodName;
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getClassName()
+	public function getClassName(): string
 	{
 		return $this->className;
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getMethodName()
+	public function getMethodName(): string
 	{
 		return $this->methodName;
 	}

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Consistence;
 
 class ObjectPrototypeTest extends \Consistence\TestCase
@@ -8,7 +10,7 @@ class ObjectPrototypeTest extends \Consistence\TestCase
 	/**
 	 * @return \Consistence\ObjectPrototype[][]
 	 */
-	public function consistenceObjectPrototypeProvider()
+	public function consistenceObjectPrototypeProvider(): array
 	{
 		return [
 			[

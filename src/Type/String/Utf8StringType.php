@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Consistence\Type\String;
 
 class Utf8StringType extends \Consistence\ObjectPrototype
@@ -10,11 +12,7 @@ class Utf8StringType extends \Consistence\ObjectPrototype
 		throw new \Consistence\StaticClassException();
 	}
 
-	/**
-	 * @param string $string
-	 * @return integer
-	 */
-	public static function length($string)
+	public static function length(string $string): int
 	{
 		return strlen(utf8_decode($string));
 	}

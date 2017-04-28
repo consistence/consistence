@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Consistence\Type\ArrayType;
 
 class KeyValuePairMutable extends \Consistence\Type\ArrayType\KeyValuePair

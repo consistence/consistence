@@ -107,10 +107,7 @@ class CardSuit extends \Consistence\Enum\Enum
 		self::HEARTS,
 	];
 
-	/**
-	 * @return \CardColor
-	 */
-	public function getCardColor()
+	public function getCardColor(): CardColor
 	{
 		return CardColor::get(
 			ArrayType::containsValue($this->getValue(), self::$reds) ? CardColor::RED : CardColor::BLACK
@@ -171,10 +168,7 @@ class CardSuit extends \Consistence\Enum\Enum
 		self::SPADES => self::SYMBOL_SPADES,
 	];
 
-	/**
-	 * @return string
-	 */
-	public function getSymbol()
+	public function getSymbol(): string
 	{
 		if (!isset(self::$symbolMap[$this->getValue()])) {
 			throw new \Exception('Undefinded symbol');

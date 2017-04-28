@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Consistence;
 
 class UndefinedPropertyException extends \Consistence\PhpException implements \Consistence\Exception
@@ -11,30 +13,19 @@ class UndefinedPropertyException extends \Consistence\PhpException implements \C
 	/** @var string */
 	private $propertyName;
 
-	/**
-	 * @param string $className
-	 * @param string $propertyName
-	 * @param \Exception|null $previous
-	 */
-	public function __construct($className, $propertyName, \Exception $previous = null)
+	public function __construct(string $className, string $propertyName, \Throwable $previous = null)
 	{
 		parent::__construct(sprintf('Property %s::$%s is not defined or is not accessible', $className, $propertyName), $previous);
 		$this->className = $className;
 		$this->propertyName = $propertyName;
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getClassName()
+	public function getClassName(): string
 	{
 		return $this->className;
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getPropertyName()
+	public function getPropertyName(): string
 	{
 		return $this->propertyName;
 	}

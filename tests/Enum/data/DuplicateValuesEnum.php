@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Consistence\Enum;
 
 class DuplicateValuesEnum extends \Consistence\Enum\Enum

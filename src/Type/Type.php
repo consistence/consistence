@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Consistence\Type;
 
 use Traversable;
@@ -26,7 +28,7 @@ class Type extends \Consistence\ObjectPrototype
 	 * @param mixed $value
 	 * @return string
 	 */
-	public static function getType($value)
+	public static function getType($value): string
 	{
 		if (is_object($value)) {
 			return get_class($value);
@@ -69,7 +71,7 @@ class Type extends \Consistence\ObjectPrototype
 	 * @param boolean $allowSubtypes decides if subtypes of given expected types should be considered a valid value
 	 * @return boolean
 	 */
-	public static function hasType($value, $expectedTypes, $allowSubtypes = self::SUBTYPES_ALLOW)
+	public static function hasType($value, string $expectedTypes, bool $allowSubtypes = self::SUBTYPES_ALLOW): bool
 	{
 		$types = explode('|', $expectedTypes);
 		foreach ($types as $type) {
@@ -117,18 +119,14 @@ class Type extends \Consistence\ObjectPrototype
 	 * @param string $expectedTypes
 	 * @param boolean $allowSubtypes decides if subtypes of given expected types should be considered a valid value
 	 */
-	public static function checkType($value, $expectedTypes, $allowSubtypes = self::SUBTYPES_ALLOW)
+	public static function checkType($value, string $expectedTypes, bool $allowSubtypes = self::SUBTYPES_ALLOW)
 	{
 		if (!self::hasType($value, $expectedTypes, $allowSubtypes)) {
 			throw new \Consistence\InvalidArgumentTypeException($value, $expectedTypes);
 		}
 	}
 
-	/**
-	 * @param string $type
-	 * @return string
-	 */
-	private static function normalizeType($type)
+	private static function normalizeType(string $type): string
 	{
 		switch ($type) {
 			case 'double':

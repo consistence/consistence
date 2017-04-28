@@ -1,13 +1,12 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Consistence\Time;
 
 interface InvalidTimeForFormatException extends \Consistence\Time\Exception
 {
 
-	/**
-	 * @return string
-	 */
-	public function getTimeString();
+	public function getTimeString(): string;
 
 }

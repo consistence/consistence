@@ -1,8 +1,8 @@
 <?php
 
-namespace Consistence\Time;
+declare(strict_types = 1);
 
-use Consistence\Type\Type;
+namespace Consistence\Time;
 
 use DateTime;
 use DateTimeImmutable;
@@ -78,10 +78,8 @@ class TimeFormat extends \Consistence\ObjectPrototype
 	 * @param \DateTimeZone|null $timezone
 	 * @return \DateTime
 	 */
-	public static function createDateTimeFromTimestamp($timestamp, DateTimeZone $timezone = null)
+	public static function createDateTimeFromTimestamp(int $timestamp, DateTimeZone $timezone = null): DateTime
 	{
-		Type::checkType($timestamp, 'integer');
-
 		$time = new DateTime(date(self::ISO8601_WITHOUT_TIMEZONE, $timestamp));
 		if ($timezone !== null) {
 			$time->setTimezone($timezone);
@@ -97,10 +95,11 @@ class TimeFormat extends \Consistence\ObjectPrototype
 	 * @param \DateTimeZone|null $timezone
 	 * @return \DateTimeImmutable
 	 */
-	public static function createDateTimeImmutableFromTimestamp($timestamp, DateTimeZone $timezone = null)
+	public static function createDateTimeImmutableFromTimestamp(
+		int $timestamp,
+		DateTimeZone $timezone = null
+	): DateTimeImmutable
 	{
-		Type::checkType($timestamp, 'integer');
-
 		$time = new DateTimeImmutable(date(self::ISO8601_WITHOUT_TIMEZONE, $timestamp));
 		if ($timezone !== null) {
 			$time = $time->setTimezone($timezone);
@@ -115,7 +114,7 @@ class TimeFormat extends \Consistence\ObjectPrototype
 	 * @param \DateTimeInterface $date
 	 * @return \DateTime
 	 */
-	public static function createDateTimeFromDateTimeInterface(DateTimeInterface $date)
+	public static function createDateTimeFromDateTimeInterface(DateTimeInterface $date): DateTime
 	{
 		return new DateTime($date->format(self::ISO8601_WITH_MICROSECONDS_WITHOUT_TIMEZONE), $date->getTimezone());
 	}
@@ -126,7 +125,7 @@ class TimeFormat extends \Consistence\ObjectPrototype
 	 * @param \DateTimeInterface $date
 	 * @return \DateTimeImmutable
 	 */
-	public static function createDateTimeImmutableFromDateTimeInterface(DateTimeInterface $date)
+	public static function createDateTimeImmutableFromDateTimeInterface(DateTimeInterface $date): DateTimeImmutable
 	{
 		return new DateTimeImmutable($date->format(self::ISO8601_WITH_MICROSECONDS_WITHOUT_TIMEZONE), $date->getTimezone());
 	}
@@ -154,11 +153,8 @@ class TimeFormat extends \Consistence\ObjectPrototype
 	 * @param string $format
 	 * @param string $timeString
 	 */
-	public static function checkTime($format, $timeString)
+	public static function checkTime(string $format, string $timeString)
 	{
-		Type::checkType($format, 'string');
-		Type::checkType($timeString, 'string');
-
 		$parsedTime = date_parse_from_format($format, $timeString);
 		if ($parsedTime['error_count'] > 0) {
 			throw new \Consistence\Time\TimeDoesNotMatchFormatException($format, $timeString);
@@ -220,7 +216,7 @@ class TimeFormat extends \Consistence\ObjectPrototype
 	 * @param string $timeString
 	 * @return boolean
 	 */
-	public static function isValidTime($format, $timeString)
+	public static function isValidTime(string $format, string $timeString): bool
 	{
 		try {
 			self::checkTime($format, $timeString);
@@ -242,7 +238,11 @@ class TimeFormat extends \Consistence\ObjectPrototype
 	 * @param \DateTimeZone|null $timezone
 	 * @return \DateTime
 	 */
-	public static function createDateTimeFromFormat($format, $timeString, DateTimeZone $timezone = null)
+	public static function createDateTimeFromFormat(
+		string $format,
+		string $timeString,
+		DateTimeZone $timezone = null
+	): DateTime
 	{
 		self::checkTime($format, $timeString);
 		if ($timezone === null) {
@@ -262,7 +262,11 @@ class TimeFormat extends \Consistence\ObjectPrototype
 	 * @param \DateTimeZone|null $timezone
 	 * @return \DateTimeImmutable
 	 */
-	public static function createDateTimeImmutableFromFormat($format, $timeString, DateTimeZone $timezone = null)
+	public static function createDateTimeImmutableFromFormat(
+		string $format,
+		string $timeString,
+		DateTimeZone $timezone = null
+	): DateTimeImmutable
 	{
 		self::checkTime($format, $timeString);
 		if ($timezone === null) {

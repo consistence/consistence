@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Consistence\Annotation;
 
 use ReflectionProperty;
@@ -13,12 +15,7 @@ class AnnotationNotFoundException extends \Consistence\PhpException implements \
 	/** @var \ReflectionProperty */
 	private $property;
 
-	/**
-	 * @param string $annotationName
-	 * @param \ReflectionProperty $property
-	 * @param \Exception|null $previous
-	 */
-	public function __construct($annotationName, ReflectionProperty $property, \Exception $previous = null)
+	public function __construct(string $annotationName, ReflectionProperty $property, \Throwable $previous = null)
 	{
 		parent::__construct(
 			sprintf(
@@ -33,18 +30,12 @@ class AnnotationNotFoundException extends \Consistence\PhpException implements \
 		$this->property = $property;
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getAnnotationName()
+	public function getAnnotationName(): string
 	{
 		return $this->annotationName;
 	}
 
-	/**
-	 * @return \ReflectionProperty
-	 */
-	public function getProperty()
+	public function getProperty(): ReflectionProperty
 	{
 		return $this->property;
 	}

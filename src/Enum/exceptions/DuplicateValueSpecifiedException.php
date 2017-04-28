@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Consistence\Enum;
 
 use Consistence\Type\Type;
@@ -16,9 +18,9 @@ class DuplicateValueSpecifiedException extends \Consistence\PhpException impleme
 	/**
 	 * @param mixed $value
 	 * @param string $class
-	 * @param \Exception|null $previous
+	 * @param \Throwable|null $previous
 	 */
-	public function __construct($value, $class, \Exception $previous = null)
+	public function __construct($value, string $class, \Throwable $previous = null)
 	{
 		parent::__construct(sprintf(
 			'Value %s [%s] is specified in %s\'s available values multiple times',
@@ -38,10 +40,7 @@ class DuplicateValueSpecifiedException extends \Consistence\PhpException impleme
 		return $this->value;
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getClass()
+	public function getClass(): string
 	{
 		return $this->class;
 	}

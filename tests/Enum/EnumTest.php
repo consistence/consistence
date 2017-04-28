@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Consistence\Enum;
 
 use Consistence\Type\ArrayType\ArrayType;
@@ -169,9 +171,9 @@ class EnumTest extends \Consistence\TestCase
 	/**
 	 * @return mixed[][]
 	 */
-	public function typesProvider()
+	public function typesProvider(): array
 	{
-		return ArrayType::mapValuesByCallback(TypeEnum::getAvailableValues(), function ($value) {
+		return ArrayType::mapValuesByCallback(TypeEnum::getAvailableValues(), function ($value): array {
 			return [$value];
 		});
 	}

@@ -13,9 +13,9 @@ class Math extends \Consistence\ObjectPrototype
 	 *
 	 * a mod n
 	 *
-	 * @param integer $dividend a
-	 * @param integer $modulus n
-	 * @return integer
+	 * @param int $dividend a
+	 * @param int $modulus n
+	 * @return int
 	 */
 	public static function modulo(int $dividend, int $modulus): int
 	{

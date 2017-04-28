@@ -6,7 +6,7 @@ namespace Consistence\Enum;
 
 use Consistence\Type\Type;
 
-class InvalidEnumValueException extends \Consistence\PhpException implements \Consistence\Enum\Exception
+class InvalidEnumValueException extends \Consistence\PhpException
 {
 
 	/** @var mixed */

@@ -14,7 +14,7 @@
 		"php": "~7.0"
 	},
 	"require-dev": {
-		"consistence/coding-standard": "0.13",
+		"consistence/coding-standard": "1.0",
 		"jakub-onderka/php-console-highlighter": "0.3.2",
 		"jakub-onderka/php-parallel-lint": "0.9.2",
 		"phing/phing": "2.16",

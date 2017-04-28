@@ -5,7 +5,6 @@ declare(strict_types = 1);
 namespace Consistence\Reflection;
 
 use Consistence\Type\ArrayType\ArrayType;
-
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionProperty;
@@ -27,7 +26,7 @@ class ClassReflection extends \Consistence\ObjectPrototype
 	 * Retrieves methods defined only at the same level as given ReflectionClass
 	 *
 	 * @param \ReflectionClass $classReflection
-	 * @param integer $filter
+	 * @param int $filter
 	 * @return \ReflectionMethod[]
 	 */
 	public static function getDeclaredMethods(ReflectionClass $classReflection, int $filter = self::FILTER_VISIBILITY_NONE)
@@ -44,8 +43,8 @@ class ClassReflection extends \Consistence\ObjectPrototype
 	 *
 	 * @param \ReflectionClass $classReflection
 	 * @param string $methodName
-	 * @param boolean $caseSensitive should the comparison be case-sensitive? (php methods are not by default, but you should)
-	 * @return boolean
+	 * @param bool $caseSensitive should the comparison be case-sensitive? (php methods are not by default, but you should)
+	 * @return bool
 	 */
 	public static function hasDeclaredMethod(
 		ReflectionClass $classReflection,
@@ -66,7 +65,7 @@ class ClassReflection extends \Consistence\ObjectPrototype
 	 * Retrieves properties defined only at the same level as given ReflectionClass
 	 *
 	 * @param \ReflectionClass $classReflection
-	 * @param integer $filter
+	 * @param int $filter
 	 * @return \ReflectionMethod[]
 	 */
 	public static function getDeclaredProperties(ReflectionClass $classReflection, int $filter = self::FILTER_VISIBILITY_NONE)
@@ -83,7 +82,7 @@ class ClassReflection extends \Consistence\ObjectPrototype
 	 *
 	 * @param \ReflectionClass $classReflection
 	 * @param string $propertyName
-	 * @return boolean
+	 * @return bool
 	 */
 	public static function hasDeclaredProperty(ReflectionClass $classReflection, string $propertyName): bool
 	{
@@ -120,7 +119,7 @@ class ClassReflection extends \Consistence\ObjectPrototype
 	 *
 	 * @param \ReflectionClass $classReflection
 	 * @param string $constantName
-	 * @return boolean
+	 * @return bool
 	 */
 	public static function hasDeclaredConstant(ReflectionClass $classReflection, string $constantName): bool
 	{

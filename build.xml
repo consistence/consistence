@@ -9,7 +9,7 @@
 	<property name="path.bin" value="${path.root}/bin"/>
 	<property name="path.composer.executable" value="composer"/>
 	<property name="path.phpcs.executable" value="${path.bin}/phpcs"/>
-	<property name="path.phpcs.ruleset" value="${path.vendor}/consistence/coding-standard/Consistence/ruleset.xml"/>
+	<property name="path.phpcs.ruleset" value="${path.build}/cs-ruleset.xml"/>
 	<property name="path.phplint.executable" value="${path.bin}/parallel-lint"/>
 	<property name="path.phpunit.configuration" value="${path.tests}/phpunit.xml"/>
 	<property name="path.phpunit.executable" value="${path.bin}/phpunit"/>

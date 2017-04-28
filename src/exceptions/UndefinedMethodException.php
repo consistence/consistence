@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Consistence;
 
-class UndefinedMethodException extends \Consistence\PhpException implements \Consistence\Exception
+class UndefinedMethodException extends \Consistence\PhpException
 {
 
 	/** @var string */

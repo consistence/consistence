@@ -6,7 +6,7 @@ namespace Consistence\Annotation;
 
 use ReflectionProperty;
 
-class AnnotationNotFoundException extends \Consistence\PhpException implements \Consistence\Annotation\Exception
+class AnnotationNotFoundException extends \Consistence\PhpException
 {
 
 	/** @var string */

@@ -21,8 +21,8 @@ class ArrayType extends \Consistence\ObjectPrototype
 	 * Wrapper for array_key_exists
 	 *
 	 * @param mixed[] $haystack
-	 * @param integer|string $key
-	 * @return boolean
+	 * @param int|string $key
+	 * @return bool
 	 */
 	public static function containsKey(array $haystack, $key): bool
 	{
@@ -34,8 +34,8 @@ class ArrayType extends \Consistence\ObjectPrototype
 	 *
 	 * @param mixed[] $haystack
 	 * @param mixed $needle
-	 * @param boolean $strict
-	 * @return boolean
+	 * @param bool $strict
+	 * @return bool
 	 */
 	public static function containsValue(array $haystack, $needle, bool $strict = self::STRICT_TRUE): bool
 	{
@@ -47,7 +47,7 @@ class ArrayType extends \Consistence\ObjectPrototype
 	 *
 	 * @param mixed[] $haystack
 	 * @param \Closure $callback
-	 * @return boolean
+	 * @return bool
 	 */
 	public static function containsByCallback(array $haystack, Closure $callback): bool
 	{
@@ -60,7 +60,7 @@ class ArrayType extends \Consistence\ObjectPrototype
 	 *
 	 * @param mixed[] $haystack
 	 * @param \Closure $callback
-	 * @return boolean
+	 * @return bool
 	 */
 	public static function containsKeyByValueCallback(array $haystack, Closure $callback): bool
 	{
@@ -73,7 +73,7 @@ class ArrayType extends \Consistence\ObjectPrototype
 	 *
 	 * @param mixed[] $haystack
 	 * @param \Closure $callback
-	 * @return boolean
+	 * @return bool
 	 */
 	public static function containsValueByValueCallback(array $haystack, Closure $callback): bool
 	{
@@ -86,8 +86,8 @@ class ArrayType extends \Consistence\ObjectPrototype
 	 *
 	 * @param mixed[] $haystack
 	 * @param mixed $needle
-	 * @param boolean $strict
-	 * @return integer|string|null
+	 * @param bool $strict
+	 * @return int|string|null
 	 */
 	public static function findKey(array $haystack, $needle, bool $strict = self::STRICT_TRUE)
 	{
@@ -104,7 +104,7 @@ class ArrayType extends \Consistence\ObjectPrototype
 	 *
 	 * @param mixed[] $haystack
 	 * @param \Closure $callback
-	 * @return integer|string|null
+	 * @return int|string|null
 	 */
 	public static function findKeyByCallback(array $haystack, Closure $callback)
 	{
@@ -121,7 +121,7 @@ class ArrayType extends \Consistence\ObjectPrototype
 	 *
 	 * @param mixed[] $haystack
 	 * @param \Closure $callback
-	 * @return integer|string|null
+	 * @return int|string|null
 	 */
 	public static function findKeyByValueCallback(array $haystack, Closure $callback)
 	{
@@ -137,8 +137,8 @@ class ArrayType extends \Consistence\ObjectPrototype
 	/**
 	 * @param mixed[] $haystack
 	 * @param mixed $needle
-	 * @param boolean $strict
-	 * @return integer|string
+	 * @param bool $strict
+	 * @return int|string
 	 */
 	public static function getKey(array $haystack, $needle, bool $strict = self::STRICT_TRUE)
 	{
@@ -155,7 +155,7 @@ class ArrayType extends \Consistence\ObjectPrototype
 	 *
 	 * @param mixed[] $haystack
 	 * @param \Closure $callback
-	 * @return integer|string
+	 * @return int|string
 	 */
 	public static function getKeyByCallback(array $haystack, Closure $callback)
 	{
@@ -172,7 +172,7 @@ class ArrayType extends \Consistence\ObjectPrototype
 	 *
 	 * @param mixed[] $haystack
 	 * @param \Closure $callback
-	 * @return integer|string
+	 * @return int|string
 	 */
 	public static function getKeyByValueCallback(array $haystack, Closure $callback)
 	{
@@ -186,7 +186,7 @@ class ArrayType extends \Consistence\ObjectPrototype
 
 	/**
 	 * @param mixed[] $haystack
-	 * @param integer|string $key
+	 * @param int|string $key
 	 * @return mixed|null
 	 */
 	public static function findValue(array $haystack, $key)
@@ -200,7 +200,7 @@ class ArrayType extends \Consistence\ObjectPrototype
 
 	/**
 	 * @param mixed[] $haystack
-	 * @param integer|string $key
+	 * @param int|string $key
 	 * @return mixed
 	 */
 	public static function getValue(array $haystack, $key)
@@ -353,7 +353,7 @@ class ArrayType extends \Consistence\ObjectPrototype
 	/**
 	 * @param mixed[] $haystack reference to array
 	 * @param mixed $value
-	 * @return boolean returns true if the array was modified
+	 * @return bool returns true if the array was modified
 	 */
 	public static function removeValue(array &$haystack, $value): bool
 	{
@@ -371,7 +371,7 @@ class ArrayType extends \Consistence\ObjectPrototype
 	 *
 	 * @param mixed[] $haystack reference to array
 	 * @param mixed[] $keys keys to be removed from $haystack
-	 * @return boolean returns true if the array was modified
+	 * @return bool returns true if the array was modified
 	 */
 	public static function removeKeys(array &$haystack, array $keys): bool
 	{
@@ -391,7 +391,7 @@ class ArrayType extends \Consistence\ObjectPrototype
 	 *
 	 * @param mixed[] $haystack reference to array
 	 * @param mixed[] $arrayWithKeysToRemove
-	 * @return boolean returns true if the array was modified
+	 * @return bool returns true if the array was modified
 	 */
 	public static function removeKeysByArrayKeys(array &$haystack, array $arrayWithKeysToRemove): bool
 	{
@@ -410,7 +410,7 @@ class ArrayType extends \Consistence\ObjectPrototype
 	 * Mimics the behaviour of array_unique, but makes strict comparisons by default
 	 *
 	 * @param mixed[] $haystack
-	 * @param boolean $strict
+	 * @param bool $strict
 	 * @return mixed[] new array with unique values
 	 */
 	public static function uniqueValues(array $haystack, bool $strict = self::STRICT_TRUE)

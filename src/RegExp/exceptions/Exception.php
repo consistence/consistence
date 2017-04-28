@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Consistence\RegExp;
 
-class Exception extends \Exception implements \Consistence\Exception
+class Exception extends \Exception
 {
 
 	/**

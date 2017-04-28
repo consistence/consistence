@@ -198,7 +198,7 @@ class MultiEnumTest extends \Consistence\TestCase
 		RolesEnum::get(7);
 
 		$this->expectException(\Consistence\Enum\InvalidEnumValueException::class);
-		$this->expectExceptionMessage('8 [integer] is not a valid value');
+		$this->expectExceptionMessage('8 [int] is not a valid value');
 
 		RolesEnum::get(8);
 	}
@@ -206,7 +206,7 @@ class MultiEnumTest extends \Consistence\TestCase
 	public function testGetNegative()
 	{
 		$this->expectException(\Consistence\Enum\InvalidEnumValueException::class);
-		$this->expectExceptionMessage('-1 [integer] is not a valid value');
+		$this->expectExceptionMessage('-1 [int] is not a valid value');
 
 		RolesEnum::get(-1);
 	}
@@ -214,7 +214,7 @@ class MultiEnumTest extends \Consistence\TestCase
 	public function testGetMultiNegative()
 	{
 		$this->expectException(\Consistence\Enum\InvalidEnumValueException::class);
-		$this->expectExceptionMessage('-1 [integer] is not a valid value');
+		$this->expectExceptionMessage('-1 [int] is not a valid value');
 
 		RolesEnum::getMulti(-1);
 	}
@@ -318,7 +318,7 @@ class MultiEnumTest extends \Consistence\TestCase
 		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
 
 		$this->expectException(\Consistence\Enum\InvalidEnumValueException::class);
-		$this->expectExceptionMessage('-1 [integer] is not a valid value');
+		$this->expectExceptionMessage('-1 [int] is not a valid value');
 
 		$userAndAdmin->containsValue(-1);
 	}
@@ -410,7 +410,7 @@ class MultiEnumTest extends \Consistence\TestCase
 		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
 
 		$this->expectException(\Consistence\Enum\InvalidEnumValueException::class);
-		$this->expectExceptionMessage('5 [integer] is not a valid value');
+		$this->expectExceptionMessage('5 [int] is not a valid value');
 
 		$userAndAdmin->addValue(RoleEnum::USER | RoleEnum::ADMIN);
 	}
@@ -494,7 +494,7 @@ class MultiEnumTest extends \Consistence\TestCase
 		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
 
 		$this->expectException(\Consistence\Enum\InvalidEnumValueException::class);
-		$this->expectExceptionMessage('5 [integer] is not a valid value');
+		$this->expectExceptionMessage('5 [int] is not a valid value');
 
 		$userAndAdmin->removeValue(RoleEnum::USER | RoleEnum::ADMIN);
 	}
@@ -594,7 +594,7 @@ class MultiEnumTest extends \Consistence\TestCase
 		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
 
 		$this->expectException(\Consistence\Enum\InvalidEnumValueException::class);
-		$this->expectExceptionMessage('5 [integer] is not a valid value');
+		$this->expectExceptionMessage('5 [int] is not a valid value');
 
 		$userAndAdmin->intersectValue(RoleEnum::USER | RoleEnum::ADMIN);
 	}

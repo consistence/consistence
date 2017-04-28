@@ -9,14 +9,14 @@ use Consistence\Type\Type;
 class KeyValuePair extends \Consistence\ObjectPrototype
 {
 
-	/** @var integer|string */
+	/** @var int|string */
 	private $key;
 
 	/** @var mixed */
 	private $value;
 
 	/**
-	 * @param integer|string $key
+	 * @param int|string $key
 	 * @param mixed $value
 	 */
 	public function __construct($key, $value)
@@ -25,18 +25,18 @@ class KeyValuePair extends \Consistence\ObjectPrototype
 	}
 
 	/**
-	 * @param integer|string $key
+	 * @param int|string $key
 	 * @param mixed $value
 	 */
 	protected function setPair($key, $value)
 	{
-		Type::checkType($key, 'integer|string');
+		Type::checkType($key, 'int|string');
 		$this->key = $key;
 		$this->value = $value;
 	}
 
 	/**
-	 * @return integer|string
+	 * @return int|string
 	 */
 	public function getKey()
 	{

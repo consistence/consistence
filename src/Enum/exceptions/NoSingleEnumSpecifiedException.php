@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Consistence\Enum;
 
-class NoSingleEnumSpecifiedException extends \Consistence\PhpException implements \Consistence\Enum\Exception
+class NoSingleEnumSpecifiedException extends \Consistence\PhpException
 {
 
 	/** @var string */

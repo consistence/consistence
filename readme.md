@@ -91,8 +91,8 @@ $foo->bar = 'bar';
 use Consistence\Type\Type;
 
 Type::checkType('foo', 'string');
-Type::checkType('foo', 'string|integer');
-Type::checkType(1, 'string|integer');
+Type::checkType('foo', 'string|int');
+Type::checkType(1, 'string|int');
 Type::checkType(
 	[
 		[

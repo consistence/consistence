@@ -18,7 +18,7 @@ class KeyValuePairTest extends \Consistence\TestCase
 	public function testConstructInvalidKey()
 	{
 		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
-		$this->expectExceptionMessage('integer|string expected');
+		$this->expectExceptionMessage('int|string expected');
 
 		new KeyValuePair([], 'foo');
 	}

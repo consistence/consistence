@@ -4,10 +4,10 @@ declare(strict_types = 1);
 
 namespace Consistence\Enum;
 
-class MultiEnumValueIsNotPowerOfTwoException extends \Consistence\PhpException implements \Consistence\Enum\Exception
+class MultiEnumValueIsNotPowerOfTwoException extends \Consistence\PhpException
 {
 
-	/** @var integer */
+	/** @var int */
 	private $value;
 
 	/** @var string */

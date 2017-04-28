@@ -8,7 +8,7 @@ class KeyValuePairMutable extends \Consistence\Type\ArrayType\KeyValuePair
 {
 
 	/**
-	 * @param integer|string $key
+	 * @param int|string $key
 	 * @param mixed $value
 	 */
 	public function setPair($key, $value)

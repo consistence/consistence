@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Consistence\Math;
 
-class NonNegativeIntegerExpectedException extends \Consistence\PhpException implements \Consistence\Math\Exception
+class NonNegativeIntegerExpectedException extends \Consistence\PhpException
 {
 
 	/** @var mixed */

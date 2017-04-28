@@ -27,7 +27,7 @@ class KeyValuePairMutableTest extends \Consistence\TestCase
 		$pair = new KeyValuePairMutable(0, 'foo');
 
 		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
-		$this->expectExceptionMessage('integer|string expected');
+		$this->expectExceptionMessage('int|string expected');
 
 		$pair->setPair([], 'foo');
 	}

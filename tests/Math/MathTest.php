@@ -8,7 +8,7 @@ class MathTest extends \Consistence\TestCase
 {
 
 	/**
-	 * @return integer[][]
+	 * @return int[][]
 	 */
 	public function moduloProvider(): array
 	{
@@ -22,9 +22,9 @@ class MathTest extends \Consistence\TestCase
 	/**
 	 * @dataProvider moduloProvider
 	 *
-	 * @param integer $dividend
-	 * @param integer $modulo
-	 * @param integer $result
+	 * @param int $dividend
+	 * @param int $modulo
+	 * @param int $result
 	 */
 	public function testModulo(int $dividend, int $modulo, int $result)
 	{
@@ -65,8 +65,8 @@ class MathTest extends \Consistence\TestCase
 	/**
 	 * @dataProvider powersOfTwoProvider
 	 *
-	 * @param integer $value
-	 * @param boolean $result
+	 * @param int $value
+	 * @param bool $result
 	 */
 	public function testIsPowerOfTwo(int $value, bool $result)
 	{

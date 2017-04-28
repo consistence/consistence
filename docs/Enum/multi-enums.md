@@ -82,7 +82,7 @@ $userAndAdmin->contains(RolesEnum::getMulti(RolesEnum::USER, RolesEnum::EMPLOYEE
 $userAndAdmin->containsValue(RolesEnum::USER); // true
 $userAndAdmin->containsValue(RolesEnum::ADMIN); // true
 $userAndAdmin->containsValue(RolesEnum::EMPLOYEE); // false
-$userAndAdmin->containsValue(5); // Consistence\Enum\InvalidEnumValueException: 5 [integer] is not a valid value, accepted values: 1, 2, 4
+$userAndAdmin->containsValue(5); // Consistence\Enum\InvalidEnumValueException: 5 [int] is not a valid value, accepted values: 1, 2, 4
 ```
 
 ### Add
@@ -102,7 +102,7 @@ $user = $empty->addValue(RolesEnum::USER);
 $userAndAdmin = $user->addValue(RolesEnum::ADMIN);
 
 // when using value, only valid single values are accepted
-$empty->addValue(RolesEnum::USER | RolesEnum::EMPLOYEE); // Consistence\Enum\InvalidEnumValueException: 3 [integer] is not a valid value, accepted values: 1, 2, 4
+$empty->addValue(RolesEnum::USER | RolesEnum::EMPLOYEE); // Consistence\Enum\InvalidEnumValueException: 3 [int] is not a valid value, accepted values: 1, 2, 4
 ```
 
 ### Remove
@@ -122,7 +122,7 @@ $userAndAdmin = $userAndAdminAndEmployee->removeValue(RolesEnum::EMPLOYEE);
 $user = $userAndAdmin->removeValue(RolesEnum::ADMIN);
 
 // when using value, only valid single values are accepted
-$userAndAdminAndEmployee->removeValue(RolesEnum::USER | RolesEnum::EMPLOYEE); // Consistence\Enum\InvalidEnumValueException: 3 [integer] is not a valid value, accepted values: 1, 2, 4
+$userAndAdminAndEmployee->removeValue(RolesEnum::USER | RolesEnum::EMPLOYEE); // Consistence\Enum\InvalidEnumValueException: 3 [int] is not a valid value, accepted values: 1, 2, 4
 ```
 
 ### Intersect
@@ -142,7 +142,7 @@ $user = $userAndAdmin->intersectValue(RolesEnum::USER);
 $empty = $userAndAdmin->intersectValue(RolesEnum::EMPLOYEE);
 
 // when using value, only valid single values are accepted
-$user->intersectValue(RolesEnum::USER | RolesEnum::EMPLOYEE); // Consistence\Enum\InvalidEnumValueException: 3 [integer] is not a valid value, accepted values: 1, 2, 4
+$user->intersectValue(RolesEnum::USER | RolesEnum::EMPLOYEE); // Consistence\Enum\InvalidEnumValueException: 3 [int] is not a valid value, accepted values: 1, 2, 4
 ```
 
 ### Filter
@@ -239,7 +239,7 @@ class RoleEnum extends \Consistence\Enum\Enum
 class RolesEnum extends \Consistence\Enum\MultiEnum
 {
 
-	/** @var integer[] format: single Enum value (string) => MultiEnum value (integer) */
+	/** @var int[] format: single Enum value (string) => MultiEnum value (int) */
 	private static $singleMultiMap = [
 		RoleEnum::USER => 1,
 		RoleEnum::EMPLOYEE => 2,
@@ -258,7 +258,7 @@ class RolesEnum extends \Consistence\Enum\MultiEnum
 	 * Converts value representing a value from single Enum to MultiEnum counterpart
 	 *
 	 * @param string $singleEnumValue
-	 * @return integer
+	 * @return int
 	 */
 	protected static function convertSingleEnumValueToValue($singleEnumValue): int
 	{
@@ -268,7 +268,7 @@ class RolesEnum extends \Consistence\Enum\MultiEnum
 	/**
 	 * Converts value representing a value from MultiEnum to single Enum counterpart
 	 *
-	 * @param integer $value
+	 * @param int $value
 	 * @return string
 	 */
 	protected static function convertValueToSingleEnumValue(int $value)

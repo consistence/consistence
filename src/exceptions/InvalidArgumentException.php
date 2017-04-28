@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Consistence;
 
-class InvalidArgumentException extends \Consistence\PhpException implements \Consistence\Exception
+class InvalidArgumentException extends \Consistence\PhpException
 {
 
 }

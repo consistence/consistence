@@ -8,7 +8,6 @@ use Consistence\Reflection\ClassReflection;
 use Consistence\Type\ArrayType\ArrayType;
 use Consistence\Type\ArrayType\KeyValuePair;
 use Consistence\Type\Type;
-
 use ReflectionClass;
 
 abstract class Enum extends \Consistence\ObjectPrototype
@@ -101,7 +100,7 @@ abstract class Enum extends \Consistence\ObjectPrototype
 	{
 		$index = [];
 		foreach ($availableValues as $value) {
-			Type::checkType($value, 'integer|string|float|boolean|null');
+			Type::checkType($value, 'int|string|float|bool|null');
 			$key = self::getValueIndex($value);
 			if (isset($index[$key])) {
 				throw new \Consistence\Enum\DuplicateValueSpecifiedException($value, static::class);
@@ -112,7 +111,7 @@ abstract class Enum extends \Consistence\ObjectPrototype
 
 	/**
 	 * @param mixed $value
-	 * @return boolean
+	 * @return bool
 	 */
 	public static function isValidValue($value): bool
 	{
@@ -161,7 +160,7 @@ abstract class Enum extends \Consistence\ObjectPrototype
 
 	/**
 	 * @param mixed $value
-	 * @return boolean
+	 * @return bool
 	 */
 	public function equalsValue($value): bool
 	{

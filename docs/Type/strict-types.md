@@ -61,8 +61,8 @@ use Consistence\Type\Type;
 
 Type::checkType('foo', 'string');
 
-// \Consistence\InvalidArgumentTypeException: integer expected, foo [string] given
-Type::checkType('foo', 'integer');
+// \Consistence\InvalidArgumentTypeException: int expected, foo [string] given
+Type::checkType('foo', 'int');
 ```
 
 Usable types are listed in the [Consistence Coding Standard](https://github.com/consistence/coding-standard/blob/master/consistence-coding-standard.md#allowed-types-for-param-return-var).
@@ -100,7 +100,7 @@ Type::checkType(
 	'string[]'
 );
 
-// \Consistence\InvalidArgumentTypeException: string[] expected, 1 [integer] given
+// \Consistence\InvalidArgumentTypeException: string[] expected, 1 [int] given
 Type::checkType(1, 'string[]');
 ```
 
@@ -133,8 +133,8 @@ There are a lot of cases when multiple types can be accepted, this can be repres
 
 use Consistence\Type\Type;
 
-Type::checkType('foo', 'string|integer');
-Type::checkType(1, 'string|integer');
+Type::checkType('foo', 'string|int');
+Type::checkType(1, 'string|int');
 ```
 
 Getting types

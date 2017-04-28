@@ -74,7 +74,7 @@ class TimeFormat extends \Consistence\ObjectPrototype
 	/**
 	 * Convert unix timestamp to DateTime with current timezone
 	 *
-	 * @param integer $timestamp
+	 * @param int $timestamp
 	 * @param \DateTimeZone|null $timezone
 	 * @return \DateTime
 	 */
@@ -91,7 +91,7 @@ class TimeFormat extends \Consistence\ObjectPrototype
 	/**
 	 * Convert unix timestamp to DateTimeImmutable with current timezone
 	 *
-	 * @param integer $timestamp
+	 * @param int $timestamp
 	 * @param \DateTimeZone|null $timezone
 	 * @return \DateTimeImmutable
 	 */
@@ -214,7 +214,7 @@ class TimeFormat extends \Consistence\ObjectPrototype
 	 *
 	 * @param string $format
 	 * @param string $timeString
-	 * @return boolean
+	 * @return bool
 	 */
 	public static function isValidTime(string $format, string $timeString): bool
 	{

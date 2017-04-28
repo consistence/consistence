@@ -6,7 +6,6 @@ namespace Consistence\Enum;
 
 use ArrayIterator;
 use Closure;
-
 use Consistence\Math\Math;
 use Consistence\Type\ArrayType\ArrayType;
 use Consistence\Type\Type;
@@ -26,7 +25,7 @@ abstract class MultiEnum extends \Consistence\Enum\Enum implements \IteratorAggr
 	}
 
 	/**
-	 * @return integer[] format: const name (string) => value (integer)
+	 * @return int[] format: const name (string) => value (int)
 	 */
 	public static function getAvailableValues()
 	{
@@ -44,7 +43,7 @@ abstract class MultiEnum extends \Consistence\Enum\Enum implements \IteratorAggr
 	}
 
 	/**
-	 * @param integer[] $availableValues
+	 * @param int[] $availableValues
 	 */
 	protected static function checkAvailableValues(array $availableValues)
 	{
@@ -57,7 +56,7 @@ abstract class MultiEnum extends \Consistence\Enum\Enum implements \IteratorAggr
 	}
 
 	/**
-	 * @param integer ...$values
+	 * @param int ...$values
 	 * @return static
 	 */
 	public static function getMulti(int ...$values): self
@@ -66,7 +65,7 @@ abstract class MultiEnum extends \Consistence\Enum\Enum implements \IteratorAggr
 	}
 
 	/**
-	 * @param integer[] $values enum values
+	 * @param int[] $values enum values
 	 * @return static
 	 */
 	public static function getMultiByArray(array $values): self
@@ -103,7 +102,7 @@ abstract class MultiEnum extends \Consistence\Enum\Enum implements \IteratorAggr
 	 * Converts value representing a value from single Enum to MultiEnum counterpart
 	 *
 	 * @param mixed $singleEnumValue
-	 * @return integer
+	 * @return int
 	 */
 	protected static function convertSingleEnumValueToValue($singleEnumValue): int
 	{
@@ -113,7 +112,7 @@ abstract class MultiEnum extends \Consistence\Enum\Enum implements \IteratorAggr
 	/**
 	 * Converts value representing a value from MultiEnum to single Enum counterpart
 	 *
-	 * @param integer $value
+	 * @param int $value
 	 * @return mixed
 	 */
 	protected static function convertValueToSingleEnumValue(int $value)
@@ -124,7 +123,7 @@ abstract class MultiEnum extends \Consistence\Enum\Enum implements \IteratorAggr
 	/**
 	 * Converts value representing part of MultiEnum to Enum instance
 	 *
-	 * @param integer $value
+	 * @param int $value
 	 * @return \Consistence\Enum\Enum
 	 */
 	protected static function convertValueToSingleEnum(int $value): Enum
@@ -138,7 +137,7 @@ abstract class MultiEnum extends \Consistence\Enum\Enum implements \IteratorAggr
 	 * Converts Enum instance to value representing part of MultiEnum
 	 *
 	 * @param \Consistence\Enum\Enum $singleEnum
-	 * @return integer
+	 * @return int
 	 */
 	protected static function convertSingleEnumToValue(Enum $singleEnum): int
 	{
@@ -147,7 +146,7 @@ abstract class MultiEnum extends \Consistence\Enum\Enum implements \IteratorAggr
 
 	/**
 	 * @param string $singleEnumClass
-	 * @return integer[] format: const name (string) => value (integer)
+	 * @return int[] format: const name (string) => value (int)
 	 */
 	private static function getSingleEnumMappedAvailableValues(string $singleEnumClass)
 	{
@@ -171,11 +170,11 @@ abstract class MultiEnum extends \Consistence\Enum\Enum implements \IteratorAggr
 	}
 
 	/**
-	 * @param integer $value
+	 * @param int $value
 	 */
 	public static function checkValue($value)
 	{
-		Type::checkType($value, 'integer');
+		Type::checkType($value, 'int');
 		if ($value < 0) {
 			throw new \Consistence\Enum\InvalidEnumValueException($value, self::getAvailableValues());
 		}
@@ -191,7 +190,7 @@ abstract class MultiEnum extends \Consistence\Enum\Enum implements \IteratorAggr
 	}
 
 	/**
-	 * @return integer[] format: const name (string) => value (integer)
+	 * @return int[] format: const name (string) => value (int)
 	 */
 	public function getValues()
 	{
@@ -279,7 +278,7 @@ abstract class MultiEnum extends \Consistence\Enum\Enum implements \IteratorAggr
 	}
 
 	/**
-	 * @param integer $value
+	 * @param int $value
 	 * @return static different instance of enum
 	 */
 	public function addValue(int $value): self
@@ -317,7 +316,7 @@ abstract class MultiEnum extends \Consistence\Enum\Enum implements \IteratorAggr
 	}
 
 	/**
-	 * @param integer $value
+	 * @param int $value
 	 * @return static different instance of enum
 	 */
 	public function removeValue(int $value): self
@@ -355,7 +354,7 @@ abstract class MultiEnum extends \Consistence\Enum\Enum implements \IteratorAggr
 	}
 
 	/**
-	 * @param integer $value
+	 * @param int $value
 	 * @return static different instance of enum
 	 */
 	public function intersectValue(int $value): self

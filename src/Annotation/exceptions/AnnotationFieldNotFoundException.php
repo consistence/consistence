@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Consistence\Annotation;
 
-class AnnotationFieldNotFoundException extends \Consistence\PhpException implements \Consistence\Annotation\Exception
+class AnnotationFieldNotFoundException extends \Consistence\PhpException
 {
 
 	/** @var string */

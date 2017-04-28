@@ -45,31 +45,31 @@ class Type extends \Consistence\ObjectPrototype
 	 * Tests if the $value has one of expected types
 	 *
 	 * Supported syntax:
-	 *  - integer
+	 *  - int
 	 *  - mixed (allow every type)
 	 *  - object
-	 *  - int
-	 *  - integer|string
-	 *  - integer|string|float
-	 *  - integer|null
+	 *  - integer
+	 *  - int|string
+	 *  - int|string|float
+	 *  - int|null
 	 *  - DateTime (do not use leading \)
 	 *  - stdClass|DateTime
-	 *  - integer|DateTime
-	 *  - integer[]
-	 *  - integer[]|string[]
-	 *  - integer[]|DateTime
-	 *  - integer[][]
+	 *  - int|DateTime
+	 *  - int[]
+	 *  - int[]|string[]
+	 *  - int[]|DateTime
+	 *  - int[][]
 	 *  - mixed[]|Collection
 	 *
 	 * Optional validation of keys in traversable types:
-	 *  - integer:string[]
+	 *  - int:string[]
 	 *  - missing keys can be omitted on right - string:mixed:string[][] is the same as string:string[][]
 	 *  - key types cannot contain | sign to separate more accepted types
 	 *
 	 * @param mixed $value
 	 * @param string $expectedTypes
-	 * @param boolean $allowSubtypes decides if subtypes of given expected types should be considered a valid value
-	 * @return boolean
+	 * @param bool $allowSubtypes decides if subtypes of given expected types should be considered a valid value
+	 * @return bool
 	 */
 	public static function hasType($value, string $expectedTypes, bool $allowSubtypes = self::SUBTYPES_ALLOW): bool
 	{
@@ -117,7 +117,7 @@ class Type extends \Consistence\ObjectPrototype
 	 *
 	 * @param mixed $value
 	 * @param string $expectedTypes
-	 * @param boolean $allowSubtypes decides if subtypes of given expected types should be considered a valid value
+	 * @param bool $allowSubtypes decides if subtypes of given expected types should be considered a valid value
 	 */
 	public static function checkType($value, string $expectedTypes, bool $allowSubtypes = self::SUBTYPES_ALLOW)
 	{
@@ -131,10 +131,10 @@ class Type extends \Consistence\ObjectPrototype
 		switch ($type) {
 			case 'double':
 				return 'float';
-			case 'int':
-				return 'integer';
-			case 'bool':
-				return 'boolean';
+			case 'integer':
+				return 'int';
+			case 'boolean':
+				return 'bool';
 			case 'NULL':
 				return 'null';
 			default:

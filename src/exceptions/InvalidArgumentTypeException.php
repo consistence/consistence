@@ -6,7 +6,7 @@ namespace Consistence;
 
 use Consistence\Type\Type;
 
-class InvalidArgumentTypeException extends \Consistence\InvalidArgumentException implements \Consistence\Exception
+class InvalidArgumentTypeException extends \Consistence\InvalidArgumentException
 {
 
 	/** @var mixed */

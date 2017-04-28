@@ -6,7 +6,7 @@ namespace Consistence\Enum;
 
 use Consistence\Type\Type;
 
-class DuplicateValueSpecifiedException extends \Consistence\PhpException implements \Consistence\Enum\Exception
+class DuplicateValueSpecifiedException extends \Consistence\PhpException
 {
 
 	/** @var mixed */

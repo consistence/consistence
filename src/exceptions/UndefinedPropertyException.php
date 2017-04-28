@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Consistence;
 
-class UndefinedPropertyException extends \Consistence\PhpException implements \Consistence\Exception
+class UndefinedPropertyException extends \Consistence\PhpException
 {
 
 	/** @var string */

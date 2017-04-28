@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Consistence\Time;
 
-interface InvalidTimeForFormatException extends \Consistence\Time\Exception
+interface InvalidTimeForFormatException
 {
 
 	public function getTimeString(): string;

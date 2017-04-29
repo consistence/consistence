@@ -16,6 +16,18 @@ class ArrayType extends \Consistence\ObjectPrototype
 	}
 
 	/**
+	 * Wrapper for array_key_exists
+	 *
+	 * @param mixed[] $haystack
+	 * @param integer|string $key
+	 * @return boolean
+	 */
+	public static function containsKey(array $haystack, $key)
+	{
+		return array_key_exists($key, $haystack);
+	}
+
+	/**
 	 * Wrapper for PHP in_array, provides safer default parameter
 	 *
 	 * @param mixed[] $haystack

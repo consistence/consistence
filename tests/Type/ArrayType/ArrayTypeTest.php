@@ -7,6 +7,31 @@ use DateTimeImmutable;
 class ArrayTypeTest extends \Consistence\TestCase
 {
 
+	public function testContainsKeyIsNotStrict()
+	{
+		$values = [
+			'three' => 'three',
+			'7' => '7',
+			3 => 3,
+			null => null,
+			false => 'false',
+			true => 'true',
+			'nullValue' => null,
+		];
+
+		$this->assertTrue(ArrayType::containsKey($values, 'three'));
+		$this->assertTrue(ArrayType::containsKey($values, '7'));
+		$this->assertTrue(ArrayType::containsKey($values, 7));
+		$this->assertTrue(ArrayType::containsKey($values, null));
+		$this->assertTrue(ArrayType::containsKey($values, 3));
+		$this->assertTrue(ArrayType::containsKey($values, '3'));
+		$this->assertTrue(ArrayType::containsKey($values, '')); // null key
+		$this->assertTrue(ArrayType::containsKey($values, 0)); // false key
+		$this->assertTrue(ArrayType::containsKey($values, 1)); // true key
+		$this->assertTrue(ArrayType::containsKey($values, 'nullValue'));
+		$this->assertFalse(ArrayType::containsKey($values, '99'));
+	}
+
 	public function testStaticConstruct()
 	{
 		$this->expectException(\Consistence\StaticClassException::class);

@@ -46,11 +46,25 @@ class ArrayTypeTest extends \Consistence\TestCase
 		$this->assertFalse(ArrayType::inArray($values, '2'));
 	}
 
+	public function testContainsValueDefault()
+	{
+		$values = [1, 2, 3];
+		$this->assertTrue(ArrayType::containsValue($values, 2));
+		$this->assertFalse(ArrayType::containsValue($values, '2'));
+	}
+
 	public function testInArrayStrict()
 	{
 		$values = [1, 2, 3];
 		$this->assertTrue(ArrayType::inArray($values, 2, ArrayType::STRICT_TRUE));
 		$this->assertFalse(ArrayType::inArray($values, '2', ArrayType::STRICT_TRUE));
+	}
+
+	public function testContainsValueStrict()
+	{
+		$values = [1, 2, 3];
+		$this->assertTrue(ArrayType::containsValue($values, 2, ArrayType::STRICT_TRUE));
+		$this->assertFalse(ArrayType::containsValue($values, '2', ArrayType::STRICT_TRUE));
 	}
 
 	public function testInArrayLoose()
@@ -59,10 +73,24 @@ class ArrayTypeTest extends \Consistence\TestCase
 		$this->assertTrue(ArrayType::inArray($values, '2', ArrayType::STRICT_FALSE));
 	}
 
+	public function testContainsValueLoose()
+	{
+		$values = [1, 2, 3];
+		$this->assertTrue(ArrayType::containsValue($values, '2', ArrayType::STRICT_FALSE));
+	}
+
 	public function testInArrayByCallback()
 	{
 		$values = [1, 2, 3];
 		$this->assertTrue(ArrayType::inArrayByCallback($values, function (KeyValuePair $pair) {
+			return ($pair->getValue() % 2) === 0;
+		}));
+	}
+
+	public function testContainsByCallback()
+	{
+		$values = [1, 2, 3];
+		$this->assertTrue(ArrayType::containsByCallback($values, function (KeyValuePair $pair) {
 			return ($pair->getValue() % 2) === 0;
 		}));
 	}
@@ -75,10 +103,26 @@ class ArrayTypeTest extends \Consistence\TestCase
 		}));
 	}
 
+	public function testContainsByCallbackLoose()
+	{
+		$values = [1, 2, 3];
+		$this->assertTrue(ArrayType::containsByCallback($values, function (KeyValuePair $pair) {
+			return $pair->getValue() == '2';
+		}));
+	}
+
 	public function testInArrayByCallbackNotFound()
 	{
 		$values = [1, 2, 3];
 		$this->assertFalse(ArrayType::inArrayByCallback($values, function (KeyValuePair $pair) {
+			return $pair->getValue() === 0;
+		}));
+	}
+
+	public function testContainsByCallbackNotFound()
+	{
+		$values = [1, 2, 3];
+		$this->assertFalse(ArrayType::containsByCallback($values, function (KeyValuePair $pair) {
 			return $pair->getValue() === 0;
 		}));
 	}
@@ -107,6 +151,14 @@ class ArrayTypeTest extends \Consistence\TestCase
 		}));
 	}
 
+	public function testContainsValueByValueCallback()
+	{
+		$values = [1, 2, 3];
+		$this->assertTrue(ArrayType::containsValueByValueCallback($values, function ($value) {
+			return ($value % 2) === 0;
+		}));
+	}
+
 	public function testInArrayByValueCallbackLoose()
 	{
 		$values = [1, 2, 3];
@@ -115,10 +167,26 @@ class ArrayTypeTest extends \Consistence\TestCase
 		}));
 	}
 
+	public function testContainsValueByValueCallbackLoose()
+	{
+		$values = [1, 2, 3];
+		$this->assertTrue(ArrayType::containsValueByValueCallback($values, function ($value) {
+			return $value == '2';
+		}));
+	}
+
 	public function testInArrayByValueCallbackNotFound()
 	{
 		$values = [1, 2, 3];
 		$this->assertFalse(ArrayType::inArrayByValueCallback($values, function ($value) {
+			return $value === 0;
+		}));
+	}
+
+	public function testContainsValueByValueCallbackNotFound()
+	{
+		$values = [1, 2, 3];
+		$this->assertFalse(ArrayType::containsValueByValueCallback($values, function ($value) {
 			return $value === 0;
 		}));
 	}

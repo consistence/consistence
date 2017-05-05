@@ -113,7 +113,7 @@ class CardSuit extends \Consistence\Enum\Enum
 	public function getCardColor()
 	{
 		return CardColor::get(
-			ArrayType::inArray($this->getValue(), self::$reds) ? CardColor::RED : CardColor::BLACK
+			ArrayType::containsValue($this->getValue(), self::$reds) ? CardColor::RED : CardColor::BLACK
 		);
 	}
 

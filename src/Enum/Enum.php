@@ -114,7 +114,7 @@ abstract class Enum extends \Consistence\ObjectPrototype
 	 */
 	public static function isValidValue($value)
 	{
-		return ArrayType::inArray(static::getAvailableValues(), $value);
+		return ArrayType::containsValue(static::getAvailableValues(), $value);
 	}
 
 	/**

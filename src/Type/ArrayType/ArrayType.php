@@ -30,6 +30,8 @@ class ArrayType extends \Consistence\ObjectPrototype
 	/**
 	 * Wrapper for PHP in_array, provides safer default parameter
 	 *
+	 * @deprecated use self::containsValue() instead
+	 *
 	 * @param mixed[] $haystack
 	 * @param mixed $needle
 	 * @param boolean $strict
@@ -37,7 +39,34 @@ class ArrayType extends \Consistence\ObjectPrototype
 	 */
 	public static function inArray(array $haystack, $needle, $strict = self::STRICT_TRUE)
 	{
+		return self::containsValue($haystack, $needle, $strict);
+	}
+
+	/**
+	 * Wrapper for PHP in_array, provides safer default parameter
+	 *
+	 * @param mixed[] $haystack
+	 * @param mixed $needle
+	 * @param boolean $strict
+	 * @return boolean
+	 */
+	public static function containsValue(array $haystack, $needle, $strict = self::STRICT_TRUE)
+	{
 		return in_array($needle, $haystack, $strict);
+	}
+
+	/**
+	 * Returns true when callback(\Consistence\Type\ArrayType\KeyValuePair) is at least once trueish
+	 *
+	 * @deprecated use self::containsByCallback() instead
+	 *
+	 * @param mixed[] $haystack
+	 * @param \Closure $callback
+	 * @return boolean
+	 */
+	public static function inArrayByCallback(array $haystack, Closure $callback)
+	{
+		return self::containsByCallback($haystack, $callback);
 	}
 
 	/**
@@ -47,7 +76,7 @@ class ArrayType extends \Consistence\ObjectPrototype
 	 * @param \Closure $callback
 	 * @return boolean
 	 */
-	public static function inArrayByCallback(array $haystack, Closure $callback)
+	public static function containsByCallback(array $haystack, Closure $callback)
 	{
 		$result = self::findByCallback($haystack, $callback);
 		return $result !== null;
@@ -69,11 +98,25 @@ class ArrayType extends \Consistence\ObjectPrototype
 	/**
 	 * Returns true when callback(value) is at least once trueish
 	 *
+	 * @deprecated use self::containsValueByValueCallback() instead
+	 *
 	 * @param mixed[] $haystack
 	 * @param \Closure $callback
 	 * @return boolean
 	 */
 	public static function inArrayByValueCallback(array $haystack, Closure $callback)
+	{
+		return self::containsValueByValueCallback($haystack, $callback);
+	}
+
+	/**
+	 * Returns true when callback(value) is at least once trueish
+	 *
+	 * @param mixed[] $haystack
+	 * @param \Closure $callback
+	 * @return boolean
+	 */
+	public static function containsValueByValueCallback(array $haystack, Closure $callback)
 	{
 		$result = self::findValueByCallback($haystack, $callback);
 		return $result !== null;
@@ -415,7 +458,7 @@ class ArrayType extends \Consistence\ObjectPrototype
 	{
 		$result = [];
 		foreach ($haystack as $key => $value) {
-			if (!self::inArray($result, $value, $strict)) {
+			if (!self::containsValue($result, $value, $strict)) {
 				$result[$key] = $value;
 			}
 		}

@@ -30,21 +30,6 @@ class ArrayType extends \Consistence\ObjectPrototype
 	/**
 	 * Wrapper for PHP in_array, provides safer default parameter
 	 *
-	 * @deprecated use self::containsValue() instead
-	 *
-	 * @param mixed[] $haystack
-	 * @param mixed $needle
-	 * @param boolean $strict
-	 * @return boolean
-	 */
-	public static function inArray(array $haystack, $needle, $strict = self::STRICT_TRUE)
-	{
-		return self::containsValue($haystack, $needle, $strict);
-	}
-
-	/**
-	 * Wrapper for PHP in_array, provides safer default parameter
-	 *
 	 * @param mixed[] $haystack
 	 * @param mixed $needle
 	 * @param boolean $strict
@@ -53,20 +38,6 @@ class ArrayType extends \Consistence\ObjectPrototype
 	public static function containsValue(array $haystack, $needle, $strict = self::STRICT_TRUE)
 	{
 		return in_array($needle, $haystack, $strict);
-	}
-
-	/**
-	 * Returns true when callback(\Consistence\Type\ArrayType\KeyValuePair) is at least once trueish
-	 *
-	 * @deprecated use self::containsByCallback() instead
-	 *
-	 * @param mixed[] $haystack
-	 * @param \Closure $callback
-	 * @return boolean
-	 */
-	public static function inArrayByCallback(array $haystack, Closure $callback)
-	{
-		return self::containsByCallback($haystack, $callback);
 	}
 
 	/**
@@ -93,20 +64,6 @@ class ArrayType extends \Consistence\ObjectPrototype
 	{
 		$result = self::findKeyByValueCallback($haystack, $callback);
 		return $result !== null;
-	}
-
-	/**
-	 * Returns true when callback(value) is at least once trueish
-	 *
-	 * @deprecated use self::containsValueByValueCallback() instead
-	 *
-	 * @param mixed[] $haystack
-	 * @param \Closure $callback
-	 * @return boolean
-	 */
-	public static function inArrayByValueCallback(array $haystack, Closure $callback)
-	{
-		return self::containsValueByValueCallback($haystack, $callback);
 	}
 
 	/**

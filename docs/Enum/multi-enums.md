@@ -156,7 +156,7 @@ $allowedRoles = RolesEnum::getMulti(RolesEnum::USER);
 
 $userAndAdmin = RolesEnum::getMulti(RolesEnum::USER, RolesEnum::ADMIN);
 $user = $userAndAdmin->filterValues(function ($singleValue) use ($allowedRoles) {
-	return ArrayType::inArray($allowedRoles->getAvailableValues(), $singleValue);
+	return ArrayType::containsValue($allowedRoles->getAvailableValues(), $singleValue);
 });
 ```
 

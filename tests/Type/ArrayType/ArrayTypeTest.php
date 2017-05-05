@@ -83,6 +83,22 @@ class ArrayTypeTest extends \Consistence\TestCase
 		}));
 	}
 
+	public function testContainsKeyByValueCallback()
+	{
+		$values = [1, 2, 3];
+		$this->assertTrue(ArrayType::containsKeyByValueCallback($values, function ($value) {
+			return ($value % 2) === 0;
+		}));
+	}
+
+	public function testContainsKeyByValueCallbackNotFound()
+	{
+		$values = [1, 2, 3];
+		$this->assertFalse(ArrayType::containsKeyByValueCallback($values, function ($value) {
+			return ($value % 5) === 0;
+		}));
+	}
+
 	public function testInArrayByValueCallback()
 	{
 		$values = [1, 2, 3];

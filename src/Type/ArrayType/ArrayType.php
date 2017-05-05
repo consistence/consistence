@@ -54,6 +54,19 @@ class ArrayType extends \Consistence\ObjectPrototype
 	}
 
 	/**
+	 * Returns true when callback(key) is at least once trueish
+	 *
+	 * @param mixed[] $haystack
+	 * @param \Closure $callback
+	 * @return boolean
+	 */
+	public static function containsKeyByValueCallback(array $haystack, Closure $callback)
+	{
+		$result = self::findKeyByValueCallback($haystack, $callback);
+		return $result !== null;
+	}
+
+	/**
 	 * Returns true when callback(value) is at least once trueish
 	 *
 	 * @param mixed[] $haystack

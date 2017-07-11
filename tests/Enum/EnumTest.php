@@ -201,4 +201,22 @@ class EnumTest extends \Consistence\TestCase
 		}
 	}
 
+	public function testMagicGet()
+	{
+		$role = RoleEnum::ADMIN();
+		$this->assertSame($role, RoleEnum::get(RoleEnum::ADMIN));
+	}
+
+	public function testMagicGetThrowsException()
+	{
+		try {
+			RoleEnum::NON_EXISTING_ROLE();
+		} catch (\Consistence\Enum\InvalidEnumConstantException $e) {
+			$this->assertSame('NON_EXISTING_ROLE is not a valid constant name of class Consistence\Enum\RoleEnum, accepted values: USER, EMPLOYEE, ADMIN', $e->getMessage());
+			$this->assertSame('NON_EXISTING_ROLE', $e->getValue());
+			$this->assertSame('Consistence\Enum\RoleEnum', $e->getClass());
+			$this->assertEquals(array_keys(RoleEnum::getAvailableValues()), $e->getAvailableValues());
+		}
+	}
+
 }

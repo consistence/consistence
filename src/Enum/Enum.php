@@ -167,4 +167,13 @@ abstract class Enum extends \Consistence\ObjectPrototype
 		return $this->getValue() === $value;
 	}
 
+	public static function __callStatic($name, array $arguments)
+	{
+		if (!array_key_exists($name, self::getAvailableValues())) {
+			throw new \Consistence\Enum\InvalidEnumConstantException($name, static::class, array_keys(self::getAvailableValues()));
+		};
+
+		return self::get(constant('static::' . $name));
+	}
+
 }

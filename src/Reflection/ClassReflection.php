@@ -66,7 +66,7 @@ class ClassReflection extends \Consistence\ObjectPrototype
 	 *
 	 * @param \ReflectionClass $classReflection
 	 * @param int $filter
-	 * @return \ReflectionMethod[]
+	 * @return \ReflectionProperty[]
 	 */
 	public static function getDeclaredProperties(ReflectionClass $classReflection, int $filter = self::FILTER_VISIBILITY_NONE)
 	{

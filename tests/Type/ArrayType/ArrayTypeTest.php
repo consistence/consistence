@@ -61,6 +61,12 @@ class ArrayTypeTest extends \Consistence\TestCase
 		$this->assertTrue(ArrayType::containsValue($values, '2', ArrayType::STRICT_FALSE));
 	}
 
+	public function testContainsValueNull()
+	{
+		$this->assertTrue(ArrayType::containsValue([1, 2, 3, null], null));
+		$this->assertFalse(ArrayType::containsValue([1, 2, 3], null));
+	}
+
 	public function testContainsByCallback()
 	{
 		$values = [1, 2, 3];
@@ -122,6 +128,14 @@ class ArrayTypeTest extends \Consistence\TestCase
 		$values = [1, 2, 3];
 		$this->assertFalse(ArrayType::containsValueByValueCallback($values, function (int $value): bool {
 			return $value === 0;
+		}));
+	}
+
+	public function testContainsValueByValueCallbackNull()
+	{
+		$values = [1, 2, 3, null];
+		$this->assertTrue(ArrayType::containsValueByValueCallback($values, function ($value): bool {
+			return $value === null;
 		}));
 	}
 
@@ -317,6 +331,14 @@ class ArrayTypeTest extends \Consistence\TestCase
 		ArrayType::getValue($values, 2);
 	}
 
+	public function testGetValueNull()
+	{
+		$values = [
+			'null' => null,
+		];
+		$this->assertSame(null, ArrayType::getValue($values, 'null'));
+	}
+
 	public function testFindByCallback()
 	{
 		$values = [1, 2, 3];
@@ -395,6 +417,14 @@ class ArrayTypeTest extends \Consistence\TestCase
 		ArrayType::getValueByCallback($values, function (int $value): bool {
 			return $value > 3;
 		});
+	}
+
+	public function testGetValueByCallbackNull()
+	{
+		$values = [1, 2, 3, null];
+		$this->assertSame(null, ArrayType::getValueByCallback($values, function ($value): bool {
+			return $value === null;
+		}));
 	}
 
 	public function testFilterByCallback()

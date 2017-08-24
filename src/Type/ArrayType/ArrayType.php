@@ -78,8 +78,13 @@ class ArrayType extends \Consistence\ObjectPrototype
 	 */
 	public static function containsValueByValueCallback(array $haystack, Closure $callback): bool
 	{
-		$result = self::findValueByCallback($haystack, $callback);
-		return $result !== null;
+		foreach ($haystack as $key => $value) {
+			if ($callback($value)) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**
@@ -206,12 +211,11 @@ class ArrayType extends \Consistence\ObjectPrototype
 	 */
 	public static function getValue(array $haystack, $key)
 	{
-		$result = static::findValue($haystack, $key);
-		if ($result === null) {
+		if (!array_key_exists($key, $haystack)) {
 			throw new \Consistence\Type\ArrayType\ElementDoesNotExistException();
 		}
 
-		return $result;
+		return $haystack[$key];
 	}
 
 	/**
@@ -278,12 +282,13 @@ class ArrayType extends \Consistence\ObjectPrototype
 	 */
 	public static function getValueByCallback(array $haystack, Closure $callback)
 	{
-		$result = static::findValueByCallback($haystack, $callback);
-		if ($result === null) {
-			throw new \Consistence\Type\ArrayType\ElementDoesNotExistException();
+		foreach ($haystack as $key => $value) {
+			if ($callback($value)) {
+				return $value;
+			}
 		}
 
-		return $result;
+		throw new \Consistence\Type\ArrayType\ElementDoesNotExistException();
 	}
 
 	/**

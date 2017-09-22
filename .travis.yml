@@ -22,7 +22,7 @@ before_install:
   - composer self-update
 
 install:
-  - composer update --no-interaction --prefer-source ${COMPOSER_DEPENDENCIES_OPTIONS}
+  - composer update --no-interaction --no-suggest --prefer-source ${COMPOSER_DEPENDENCIES_OPTIONS}
 
 script:
   - bin/phing ci-build

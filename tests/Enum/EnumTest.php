@@ -201,4 +201,8 @@ class EnumTest extends \Consistence\TestCase
 		}
 	}
 
+	public function testGetByName()
+	{
+		$this->assertSame(StatusEnum::DRAFT(), StatusEnum::get(1));
+	}
 }

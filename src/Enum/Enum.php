@@ -19,6 +19,9 @@ abstract class Enum extends \Consistence\ObjectPrototype
 	/** @var self[] indexed by enum and value */
 	private static $instances = [];
 
+	/** @var indexed by enum and name */
+	private static $valueByName = [];
+
 	/** @var mixed[] format: enum name (string) => cached values (const name (string) => value (mixed)) */
 	private static $availableValues;
 
@@ -30,6 +33,29 @@ abstract class Enum extends \Consistence\ObjectPrototype
 		static::checkValue($value);
 		$this->value = $value;
 	}
+
+	/**
+	 * Supports `Enum::CONST_NAME()`.
+	 * @param string $name An existing constant name
+	 */
+    public static final function __callStatic($name, array $args)
+    {
+        return static::getByname($name);
+    }
+
+    /**
+     * Retrieves an instance of the enum from the constant's name.
+     */
+    public static final function getByName($name)
+    {
+        $nameMap = static::getAvailableEnums();
+
+        if (!isset($nameMap[$name])) {
+            throw new \Consistence\Enum\InvalidEnumValueException("name:$name", static::getAvailableValues());
+        }
+
+        return $nameMap[$name];
+    }
 
 	/**
 	 * @param mixed $value

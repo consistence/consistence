@@ -25,14 +25,13 @@ class MathTest extends \Consistence\TestCase
 	 * @param int $dividend
 	 * @param int $modulo
 	 * @param int $result
-	 * @return void
 	 */
-	public function testModulo(int $dividend, int $modulo, int $result): void
+	public function testModulo(int $dividend, int $modulo, int $result)
 	{
 		$this->assertSame(Math::modulo($dividend, $modulo), $result);
 	}
 
-	public function testModuloNegativeModulus(): void
+	public function testModuloNegativeModulus()
 	{
 		try {
 			Math::modulo(5, -1);
@@ -68,9 +67,8 @@ class MathTest extends \Consistence\TestCase
 	 *
 	 * @param int $value
 	 * @param bool $result
-	 * @return void
 	 */
-	public function testIsPowerOfTwo(int $value, bool $result): void
+	public function testIsPowerOfTwo(int $value, bool $result)
 	{
 		$this->assertSame(Math::isPowerOfTwo($value), $result);
 	}
@@ -92,14 +90,13 @@ class MathTest extends \Consistence\TestCase
 	 *
 	 * @param int $value
 	 * @param int $result
-	 * @return void
 	 */
-	public function testFactorial(int $value, int $result): void
+	public function testFactorial(int $value, int $result)
 	{
 		$this->assertSame(Math::factorial($value), $result);
 	}
 
-	public function testNNegativeFactorial(): void
+	public function testNNegativeFactorial()
 	{
 		try {
 			Math::factorial(-1);

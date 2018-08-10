@@ -11,7 +11,8 @@
 		}
 	],
 	"require": {
-		"php": "~7.0"
+		"php": "~7.0",
+		"ext-json": "*"
 	},
 	"require-dev": {
 		"consistence/coding-standard": "2.2.1",

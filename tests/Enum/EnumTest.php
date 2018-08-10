@@ -5,6 +5,9 @@ declare(strict_types = 1);
 namespace Consistence\Enum;
 
 use Consistence\Type\ArrayType\ArrayType;
+use const JSON_PRESERVE_ZERO_FRACTION;
+use function json_decode;
+use function json_encode;
 
 class EnumTest extends \Consistence\TestCase
 {
@@ -199,6 +202,20 @@ class EnumTest extends \Consistence\TestCase
 			$this->assertSame(DuplicateValuesEnum::FOO, $e->getValue());
 			$this->assertSame(DuplicateValuesEnum::class, $e->getClass());
 		}
+	}
+
+	/**
+	 * @dataProvider typesProvider
+	 *
+	 * @param mixed $value
+	 */
+	public function testJsonSerialize($value)
+	{
+		$enum = TypeEnum::get($value);
+		$serialized = json_encode($enum, JSON_PRESERVE_ZERO_FRACTION);
+		$deserialized = TypeEnum::get(json_decode($serialized));
+
+		$this->assertSame($enum, $deserialized);
 	}
 
 }

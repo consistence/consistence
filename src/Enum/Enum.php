@@ -10,7 +10,7 @@ use Consistence\Type\ArrayType\KeyValuePair;
 use Consistence\Type\Type;
 use ReflectionClass;
 
-abstract class Enum extends \Consistence\ObjectPrototype
+abstract class Enum extends \Consistence\ObjectPrototype implements \JsonSerializable
 {
 
 	/** @var mixed */
@@ -165,6 +165,14 @@ abstract class Enum extends \Consistence\ObjectPrototype
 	public function equalsValue($value): bool
 	{
 		return $this->getValue() === $value;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function jsonSerialize()
+	{
+		return $this->getValue();
 	}
 
 }

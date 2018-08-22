@@ -124,7 +124,7 @@ abstract class Enum extends \Consistence\ObjectPrototype
 	public static function checkValue($value)
 	{
 		if (!static::isValidValue($value)) {
-			throw new \Consistence\Enum\InvalidEnumValueException($value, static::getAvailableValues());
+			throw new \Consistence\Enum\InvalidEnumValueException($value, static::class);
 		}
 	}
 

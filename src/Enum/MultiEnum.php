@@ -176,13 +176,13 @@ abstract class MultiEnum extends \Consistence\Enum\Enum implements \IteratorAggr
 	{
 		Type::checkType($value, 'int');
 		if ($value < 0) {
-			throw new \Consistence\Enum\InvalidEnumValueException($value, self::getAvailableValues());
+			throw new \Consistence\Enum\InvalidEnumValueException($value, static::class);
 		}
 		$check = 1;
 		while ($check <= $value) {
 			if ($value & $check) {
 				if (!static::isValidValue($check)) {
-					throw new \Consistence\Enum\InvalidEnumValueException($check, self::getAvailableValues());
+					throw new \Consistence\Enum\InvalidEnumValueException($check, static::class);
 				}
 			}
 			$check <<= 1;

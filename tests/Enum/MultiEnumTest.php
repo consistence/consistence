@@ -231,6 +231,7 @@ class MultiEnumTest extends \Consistence\TestCase
 				'EMPLOYEE' => RoleEnum::EMPLOYEE,
 				'ADMIN' => RoleEnum::ADMIN,
 			], $e->getAvailableValues());
+			$this->assertSame(RolesEnum::class, $e->getEnumClassName());
 		}
 	}
 

@@ -107,6 +107,7 @@ class EnumTest extends \Consistence\TestCase
 				'REVIEW' => StatusEnum::REVIEW,
 				'PUBLISHED' => StatusEnum::PUBLISHED,
 			], $e->getAvailableValues());
+			$this->assertSame(StatusEnum::class, $e->getEnumClassName());
 		}
 	}
 
@@ -129,6 +130,7 @@ class EnumTest extends \Consistence\TestCase
 				'REVIEW' => StatusEnum::REVIEW,
 				'PUBLISHED' => StatusEnum::PUBLISHED,
 			], $e->getAvailableValues());
+			$this->assertSame(StatusEnum::class, $e->getEnumClassName());
 		}
 	}
 

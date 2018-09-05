@@ -73,4 +73,37 @@ class MathTest extends \Consistence\TestCase
 		$this->assertSame(Math::isPowerOfTwo($value), $result);
 	}
 
+	public function factorialProvider(): array
+	{
+		return [
+			[5,120],
+			[0,1],
+			[1,1],	
+			[4,24],	
+			[10,3628800],	
+			[7,5040],	
+		];
+	}
+
+	/**
+	 * @dataProvider factorialProvider
+	 *
+	 * @param int $value
+	 * @param int $result
+	 */
+	public function testFactorial(int $value, int $result)
+	{
+		$this->assertSame(Math::factorial($value), $result);
+	}
+
+	public function testNNegativeFactorial()
+	{
+		try {
+			Math::factorial(-1);
+			$this->fail();
+		} catch (\Consistence\Math\NonNegativeIntegerExpectedException $e) {
+			$this->assertSame(-1, $e->getValue());
+		}
+	}
+
 }

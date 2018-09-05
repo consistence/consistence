@@ -39,4 +39,24 @@ class Math extends \Consistence\ObjectPrototype
 		return ($value & ($value - 1)) === 0;
 	}
 
+	/**
+	* Calculate the factorial of a non-negative integer n
+	* @see https://en.wikipedia.org/wiki/Factorial
+	*
+	* @param int $n
+	* @return int 
+	*/
+	public static function factorial(int $n): int 
+	{
+		if ($n < 0) {
+			throw new \Consistence\Math\NonNegativeIntegerExpectedException($n);
+		}
+
+		if ($n === 0) {
+			return 1;	
+		}
+
+		return $n * static::factorial($n - 1);
+	}
+
 }

@@ -9,14 +9,14 @@ use stdClass;
 class ObjectMixinTest extends \Consistence\TestCase
 {
 
-	public function testStaticConstruct()
+	public function testStaticConstruct(): void
 	{
 		$this->expectException(\Consistence\StaticClassException::class);
 
 		new ObjectMixin();
 	}
 
-	public function testMagicCall()
+	public function testMagicCall(): void
 	{
 		$this->expectException(\Consistence\UndefinedMethodException::class);
 		$this->expectExceptionMessage('stdClass::getFoo()');
@@ -24,7 +24,7 @@ class ObjectMixinTest extends \Consistence\TestCase
 		ObjectMixin::magicCall(new stdClass(), 'getFoo');
 	}
 
-	public function testMagicCallCatch()
+	public function testMagicCallCatch(): void
 	{
 		try {
 			ObjectMixin::magicCall(new stdClass(), 'getFoo');
@@ -35,7 +35,7 @@ class ObjectMixinTest extends \Consistence\TestCase
 		}
 	}
 
-	public function testMagicCallStatic()
+	public function testMagicCallStatic(): void
 	{
 		$this->expectException(\Consistence\UndefinedMethodException::class);
 		$this->expectExceptionMessage('stdClass::doStatic()');
@@ -43,7 +43,7 @@ class ObjectMixinTest extends \Consistence\TestCase
 		ObjectMixin::magicCallStatic(stdClass::class, 'doStatic');
 	}
 
-	public function testMagicCallStaticCatch()
+	public function testMagicCallStaticCatch(): void
 	{
 		try {
 			ObjectMixin::magicCallStatic(stdClass::class, 'doStatic');
@@ -54,7 +54,7 @@ class ObjectMixinTest extends \Consistence\TestCase
 		}
 	}
 
-	public function testMagicGet()
+	public function testMagicGet(): void
 	{
 		$this->expectException(\Consistence\UndefinedPropertyException::class);
 		$this->expectExceptionMessage('stdClass::$foo');
@@ -62,7 +62,7 @@ class ObjectMixinTest extends \Consistence\TestCase
 		ObjectMixin::magicGet(new stdClass(), 'foo');
 	}
 
-	public function testMagicGetCatch()
+	public function testMagicGetCatch(): void
 	{
 		try {
 			ObjectMixin::magicGet(new stdClass(), 'foo');
@@ -73,7 +73,7 @@ class ObjectMixinTest extends \Consistence\TestCase
 		}
 	}
 
-	public function testMagicSet()
+	public function testMagicSet(): void
 	{
 		$this->expectException(\Consistence\UndefinedPropertyException::class);
 		$this->expectExceptionMessage('stdClass::$foo');
@@ -81,7 +81,7 @@ class ObjectMixinTest extends \Consistence\TestCase
 		ObjectMixin::magicSet(new stdClass(), 'foo');
 	}
 
-	public function testMagicSetCatch()
+	public function testMagicSetCatch(): void
 	{
 		try {
 			ObjectMixin::magicSet(new stdClass(), 'foo');
@@ -92,7 +92,7 @@ class ObjectMixinTest extends \Consistence\TestCase
 		}
 	}
 
-	public function testMagicIsset()
+	public function testMagicIsset(): void
 	{
 		$this->expectException(\Consistence\UndefinedPropertyException::class);
 		$this->expectExceptionMessage('stdClass::$foo');
@@ -100,7 +100,7 @@ class ObjectMixinTest extends \Consistence\TestCase
 		ObjectMixin::magicIsSet(new stdClass(), 'foo');
 	}
 
-	public function testMagicIsSetCatch()
+	public function testMagicIsSetCatch(): void
 	{
 		try {
 			ObjectMixin::magicIsSet(new stdClass(), 'foo');
@@ -111,7 +111,7 @@ class ObjectMixinTest extends \Consistence\TestCase
 		}
 	}
 
-	public function testMagicUnset()
+	public function testMagicUnset(): void
 	{
 		$this->expectException(\Consistence\UndefinedPropertyException::class);
 		$this->expectExceptionMessage('stdClass::$foo');
@@ -119,7 +119,7 @@ class ObjectMixinTest extends \Consistence\TestCase
 		ObjectMixin::magicUnset(new stdClass(), 'foo');
 	}
 
-	public function testMagicUnsetCatch()
+	public function testMagicUnsetCatch(): void
 	{
 		try {
 			ObjectMixin::magicUnset(new stdClass(), 'foo');

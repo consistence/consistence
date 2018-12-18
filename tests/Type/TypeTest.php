@@ -12,7 +12,7 @@ use stdClass;
 class TypeTest extends \Consistence\TestCase
 {
 
-	public function testStaticConstruct()
+	public function testStaticConstruct(): void
 	{
 		$this->expectException(\Consistence\StaticClassException::class);
 
@@ -156,7 +156,7 @@ class TypeTest extends \Consistence\TestCase
 	 * @param mixed $type
 	 * @param string $expected
 	 */
-	public function testTypes($type, string $expected)
+	public function testTypes($type, string $expected): void
 	{
 		$this->assertSame($expected, Type::getType($type));
 	}
@@ -168,18 +168,18 @@ class TypeTest extends \Consistence\TestCase
 	 * @param string $expectedTypes
 	 * @param bool $result
 	 */
-	public function testHasType($value, string $expectedTypes, bool $result = true)
+	public function testHasType($value, string $expectedTypes, bool $result = true): void
 	{
 		$this->assertSame($result, Type::hasType($value, $expectedTypes));
 	}
 
-	public function testCheckTypeOk()
+	public function testCheckTypeOk(): void
 	{
 		Type::checkType('foo', 'string');
 		$this->ok();
 	}
 
-	public function testCheckTypeException()
+	public function testCheckTypeException(): void
 	{
 		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
 		$this->expectExceptionMessage('[string] given');
@@ -193,7 +193,7 @@ class TypeTest extends \Consistence\TestCase
 	 * @param mixed $value
 	 * @param string $valueType
 	 */
-	public function testCheckTypeExceptionValues($value, string $valueType)
+	public function testCheckTypeExceptionValues($value, string $valueType): void
 	{
 		try {
 			Type::checkType($value, 'resource');
@@ -205,12 +205,12 @@ class TypeTest extends \Consistence\TestCase
 		}
 	}
 
-	public function testAllowSubtypes()
+	public function testAllowSubtypes(): void
 	{
 		$this->assertTrue(Type::hasType(new DateTimeImmutable(), DateTimeInterface::class));
 	}
 
-	public function testDisallowSubtypes()
+	public function testDisallowSubtypes(): void
 	{
 		$this->assertFalse(Type::hasType(new DateTimeImmutable(), DateTimeInterface::class, Type::SUBTYPES_DISALLOW));
 	}

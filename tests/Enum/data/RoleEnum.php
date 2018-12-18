@@ -7,10 +7,10 @@ namespace Consistence\Enum;
 class RoleEnum extends \Consistence\Enum\Enum
 {
 
-	const USER = 1;
+	public const USER = 1;
 
-	const EMPLOYEE = 2;
+	public const EMPLOYEE = 2;
 
-	const ADMIN = 4;
+	public const ADMIN = 4;
 
 }

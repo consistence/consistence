@@ -13,7 +13,7 @@ class TimeDoesNotMatchFormatException extends \Consistence\PhpException implemen
 	/** @var string */
 	private $timeString;
 
-	public function __construct(string $format, string $timeString, \Throwable $previous = null)
+	public function __construct(string $format, string $timeString, ?\Throwable $previous = null)
 	{
 		parent::__construct(
 			sprintf('Time "%s" does not match format "%s"', $timeString, $format),

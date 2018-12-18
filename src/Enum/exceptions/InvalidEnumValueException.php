@@ -23,7 +23,7 @@ class InvalidEnumValueException extends \Consistence\PhpException
 	 * @param string $enumClassName
 	 * @param \Throwable|null $previous
 	 */
-	public function __construct($value, string $enumClassName, \Throwable $previous = null)
+	public function __construct($value, string $enumClassName, ?\Throwable $previous = null)
 	{
 		if (!is_subclass_of($enumClassName, Enum::class)) {
 			// @codeCoverageIgnoreStart

@@ -20,7 +20,7 @@ class DuplicateValueSpecifiedException extends \Consistence\PhpException
 	 * @param string $class
 	 * @param \Throwable|null $previous
 	 */
-	public function __construct($value, string $class, \Throwable $previous = null)
+	public function __construct($value, string $class, ?\Throwable $previous = null)
 	{
 		parent::__construct(sprintf(
 			'Value %s [%s] is specified in %s\'s available values multiple times',

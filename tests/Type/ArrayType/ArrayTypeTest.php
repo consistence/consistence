@@ -9,7 +9,7 @@ use DateTimeImmutable;
 class ArrayTypeTest extends \Consistence\TestCase
 {
 
-	public function testContainsKeyIsNotStrict()
+	public function testContainsKeyIsNotStrict(): void
 	{
 		$values = [
 			'three' => 'three',
@@ -34,40 +34,40 @@ class ArrayTypeTest extends \Consistence\TestCase
 		$this->assertFalse(ArrayType::containsKey($values, '99'));
 	}
 
-	public function testStaticConstruct()
+	public function testStaticConstruct(): void
 	{
 		$this->expectException(\Consistence\StaticClassException::class);
 
 		new ArrayType();
 	}
 
-	public function testContainsValueDefault()
+	public function testContainsValueDefault(): void
 	{
 		$values = [1, 2, 3];
 		$this->assertTrue(ArrayType::containsValue($values, 2));
 		$this->assertFalse(ArrayType::containsValue($values, '2'));
 	}
 
-	public function testContainsValueStrict()
+	public function testContainsValueStrict(): void
 	{
 		$values = [1, 2, 3];
 		$this->assertTrue(ArrayType::containsValue($values, 2, ArrayType::STRICT_TRUE));
 		$this->assertFalse(ArrayType::containsValue($values, '2', ArrayType::STRICT_TRUE));
 	}
 
-	public function testContainsValueLoose()
+	public function testContainsValueLoose(): void
 	{
 		$values = [1, 2, 3];
 		$this->assertTrue(ArrayType::containsValue($values, '2', ArrayType::STRICT_FALSE));
 	}
 
-	public function testContainsValueNull()
+	public function testContainsValueNull(): void
 	{
 		$this->assertTrue(ArrayType::containsValue([1, 2, 3, null], null));
 		$this->assertFalse(ArrayType::containsValue([1, 2, 3], null));
 	}
 
-	public function testContainsByCallback()
+	public function testContainsByCallback(): void
 	{
 		$values = [1, 2, 3];
 		$this->assertTrue(ArrayType::containsByCallback($values, function (KeyValuePair $pair): bool {
@@ -75,7 +75,7 @@ class ArrayTypeTest extends \Consistence\TestCase
 		}));
 	}
 
-	public function testContainsByCallbackLoose()
+	public function testContainsByCallbackLoose(): void
 	{
 		$values = [1, 2, 3];
 		$this->assertTrue(ArrayType::containsByCallback($values, function (KeyValuePair $pair): bool {
@@ -83,7 +83,7 @@ class ArrayTypeTest extends \Consistence\TestCase
 		}));
 	}
 
-	public function testContainsByCallbackNotFound()
+	public function testContainsByCallbackNotFound(): void
 	{
 		$values = [1, 2, 3];
 		$this->assertFalse(ArrayType::containsByCallback($values, function (KeyValuePair $pair): bool {
@@ -91,7 +91,7 @@ class ArrayTypeTest extends \Consistence\TestCase
 		}));
 	}
 
-	public function testContainsKeyByValueCallback()
+	public function testContainsKeyByValueCallback(): void
 	{
 		$values = [1, 2, 3];
 		$this->assertTrue(ArrayType::containsKeyByValueCallback($values, function (int $value): bool {
@@ -99,7 +99,7 @@ class ArrayTypeTest extends \Consistence\TestCase
 		}));
 	}
 
-	public function testContainsKeyByValueCallbackNotFound()
+	public function testContainsKeyByValueCallbackNotFound(): void
 	{
 		$values = [1, 2, 3];
 		$this->assertFalse(ArrayType::containsKeyByValueCallback($values, function (int $value): bool {
@@ -107,7 +107,7 @@ class ArrayTypeTest extends \Consistence\TestCase
 		}));
 	}
 
-	public function testContainsValueByValueCallback()
+	public function testContainsValueByValueCallback(): void
 	{
 		$values = [1, 2, 3];
 		$this->assertTrue(ArrayType::containsValueByValueCallback($values, function (int $value): bool {
@@ -115,7 +115,7 @@ class ArrayTypeTest extends \Consistence\TestCase
 		}));
 	}
 
-	public function testContainsValueByValueCallbackLoose()
+	public function testContainsValueByValueCallbackLoose(): void
 	{
 		$values = [1, 2, 3];
 		$this->assertTrue(ArrayType::containsValueByValueCallback($values, function (int $value): bool {
@@ -123,7 +123,7 @@ class ArrayTypeTest extends \Consistence\TestCase
 		}));
 	}
 
-	public function testContainsValueByValueCallbackNotFound()
+	public function testContainsValueByValueCallbackNotFound(): void
 	{
 		$values = [1, 2, 3];
 		$this->assertFalse(ArrayType::containsValueByValueCallback($values, function (int $value): bool {
@@ -131,7 +131,7 @@ class ArrayTypeTest extends \Consistence\TestCase
 		}));
 	}
 
-	public function testContainsValueByValueCallbackNull()
+	public function testContainsValueByValueCallbackNull(): void
 	{
 		$values = [1, 2, 3, null];
 		$this->assertTrue(ArrayType::containsValueByValueCallback($values, function ($value): bool {
@@ -139,27 +139,27 @@ class ArrayTypeTest extends \Consistence\TestCase
 		}));
 	}
 
-	public function testArraySearchDefault()
+	public function testArraySearchDefault(): void
 	{
 		$values = [1, 2, 3];
 		$this->assertSame(1, ArrayType::findKey($values, 2));
 		$this->assertNull(ArrayType::findKey($values, '2'));
 	}
 
-	public function testArraySearchStrict()
+	public function testArraySearchStrict(): void
 	{
 		$values = [1, 2, 3];
 		$this->assertSame(1, ArrayType::findKey($values, 2, ArrayType::STRICT_TRUE));
 		$this->assertNull(ArrayType::findKey($values, '2', ArrayType::STRICT_TRUE));
 	}
 
-	public function testArraySearchLoose()
+	public function testArraySearchLoose(): void
 	{
 		$values = [1, 2, 3];
 		$this->assertSame(1, ArrayType::findKey($values, '2', ArrayType::STRICT_FALSE));
 	}
 
-	public function testFindKeyByCallback()
+	public function testFindKeyByCallback(): void
 	{
 		$values = [1, 2, 3];
 		$this->assertSame(1, ArrayType::findKeyByCallback($values, function (KeyValuePair $pair): bool {
@@ -167,7 +167,7 @@ class ArrayTypeTest extends \Consistence\TestCase
 		}));
 	}
 
-	public function testFindKeyByCallbackNotFound()
+	public function testFindKeyByCallbackNotFound(): void
 	{
 		$values = [1, 2, 3];
 		$this->assertNull(ArrayType::findKeyByCallback($values, function (KeyValuePair $pair): bool {
@@ -175,7 +175,7 @@ class ArrayTypeTest extends \Consistence\TestCase
 		}));
 	}
 
-	public function testFindKeyByCallbackCustomKeys()
+	public function testFindKeyByCallbackCustomKeys(): void
 	{
 		$values = [
 			'one' => 1,
@@ -187,7 +187,7 @@ class ArrayTypeTest extends \Consistence\TestCase
 		}));
 	}
 
-	public function testFindKeyByValueCallback()
+	public function testFindKeyByValueCallback(): void
 	{
 		$values = [1, 2, 3];
 		$this->assertSame(1, ArrayType::findKeyByValueCallback($values, function (int $value): bool {
@@ -195,7 +195,7 @@ class ArrayTypeTest extends \Consistence\TestCase
 		}));
 	}
 
-	public function testFindKeyByValueCallbackNotFound()
+	public function testFindKeyByValueCallbackNotFound(): void
 	{
 		$values = [1, 2, 3];
 		$this->assertNull(ArrayType::findKeyByValueCallback($values, function (int $value): bool {
@@ -203,7 +203,7 @@ class ArrayTypeTest extends \Consistence\TestCase
 		}));
 	}
 
-	public function testFindKeyByValueCallbackCustomKeys()
+	public function testFindKeyByValueCallbackCustomKeys(): void
 	{
 		$values = [
 			'one' => 1,
@@ -215,13 +215,13 @@ class ArrayTypeTest extends \Consistence\TestCase
 		}));
 	}
 
-	public function testGetKey()
+	public function testGetKey(): void
 	{
 		$values = [1, 2, 3];
 		$this->assertSame(1, ArrayType::getKey($values, 2));
 	}
 
-	public function testGetKeyNotFound()
+	public function testGetKeyNotFound(): void
 	{
 		$values = [1, 2, 3];
 
@@ -230,7 +230,7 @@ class ArrayTypeTest extends \Consistence\TestCase
 		ArrayType::getKey($values, '2');
 	}
 
-	public function testGetKeyByCallback()
+	public function testGetKeyByCallback(): void
 	{
 		$values = [1, 2, 3];
 		$this->assertSame(1, ArrayType::getKeyByCallback($values, function (KeyValuePair $pair): bool {
@@ -238,7 +238,7 @@ class ArrayTypeTest extends \Consistence\TestCase
 		}));
 	}
 
-	public function testGetKeyByCallbackNotFound()
+	public function testGetKeyByCallbackNotFound(): void
 	{
 		$values = [1, 2, 3];
 
@@ -249,7 +249,7 @@ class ArrayTypeTest extends \Consistence\TestCase
 		});
 	}
 
-	public function testGetKeyByCallbackCustomKeys()
+	public function testGetKeyByCallbackCustomKeys(): void
 	{
 		$values = [
 			'one' => 1,
@@ -261,7 +261,7 @@ class ArrayTypeTest extends \Consistence\TestCase
 		}));
 	}
 
-	public function testGetKeyByValueCallback()
+	public function testGetKeyByValueCallback(): void
 	{
 		$values = [1, 2, 3];
 		$this->assertSame(1, ArrayType::getKeyByValueCallback($values, function (int $value): bool {
@@ -269,7 +269,7 @@ class ArrayTypeTest extends \Consistence\TestCase
 		}));
 	}
 
-	public function testGetKeyByValueCallbackNotFound()
+	public function testGetKeyByValueCallbackNotFound(): void
 	{
 		$values = [1, 2, 3];
 
@@ -280,7 +280,7 @@ class ArrayTypeTest extends \Consistence\TestCase
 		});
 	}
 
-	public function testGetKeyByValueCallbackCustomKeys()
+	public function testGetKeyByValueCallbackCustomKeys(): void
 	{
 		$values = [
 			'one' => 1,
@@ -292,7 +292,7 @@ class ArrayTypeTest extends \Consistence\TestCase
 		}));
 	}
 
-	public function testFindValue()
+	public function testFindValue(): void
 	{
 		$values = [
 			'foo',
@@ -301,7 +301,7 @@ class ArrayTypeTest extends \Consistence\TestCase
 		$this->assertSame('bar', ArrayType::findValue($values, 1));
 	}
 
-	public function testFindValueNotFound()
+	public function testFindValueNotFound(): void
 	{
 		$values = [
 			'foo',
@@ -310,7 +310,7 @@ class ArrayTypeTest extends \Consistence\TestCase
 		$this->assertNull(ArrayType::findValue($values, 2));
 	}
 
-	public function testGetValue()
+	public function testGetValue(): void
 	{
 		$values = [
 			'foo',
@@ -319,7 +319,7 @@ class ArrayTypeTest extends \Consistence\TestCase
 		$this->assertSame('bar', ArrayType::getValue($values, 1));
 	}
 
-	public function testGetValueNotFound()
+	public function testGetValueNotFound(): void
 	{
 		$values = [
 			'foo',
@@ -331,7 +331,7 @@ class ArrayTypeTest extends \Consistence\TestCase
 		ArrayType::getValue($values, 2);
 	}
 
-	public function testGetValueNull()
+	public function testGetValueNull(): void
 	{
 		$values = [
 			'null' => null,
@@ -339,7 +339,7 @@ class ArrayTypeTest extends \Consistence\TestCase
 		$this->assertSame(null, ArrayType::getValue($values, 'null'));
 	}
 
-	public function testFindByCallback()
+	public function testFindByCallback(): void
 	{
 		$values = [1, 2, 3];
 		$result = ArrayType::findByCallback($values, function (KeyValuePair $pair): bool {
@@ -350,7 +350,7 @@ class ArrayTypeTest extends \Consistence\TestCase
 		$this->assertSame(1, $result->getKey());
 	}
 
-	public function testFindByCallbackNothingFound()
+	public function testFindByCallbackNothingFound(): void
 	{
 		$values = [1, 2, 3];
 		$result = ArrayType::findByCallback($values, function (KeyValuePair $pair): bool {
@@ -359,7 +359,7 @@ class ArrayTypeTest extends \Consistence\TestCase
 		$this->assertNull($result);
 	}
 
-	public function testFindValueByCallback()
+	public function testFindValueByCallback(): void
 	{
 		$values = [1, 2, 3];
 		$result = ArrayType::findValueByCallback($values, function (int $value): bool {
@@ -368,7 +368,7 @@ class ArrayTypeTest extends \Consistence\TestCase
 		$this->assertSame(2, $result);
 	}
 
-	public function testFindValueByCallbackNothingFound()
+	public function testFindValueByCallbackNothingFound(): void
 	{
 		$values = [1, 2, 3];
 		$result = ArrayType::findValueByCallback($values, function (int $value): bool {
@@ -377,7 +377,7 @@ class ArrayTypeTest extends \Consistence\TestCase
 		$this->assertNull($result);
 	}
 
-	public function testGetByCallback()
+	public function testGetByCallback(): void
 	{
 		$values = [1, 2, 3];
 		$result = ArrayType::getByCallback($values, function (KeyValuePair $pair): bool {
@@ -388,7 +388,7 @@ class ArrayTypeTest extends \Consistence\TestCase
 		$this->assertSame(1, $result->getKey());
 	}
 
-	public function testGetByCallbackNothingFound()
+	public function testGetByCallbackNothingFound(): void
 	{
 		$values = [1, 2, 3];
 
@@ -399,7 +399,7 @@ class ArrayTypeTest extends \Consistence\TestCase
 		});
 	}
 
-	public function testGetValueByCallback()
+	public function testGetValueByCallback(): void
 	{
 		$values = [1, 2, 3];
 		$result = ArrayType::getValueByCallback($values, function (int $value): bool {
@@ -408,7 +408,7 @@ class ArrayTypeTest extends \Consistence\TestCase
 		$this->assertSame(2, $result);
 	}
 
-	public function testGetValueByCallbackNothingFound()
+	public function testGetValueByCallbackNothingFound(): void
 	{
 		$values = [1, 2, 3];
 
@@ -419,7 +419,7 @@ class ArrayTypeTest extends \Consistence\TestCase
 		});
 	}
 
-	public function testGetValueByCallbackNull()
+	public function testGetValueByCallbackNull(): void
 	{
 		$values = [1, 2, 3, null];
 		$this->assertSame(null, ArrayType::getValueByCallback($values, function ($value): bool {
@@ -427,7 +427,7 @@ class ArrayTypeTest extends \Consistence\TestCase
 		}));
 	}
 
-	public function testFilterByCallback()
+	public function testFilterByCallback(): void
 	{
 		$values = [1, 2, 3];
 		$result = ArrayType::filterByCallback($values, function (KeyValuePair $pair): bool {
@@ -437,7 +437,7 @@ class ArrayTypeTest extends \Consistence\TestCase
 		$this->assertSame(3, $result[2]);
 	}
 
-	public function testFilterValueByCallback()
+	public function testFilterValueByCallback(): void
 	{
 		$values = [1, 2, 3];
 		$result = ArrayType::filterValuesByCallback($values, function (int $value): bool {
@@ -447,7 +447,7 @@ class ArrayTypeTest extends \Consistence\TestCase
 		$this->assertSame(2, $result[1]);
 	}
 
-	public function testMapByCallback()
+	public function testMapByCallback(): void
 	{
 		$array = [
 			'foo' => 'bar',
@@ -460,7 +460,7 @@ class ArrayTypeTest extends \Consistence\TestCase
 		], $result);
 	}
 
-	public function testMapValuesByCallback()
+	public function testMapValuesByCallback(): void
 	{
 		$values = [1, 2, 3];
 		$result = ArrayType::mapValuesByCallback($values, function (int $value): int {
@@ -469,7 +469,7 @@ class ArrayTypeTest extends \Consistence\TestCase
 		$this->assertSame([2, 4, 6], $result);
 	}
 
-	public function testRemoveValue()
+	public function testRemoveValue(): void
 	{
 		$values = [1, 2, 3];
 		$this->assertTrue(ArrayType::removeValue($values, 2));
@@ -478,14 +478,14 @@ class ArrayTypeTest extends \Consistence\TestCase
 		$this->assertSame(3, $values[2]);
 	}
 
-	public function testRemoveValueNoChange()
+	public function testRemoveValueNoChange(): void
 	{
 		$values = [1, 2, 3];
 		$this->assertFalse(ArrayType::removeValue($values, 4));
 		$this->assertCount(3, $values);
 	}
 
-	public function testRemoveKeys()
+	public function testRemoveKeys(): void
 	{
 		$values = [1, 2, 3];
 		$this->assertTrue(ArrayType::removeKeys($values, [0, 2]));
@@ -493,14 +493,14 @@ class ArrayTypeTest extends \Consistence\TestCase
 		$this->assertSame(2, $values[1]);
 	}
 
-	public function testRemoveKeysNoChange()
+	public function testRemoveKeysNoChange(): void
 	{
 		$values = [1, 2, 3];
 		$this->assertFalse(ArrayType::removeKeys($values, [4, 5]));
 		$this->assertCount(3, $values);
 	}
 
-	public function testRemoveKeysByArrayKeys()
+	public function testRemoveKeysByArrayKeys(): void
 	{
 		$values = [1, 2, 3];
 		$this->assertTrue(ArrayType::removeKeysByArrayKeys($values, [
@@ -511,7 +511,7 @@ class ArrayTypeTest extends \Consistence\TestCase
 		$this->assertSame(2, $values[1]);
 	}
 
-	public function testRemoveKeysByArrayKeysNoChange()
+	public function testRemoveKeysByArrayKeysNoChange(): void
 	{
 		$values = [1, 2, 3];
 		$this->assertFalse(ArrayType::removeKeysByArrayKeys($values, [
@@ -521,7 +521,7 @@ class ArrayTypeTest extends \Consistence\TestCase
 		$this->assertCount(3, $values);
 	}
 
-	public function testUniqueValuesStrict()
+	public function testUniqueValuesStrict(): void
 	{
 		$values = ['1', 1];
 		$expected = ['1', 1];
@@ -531,7 +531,7 @@ class ArrayTypeTest extends \Consistence\TestCase
 		$this->assertSame($expected, $actual);
 	}
 
-	public function testUniqueValuesStrictWithObjects()
+	public function testUniqueValuesStrictWithObjects(): void
 	{
 		$values = [
 			new DateTimeImmutable('2017-01-01T12:00:00.000000'),
@@ -543,7 +543,7 @@ class ArrayTypeTest extends \Consistence\TestCase
 		$this->assertSame($values, $actual);
 	}
 
-	public function testUniqueValuesNonStrictBehavesAsArrayUniqueWithRegularComparison()
+	public function testUniqueValuesNonStrictBehavesAsArrayUniqueWithRegularComparison(): void
 	{
 		$values = ['1', 1];
 
@@ -553,7 +553,7 @@ class ArrayTypeTest extends \Consistence\TestCase
 		$this->assertCount(1, $actual);
 	}
 
-	public function testUniqueValuesNonStrictWithObjects()
+	public function testUniqueValuesNonStrictWithObjects(): void
 	{
 		$values = [
 			new DateTimeImmutable('2017-01-01T12:00:00.000000'),
@@ -566,7 +566,7 @@ class ArrayTypeTest extends \Consistence\TestCase
 		$this->assertCount(1, $actual);
 	}
 
-	public function testUniqueValuesKeepsKeys()
+	public function testUniqueValuesKeepsKeys(): void
 	{
 		$values = [
 			'a' => 'green',
@@ -579,7 +579,7 @@ class ArrayTypeTest extends \Consistence\TestCase
 		$this->assertSame($values, $actual);
 	}
 
-	public function testUniqueValuesByCallbackWithStrictComparison()
+	public function testUniqueValuesByCallbackWithStrictComparison(): void
 	{
 		$values = ['1', 1];
 
@@ -590,7 +590,7 @@ class ArrayTypeTest extends \Consistence\TestCase
 		$this->assertSame($values, $actual);
 	}
 
-	public function testUniqueValuesByCallbackWithStrictComparisonWithObjects()
+	public function testUniqueValuesByCallbackWithStrictComparisonWithObjects(): void
 	{
 		$values = [
 			new DateTimeImmutable('2017-01-01T12:00:00.000000'),
@@ -604,7 +604,7 @@ class ArrayTypeTest extends \Consistence\TestCase
 		$this->assertSame($values, $actual);
 	}
 
-	public function testUniqueValuesByCallbackWithNonStrictComparison()
+	public function testUniqueValuesByCallbackWithNonStrictComparison(): void
 	{
 		$values = ['1', 1];
 
@@ -616,7 +616,7 @@ class ArrayTypeTest extends \Consistence\TestCase
 		$this->assertCount(1, $actual);
 	}
 
-	public function testUniqueValuesByCallbackWithNonStrictComparisonWithObjects()
+	public function testUniqueValuesByCallbackWithNonStrictComparisonWithObjects(): void
 	{
 		$values = [
 			new DateTimeImmutable('2017-01-01T12:00:00.000000'),

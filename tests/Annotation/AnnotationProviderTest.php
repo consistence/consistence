@@ -9,7 +9,7 @@ use ReflectionProperty;
 class AnnotationProviderTest extends \Consistence\TestCase
 {
 
-	public function testGetAnnotation()
+	public function testGetAnnotation(): void
 	{
 		$property = new ReflectionProperty(Foo::class, 'foo');
 		$annotationProvider = $this->createMock(AnnotationProvider::class);
@@ -23,7 +23,7 @@ class AnnotationProviderTest extends \Consistence\TestCase
 		$this->assertInstanceOf(Annotation::class, $annotation);
 	}
 
-	public function testGetMissingAnnotation()
+	public function testGetMissingAnnotation(): void
 	{
 		$property = new ReflectionProperty(Foo::class, 'foo');
 		$annotationProvider = $this->createMock(AnnotationProvider::class);
@@ -39,7 +39,7 @@ class AnnotationProviderTest extends \Consistence\TestCase
 		$annotationProvider->getPropertyAnnotation($property, 'test');
 	}
 
-	public function testGetMissingAnnotationValues()
+	public function testGetMissingAnnotationValues(): void
 	{
 		$property = new ReflectionProperty(Foo::class, 'foo');
 		$annotationProvider = $this->createMock(AnnotationProvider::class);
@@ -59,7 +59,7 @@ class AnnotationProviderTest extends \Consistence\TestCase
 		}
 	}
 
-	public function testGetAnnotations()
+	public function testGetAnnotations(): void
 	{
 		$property = new ReflectionProperty(Foo::class, 'foo');
 		$annotationProvider = $this->createMock(AnnotationProvider::class);

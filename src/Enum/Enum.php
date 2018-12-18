@@ -56,9 +56,9 @@ abstract class Enum extends \Consistence\ObjectPrototype
 	}
 
 	/**
-	 * @return mixed[] format: const name (string) => value (mixed)
+	 * @return mixed[]
 	 */
-	public static function getAvailableValues()
+	public static function getAvailableValues(): iterable
 	{
 		$index = get_called_class();
 		if (!isset(self::$availableValues[$index])) {
@@ -71,9 +71,9 @@ abstract class Enum extends \Consistence\ObjectPrototype
 	}
 
 	/**
-	 * @return static[] format: const name (string) => instance (static)
+	 * @return static[]
 	 */
-	public static function getAvailableEnums()
+	public static function getAvailableEnums(): iterable
 	{
 		$values = static::getAvailableValues();
 		return ArrayType::mapByCallback($values, function (KeyValuePair $pair) {
@@ -84,7 +84,7 @@ abstract class Enum extends \Consistence\ObjectPrototype
 	/**
 	 * @return mixed[] format: const name (string) => value (mixed)
 	 */
-	private static function getEnumConstants()
+	private static function getEnumConstants(): array
 	{
 		$classReflection = new ReflectionClass(get_called_class());
 		$declaredConstants = ClassReflection::getDeclaredConstants($classReflection);
@@ -96,7 +96,7 @@ abstract class Enum extends \Consistence\ObjectPrototype
 	/**
 	 * @param mixed[] $availableValues
 	 */
-	protected static function checkAvailableValues(array $availableValues)
+	protected static function checkAvailableValues(iterable $availableValues): void
 	{
 		$index = [];
 		foreach ($availableValues as $value) {
@@ -121,7 +121,7 @@ abstract class Enum extends \Consistence\ObjectPrototype
 	/**
 	 * @param mixed $value
 	 */
-	public static function checkValue($value)
+	public static function checkValue($value): void
 	{
 		if (!static::isValidValue($value)) {
 			throw new \Consistence\Enum\InvalidEnumValueException($value, static::class);
@@ -131,12 +131,12 @@ abstract class Enum extends \Consistence\ObjectPrototype
 	/**
 	 * @return string[] names of constants which should not be used as valid values of this enum
 	 */
-	protected static function getIgnoredConstantNames()
+	protected static function getIgnoredConstantNames(): iterable
 	{
 		return [];
 	}
 
-	protected function checkSameEnum(self $that)
+	protected function checkSameEnum(self $that): void
 	{
 		if (get_class($this) !== get_class($that)) {
 			throw new \Consistence\Enum\OperationSupportedOnlyForSameEnumException($that, $this);

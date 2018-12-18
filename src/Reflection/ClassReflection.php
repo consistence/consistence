@@ -12,10 +12,10 @@ use ReflectionProperty;
 class ClassReflection extends \Consistence\ObjectPrototype
 {
 
-	const FILTER_VISIBILITY_NONE = -1;
+	public const FILTER_VISIBILITY_NONE = -1;
 
-	const CASE_SENSITIVE = true;
-	const CASE_INSENSITIVE = false;
+	public const CASE_SENSITIVE = true;
+	public const CASE_INSENSITIVE = false;
 
 	final public function __construct()
 	{
@@ -29,7 +29,7 @@ class ClassReflection extends \Consistence\ObjectPrototype
 	 * @param int $filter
 	 * @return \ReflectionMethod[]
 	 */
-	public static function getDeclaredMethods(ReflectionClass $classReflection, int $filter = self::FILTER_VISIBILITY_NONE)
+	public static function getDeclaredMethods(ReflectionClass $classReflection, int $filter = self::FILTER_VISIBILITY_NONE): array
 	{
 		$methods = $classReflection->getMethods($filter);
 		$className = $classReflection->getName();
@@ -68,7 +68,7 @@ class ClassReflection extends \Consistence\ObjectPrototype
 	 * @param int $filter
 	 * @return \ReflectionProperty[]
 	 */
-	public static function getDeclaredProperties(ReflectionClass $classReflection, int $filter = self::FILTER_VISIBILITY_NONE)
+	public static function getDeclaredProperties(ReflectionClass $classReflection, int $filter = self::FILTER_VISIBILITY_NONE): array
 	{
 		$properties = $classReflection->getProperties($filter);
 		$className = $classReflection->getName();
@@ -101,7 +101,7 @@ class ClassReflection extends \Consistence\ObjectPrototype
 	 * @param \ReflectionClass $classReflection
 	 * @return string[] format: name(string) => value(mixed)
 	 */
-	public static function getDeclaredConstants(ReflectionClass $classReflection)
+	public static function getDeclaredConstants(ReflectionClass $classReflection): array
 	{
 		$constants = $classReflection->getConstants();
 		$processClass = $classReflection;

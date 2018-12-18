@@ -19,7 +19,7 @@ abstract class MultiEnum extends \Consistence\Enum\Enum implements \IteratorAggr
 	/**
 	 * @return string|null class name representing single enum value (has to implement Consistence\Enum\Enum); null if not mapped
 	 */
-	public static function getSingleEnumClass()
+	public static function getSingleEnumClass(): ?string
 	{
 		return null;
 	}
@@ -27,7 +27,7 @@ abstract class MultiEnum extends \Consistence\Enum\Enum implements \IteratorAggr
 	/**
 	 * @return int[] format: const name (string) => value (int)
 	 */
-	public static function getAvailableValues()
+	public static function getAvailableValues(): iterable
 	{
 		$index = get_called_class();
 		if (!isset(self::$availableValues[$index])) {
@@ -45,7 +45,7 @@ abstract class MultiEnum extends \Consistence\Enum\Enum implements \IteratorAggr
 	/**
 	 * @param int[] $availableValues
 	 */
-	protected static function checkAvailableValues(array $availableValues)
+	protected static function checkAvailableValues(iterable $availableValues): void
 	{
 		parent::checkAvailableValues($availableValues);
 		foreach ($availableValues as $value) {
@@ -148,14 +148,14 @@ abstract class MultiEnum extends \Consistence\Enum\Enum implements \IteratorAggr
 	 * @param string $singleEnumClass
 	 * @return int[] format: const name (string) => value (int)
 	 */
-	private static function getSingleEnumMappedAvailableValues(string $singleEnumClass)
+	private static function getSingleEnumMappedAvailableValues(string $singleEnumClass): array
 	{
 		return ArrayType::mapValuesByCallback($singleEnumClass::getAvailableValues(), function ($singleEnumValue): int {
 			return static::convertSingleEnumValueToValue($singleEnumValue);
 		});
 	}
 
-	private function checkSingleEnum(Enum $singleEnum)
+	private function checkSingleEnum(Enum $singleEnum): void
 	{
 		$singleEnumClass = static::getSingleEnumClass();
 		if ($singleEnumClass === null) {
@@ -164,7 +164,7 @@ abstract class MultiEnum extends \Consistence\Enum\Enum implements \IteratorAggr
 		Type::checkType($singleEnum, $singleEnumClass);
 	}
 
-	private static function checkSingleValue(int $value)
+	private static function checkSingleValue(int $value): void
 	{
 		parent::checkValue($value);
 	}
@@ -172,7 +172,7 @@ abstract class MultiEnum extends \Consistence\Enum\Enum implements \IteratorAggr
 	/**
 	 * @param int $value
 	 */
-	public static function checkValue($value)
+	public static function checkValue($value): void
 	{
 		Type::checkType($value, 'int');
 		if ($value < 0) {
@@ -192,7 +192,7 @@ abstract class MultiEnum extends \Consistence\Enum\Enum implements \IteratorAggr
 	/**
 	 * @return int[] format: const name (string) => value (int)
 	 */
-	public function getValues()
+	public function getValues(): iterable
 	{
 		return ArrayType::filterValuesByCallback(self::getAvailableValues(), function (int $value): bool {
 			return $this->containsValue($value);
@@ -202,7 +202,7 @@ abstract class MultiEnum extends \Consistence\Enum\Enum implements \IteratorAggr
 	/**
 	 * @return \Consistence\Enum\Enum[]
 	 */
-	public function getEnums()
+	public function getEnums(): iterable
 	{
 		$singleEnumClass = static::getSingleEnumClass();
 		if ($singleEnumClass === null) {

@@ -23,7 +23,7 @@ class InvalidArgumentTypeException extends \Consistence\InvalidArgumentException
 	 * @param string $expectedTypes
 	 * @param \Throwable|null $previous
 	 */
-	public function __construct($value, string $expectedTypes, \Throwable $previous = null)
+	public function __construct($value, string $expectedTypes, ?\Throwable $previous = null)
 	{
 		$this->value = $value;
 		$this->valueType = Type::getType($value);

@@ -7,7 +7,7 @@ namespace Consistence\Type\ArrayType;
 class KeyValuePairTest extends \Consistence\TestCase
 {
 
-	public function testConstruct()
+	public function testConstruct(): void
 	{
 		$pair = new KeyValuePair(0, 'foo');
 		$this->assertInstanceOf(KeyValuePair::class, $pair);
@@ -15,7 +15,7 @@ class KeyValuePairTest extends \Consistence\TestCase
 		$this->assertSame('foo', $pair->getValue());
 	}
 
-	public function testConstructInvalidKey()
+	public function testConstructInvalidKey(): void
 	{
 		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
 		$this->expectExceptionMessage('int|string expected');

@@ -11,7 +11,7 @@ use DateTimeZone;
 class TimeFormatTest extends \Consistence\TestCase
 {
 
-	public function testCreateDateTimeFromTimestamp()
+	public function testCreateDateTimeFromTimestamp(): void
 	{
 		$original = new DateTime();
 		$converted = TimeFormat::createDateTimeFromTimestamp($original->getTimestamp());
@@ -19,7 +19,7 @@ class TimeFormatTest extends \Consistence\TestCase
 		$this->assertEquals($original->getTimezone(), $converted->getTimezone());
 	}
 
-	public function testCreateDateTimeFromTimestampWithCustomTimezone()
+	public function testCreateDateTimeFromTimestampWithCustomTimezone(): void
 	{
 		$timezone = new DateTimeZone('UTC');
 		$original = new DateTime('now', $timezone);
@@ -30,7 +30,7 @@ class TimeFormatTest extends \Consistence\TestCase
 		$this->assertEquals($timezone, $converted->getTimezone());
 	}
 
-	public function testCreateDateTimeImmutableFromTimestamp()
+	public function testCreateDateTimeImmutableFromTimestamp(): void
 	{
 		$original = new DateTimeImmutable();
 		$converted = TimeFormat::createDateTimeImmutableFromTimestamp($original->getTimestamp());
@@ -38,7 +38,7 @@ class TimeFormatTest extends \Consistence\TestCase
 		$this->assertEquals($original->getTimezone(), $converted->getTimezone());
 	}
 
-	public function testCreateDateTimeImmutableFromTimestampWithCustomTimezone()
+	public function testCreateDateTimeImmutableFromTimestampWithCustomTimezone(): void
 	{
 		$timezone = new DateTimeZone('UTC');
 		$original = new DateTimeImmutable('now', $timezone);
@@ -49,7 +49,7 @@ class TimeFormatTest extends \Consistence\TestCase
 		$this->assertEquals($timezone, $converted->getTimezone());
 	}
 
-	public function testCreateDateTimeFromDateTimeInterface()
+	public function testCreateDateTimeFromDateTimeInterface(): void
 	{
 		$original = new DateTimeImmutable();
 		$converted = TimeFormat::createDateTimeFromDateTimeInterface($original);
@@ -58,7 +58,7 @@ class TimeFormatTest extends \Consistence\TestCase
 		$this->assertEquals($original->getTimezone(), $converted->getTimezone());
 	}
 
-	public function testCreateDateTimeImmutableFromDateTimeInterface()
+	public function testCreateDateTimeImmutableFromDateTimeInterface(): void
 	{
 		$original = new DateTime();
 		$converted = TimeFormat::createDateTimeImmutableFromDateTimeInterface($original);
@@ -135,7 +135,7 @@ class TimeFormatTest extends \Consistence\TestCase
 	 * @param string $format
 	 * @param string $timeString
 	 */
-	public function testCheckValidTimes(string $format, string $timeString)
+	public function testCheckValidTimes(string $format, string $timeString): void
 	{
 		TimeFormat::checkTime($format, $timeString);
 		$this->ok();
@@ -148,7 +148,7 @@ class TimeFormatTest extends \Consistence\TestCase
 	 * @param string $timeString
 	 * @param string $reason
 	 */
-	public function testCheckInvalidTimes(string $format, string $timeString, string $reason)
+	public function testCheckInvalidTimes(string $format, string $timeString, string $reason): void
 	{
 		try {
 			TimeFormat::checkTime($format, $timeString);
@@ -166,7 +166,7 @@ class TimeFormatTest extends \Consistence\TestCase
 	 * @param string $timeString
 	 * @param string $reason
 	 */
-	public function testCheckNonExistingTimes(string $format, string $timeString, string $reason)
+	public function testCheckNonExistingTimes(string $format, string $timeString, string $reason): void
 	{
 		try {
 			TimeFormat::checkTime($format, $timeString);
@@ -182,7 +182,7 @@ class TimeFormatTest extends \Consistence\TestCase
 	 * @param string $format
 	 * @param string $timeString
 	 */
-	public function testValidTimes(string $format, string $timeString)
+	public function testValidTimes(string $format, string $timeString): void
 	{
 		$this->assertTrue(TimeFormat::isValidTime($format, $timeString));
 	}
@@ -194,7 +194,7 @@ class TimeFormatTest extends \Consistence\TestCase
 	 * @param string $timeString
 	 * @param string $reason
 	 */
-	public function testInvalidTimes(string $format, string $timeString, string $reason)
+	public function testInvalidTimes(string $format, string $timeString, string $reason): void
 	{
 		$this->assertFalse(
 			TimeFormat::isValidTime($format, $timeString),
@@ -208,7 +208,7 @@ class TimeFormatTest extends \Consistence\TestCase
 	 * @param string $format
 	 * @param string $timeString
 	 */
-	public function testCreateValidDateTime(string $format, string $timeString)
+	public function testCreateValidDateTime(string $format, string $timeString): void
 	{
 		$time = TimeFormat::createDateTimeFromFormat(
 			$format,
@@ -224,7 +224,7 @@ class TimeFormatTest extends \Consistence\TestCase
 		)->format($format), $time->format($format));
 	}
 
-	public function testCreateDateTimeWithDefaultTimezone()
+	public function testCreateDateTimeWithDefaultTimezone(): void
 	{
 		$this->assertInstanceOf(DateTime::class, TimeFormat::createDateTimeFromFormat('Y', '2016'));
 	}
@@ -236,7 +236,7 @@ class TimeFormatTest extends \Consistence\TestCase
 	 * @param string $timeString
 	 * @param string $reason
 	 */
-	public function testCreateInvalidDateTime(string $format, string $timeString, string $reason)
+	public function testCreateInvalidDateTime(string $format, string $timeString, string $reason): void
 	{
 		try {
 			TimeFormat::createDateTimeFromFormat(
@@ -257,7 +257,7 @@ class TimeFormatTest extends \Consistence\TestCase
 	 * @param string $format
 	 * @param string $timeString
 	 */
-	public function testCreateValidDateTimeImmutable(string $format, string $timeString)
+	public function testCreateValidDateTimeImmutable(string $format, string $timeString): void
 	{
 		$time = TimeFormat::createDateTimeImmutableFromFormat(
 			$format,
@@ -273,7 +273,7 @@ class TimeFormatTest extends \Consistence\TestCase
 		)->format($format), $time->format($format));
 	}
 
-	public function testCreateDateTimeImmutableWithDefaultTimezone()
+	public function testCreateDateTimeImmutableWithDefaultTimezone(): void
 	{
 		$this->assertInstanceOf(DateTimeImmutable::class, TimeFormat::createDateTimeImmutableFromFormat('Y', '2016'));
 	}
@@ -285,7 +285,7 @@ class TimeFormatTest extends \Consistence\TestCase
 	 * @param string $timeString
 	 * @param string $reason
 	 */
-	public function testCreateInvalidDateTimeImmutable(string $format, string $timeString, string $reason)
+	public function testCreateInvalidDateTimeImmutable(string $format, string $timeString, string $reason): void
 	{
 		try {
 			TimeFormat::createDateTimeImmutableFromFormat(

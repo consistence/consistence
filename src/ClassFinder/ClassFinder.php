@@ -9,8 +9,8 @@ interface ClassFinder
 
 	/**
 	 * @param string $interfaceName
-	 * @return string[] array of class names
+	 * @return string[] list of class names
 	 */
-	public function findByInterface(string $interfaceName);
+	public function findByInterface(string $interfaceName): iterable;
 
 }

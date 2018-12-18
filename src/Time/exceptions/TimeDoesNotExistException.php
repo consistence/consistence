@@ -10,7 +10,7 @@ class TimeDoesNotExistException extends \Consistence\PhpException implements \Co
 	/** @var string */
 	private $timeString;
 
-	public function __construct(string $timeString, \Throwable $previous = null)
+	public function __construct(string $timeString, ?\Throwable $previous = null)
 	{
 		parent::__construct(
 			sprintf('Time given in "%s" does not exist', $timeString),

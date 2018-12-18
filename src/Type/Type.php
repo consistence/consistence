@@ -9,13 +9,13 @@ use Traversable;
 class Type extends \Consistence\ObjectPrototype
 {
 
-	const SEPARATOR_KEY_TYPE = ':';
+	public const SEPARATOR_KEY_TYPE = ':';
 
-	const SUBTYPES_ALLOW = true;
-	const SUBTYPES_DISALLOW = false;
+	public const SUBTYPES_ALLOW = true;
+	public const SUBTYPES_DISALLOW = false;
 
-	const TYPE_MIXED = 'mixed';
-	const TYPE_OBJECT = 'object';
+	public const TYPE_MIXED = 'mixed';
+	public const TYPE_OBJECT = 'object';
 
 	final public function __construct()
 	{
@@ -119,7 +119,7 @@ class Type extends \Consistence\ObjectPrototype
 	 * @param string $expectedTypes
 	 * @param bool $allowSubtypes decides if subtypes of given expected types should be considered a valid value
 	 */
-	public static function checkType($value, string $expectedTypes, bool $allowSubtypes = self::SUBTYPES_ALLOW)
+	public static function checkType($value, string $expectedTypes, bool $allowSubtypes = self::SUBTYPES_ALLOW): void
 	{
 		if (!self::hasType($value, $expectedTypes, $allowSubtypes)) {
 			throw new \Consistence\InvalidArgumentTypeException($value, $expectedTypes);

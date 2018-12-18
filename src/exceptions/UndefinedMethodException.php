@@ -13,7 +13,7 @@ class UndefinedMethodException extends \Consistence\PhpException
 	/** @var string */
 	private $methodName;
 
-	public function __construct(string $className, string $methodName, \Throwable $previous = null)
+	public function __construct(string $className, string $methodName, ?\Throwable $previous = null)
 	{
 		parent::__construct(sprintf('Method %s::%s() is not defined or is not accessible', $className, $methodName), $previous);
 		$this->className = $className;

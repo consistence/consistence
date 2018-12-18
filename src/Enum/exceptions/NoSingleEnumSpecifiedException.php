@@ -10,7 +10,7 @@ class NoSingleEnumSpecifiedException extends \Consistence\PhpException
 	/** @var string */
 	private $class;
 
-	public function __construct(string $class, \Throwable $previous = null)
+	public function __construct(string $class, ?\Throwable $previous = null)
 	{
 		parent::__construct(sprintf(
 			'There is no single Enum (implementing %s) defined for MultiEnum %s',

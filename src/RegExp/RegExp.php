@@ -19,7 +19,7 @@ class RegExp extends \Consistence\ObjectPrototype
 	 * @param int $offset
 	 * @return string[] array of matches
 	 */
-	public static function match(string $subject, string $pattern, int $flags = 0, int $offset = 0)
+	public static function match(string $subject, string $pattern, int $flags = 0, int $offset = 0): array
 	{
 		if ($offset > strlen($subject)) {
 			return [];

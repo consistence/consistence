@@ -7,7 +7,7 @@ namespace Consistence\Annotation;
 class AnnotationTest extends \Consistence\TestCase
 {
 
-	public function testCreateNoParams()
+	public function testCreateNoParams(): void
 	{
 		$annotation = Annotation::createAnnotationWithoutParams('lorem');
 		$this->assertSame('lorem', $annotation->getName());
@@ -15,7 +15,7 @@ class AnnotationTest extends \Consistence\TestCase
 		$this->assertNull($annotation->getValue());
 	}
 
-	public function testCreateAnnotationWithValue()
+	public function testCreateAnnotationWithValue(): void
 	{
 		$annotation = Annotation::createAnnotationWithValue('lorem', 'ipsum');
 		$this->assertSame('lorem', $annotation->getName());
@@ -23,7 +23,7 @@ class AnnotationTest extends \Consistence\TestCase
 		$this->assertSame('ipsum', $annotation->getValue());
 	}
 
-	public function testCreateAnnotationWithFields()
+	public function testCreateAnnotationWithFields(): void
 	{
 		$annotation = Annotation::createAnnotationWithFields('lorem', [
 			new AnnotationField('foo', 'bar'),
@@ -35,7 +35,7 @@ class AnnotationTest extends \Consistence\TestCase
 		$this->assertNull($annotation->getValue());
 	}
 
-	public function testGetField()
+	public function testGetField(): void
 	{
 		$annotation = Annotation::createAnnotationWithFields('test', [
 			new AnnotationField('lorem', 1),
@@ -47,7 +47,7 @@ class AnnotationTest extends \Consistence\TestCase
 		$this->assertSame(2, $field->getValue());
 	}
 
-	public function testGetMissingField()
+	public function testGetMissingField(): void
 	{
 		$annotation = Annotation::createAnnotationWithoutParams('lorem');
 
@@ -57,7 +57,7 @@ class AnnotationTest extends \Consistence\TestCase
 		$annotation->getField('test');
 	}
 
-	public function testGetMissingFieldValues()
+	public function testGetMissingFieldValues(): void
 	{
 		try {
 			$annotation = Annotation::createAnnotationWithoutParams('lorem');

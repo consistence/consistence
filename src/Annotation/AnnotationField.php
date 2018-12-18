@@ -15,7 +15,7 @@ class AnnotationField extends \Consistence\ObjectPrototype
 
 	/**
 	 * @param string $name
-	 * @param mixed|null $value
+	 * @param mixed $value
 	 */
 	public function __construct(string $name, $value = null)
 	{
@@ -29,7 +29,7 @@ class AnnotationField extends \Consistence\ObjectPrototype
 	}
 
 	/**
-	 * @return mixed|null
+	 * @return mixed
 	 */
 	public function getValue()
 	{

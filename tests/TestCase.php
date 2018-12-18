@@ -10,7 +10,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	/**
 	 * This method can be called to provide at least one assertion in test
 	 */
-	protected function ok()
+	protected function ok(): void
 	{
 		$this->assertTrue(true);
 	}

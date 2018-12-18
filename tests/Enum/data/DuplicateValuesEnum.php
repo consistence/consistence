@@ -7,8 +7,8 @@ namespace Consistence\Enum;
 class DuplicateValuesEnum extends \Consistence\Enum\Enum
 {
 
-	const FOO = 'foo';
-	const BAR = 'foo';
-	const BAZ = 'baz';
+	public const FOO = 'foo';
+	public const BAR = 'foo';
+	public const BAZ = 'baz';
 
 }

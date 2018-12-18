@@ -7,10 +7,10 @@ namespace Consistence\Enum;
 class TypeEnum extends \Consistence\Enum\Enum
 {
 
-	const INTEGER = 1;
-	const STRING = '1';
-	const FLOAT = 1.0;
-	const BOOLEAN = true;
-	const NULL = null;
+	public const INTEGER = 1;
+	public const STRING = '1';
+	public const FLOAT = 1.0;
+	public const BOOLEAN = true;
+	public const NULL = null;
 
 }

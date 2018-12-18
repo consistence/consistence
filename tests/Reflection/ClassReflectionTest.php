@@ -9,14 +9,14 @@ use ReflectionClass;
 class ClassReflectionTest extends \Consistence\TestCase
 {
 
-	public function testStaticConstruct()
+	public function testStaticConstruct(): void
 	{
 		$this->expectException(\Consistence\StaticClassException::class);
 
 		new ClassReflection();
 	}
 
-	public function testGetDeclaredMethods()
+	public function testGetDeclaredMethods(): void
 	{
 		$classReflection = new ReflectionClass(Bar::class);
 		$methods = ClassReflection::getDeclaredMethods($classReflection);
@@ -24,7 +24,7 @@ class ClassReflectionTest extends \Consistence\TestCase
 		$this->assertSame('barMethod', $methods[0]->name);
 	}
 
-	public function testHasDeclaredMethod()
+	public function testHasDeclaredMethod(): void
 	{
 		$classReflection = new ReflectionClass(Bar::class);
 		$this->assertTrue(ClassReflection::hasDeclaredMethod($classReflection, 'barMethod'));
@@ -34,7 +34,7 @@ class ClassReflectionTest extends \Consistence\TestCase
 		$this->assertFalse(ClassReflection::hasDeclaredMethod($classReflection, 'barmethod', ClassReflection::CASE_SENSITIVE));
 	}
 
-	public function testHasDeclaredMethodCaseSensitive()
+	public function testHasDeclaredMethodCaseSensitive(): void
 	{
 		$classReflection = new ReflectionClass(Bar::class);
 		$this->assertTrue(ClassReflection::hasDeclaredMethod($classReflection, 'barMethod', ClassReflection::CASE_SENSITIVE));
@@ -42,7 +42,7 @@ class ClassReflectionTest extends \Consistence\TestCase
 		$this->assertFalse(ClassReflection::hasDeclaredMethod($classReflection, 'xxx', ClassReflection::CASE_SENSITIVE));
 	}
 
-	public function testHasDeclaredMethodCaseInsensitive()
+	public function testHasDeclaredMethodCaseInsensitive(): void
 	{
 		$classReflection = new ReflectionClass(Bar::class);
 		$this->assertTrue(ClassReflection::hasDeclaredMethod($classReflection, 'barMethod', ClassReflection::CASE_INSENSITIVE));
@@ -50,7 +50,7 @@ class ClassReflectionTest extends \Consistence\TestCase
 		$this->assertFalse(ClassReflection::hasDeclaredMethod($classReflection, 'xxx', ClassReflection::CASE_INSENSITIVE));
 	}
 
-	public function testGetDeclaredProperties()
+	public function testGetDeclaredProperties(): void
 	{
 		$classReflection = new ReflectionClass(Bar::class);
 		$properties = ClassReflection::getDeclaredProperties($classReflection);
@@ -58,7 +58,7 @@ class ClassReflectionTest extends \Consistence\TestCase
 		$this->assertSame('bar', $properties[0]->name);
 	}
 
-	public function testHasDeclaredProperty()
+	public function testHasDeclaredProperty(): void
 	{
 		$classReflection = new ReflectionClass(Bar::class);
 		$this->assertTrue(ClassReflection::hasDeclaredProperty($classReflection, 'bar'));
@@ -66,7 +66,7 @@ class ClassReflectionTest extends \Consistence\TestCase
 		$this->assertFalse(ClassReflection::hasDeclaredProperty($classReflection, 'xxx'));
 	}
 
-	public function testGetDeclaredConstants()
+	public function testGetDeclaredConstants(): void
 	{
 		$classReflection = new ReflectionClass(Bar::class);
 		$constants = ClassReflection::getDeclaredConstants($classReflection);
@@ -74,7 +74,7 @@ class ClassReflectionTest extends \Consistence\TestCase
 		$this->assertArrayHasKey('BAR', $constants);
 	}
 
-	public function testHasDeclaredConstant()
+	public function testHasDeclaredConstant(): void
 	{
 		$classReflection = new ReflectionClass(Bar::class);
 		$this->assertTrue(ClassReflection::hasDeclaredConstant($classReflection, 'BAR'));

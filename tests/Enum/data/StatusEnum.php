@@ -7,16 +7,16 @@ namespace Consistence\Enum;
 class StatusEnum extends \Consistence\Enum\Enum
 {
 
-	const DRAFT = 1;
-	const REVIEW = 2;
-	const PUBLISHED = 3;
+	public const DRAFT = 1;
+	public const REVIEW = 2;
+	public const PUBLISHED = 3;
 
-	const BAR = 'yy';
+	public const BAR = 'yy';
 
 	/**
 	 * @return string[]
 	 */
-	protected static function getIgnoredConstantNames()
+	protected static function getIgnoredConstantNames(): array
 	{
 		return [
 			'BAR',

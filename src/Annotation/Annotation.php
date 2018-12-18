@@ -22,7 +22,7 @@ class Annotation extends \Consistence\ObjectPrototype
 	/**
 	 * @param string $name
 	 * @param \Consistence\Annotation\AnnotationField[] $fields
-	 * @param mixed|null $value
+	 * @param mixed $value
 	 */
 	private function __construct(string $name, array $fields = [], $value = null)
 	{
@@ -40,7 +40,7 @@ class Annotation extends \Consistence\ObjectPrototype
 	/**
 	 * @return \Consistence\Annotation\AnnotationField[]
 	 */
-	public function getFields()
+	public function getFields(): array
 	{
 		return $this->fields;
 	}
@@ -61,7 +61,7 @@ class Annotation extends \Consistence\ObjectPrototype
 	}
 
 	/**
-	 * @return mixed|null
+	 * @return mixed
 	 */
 	public function getValue()
 	{

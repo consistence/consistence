@@ -9,8 +9,8 @@ Enums represent predefined set of values. The available values are defined stati
 class CardColor extends \Consistence\Enum\Enum
 {
 
-	const BLACK = 'black';
-	const RED = 'red';
+	public const BLACK = 'black';
+	public const RED = 'red';
 
 }
 
@@ -97,10 +97,10 @@ use Consistence\Type\ArrayType\ArrayType;
 class CardSuit extends \Consistence\Enum\Enum
 {
 
-	const CLUBS = 'clubs';
-	const DIAMONDS = 'diamonds';
-	const HEARTS = 'hearts';
-	const SPADES = 'spades';
+	public const CLUBS = 'clubs';
+	public const DIAMONDS = 'diamonds';
+	public const HEARTS = 'hearts';
+	public const SPADES = 'spades';
 
 	private static $reds = [
 		self::DIAMONDS,
@@ -148,15 +148,15 @@ If you want to exclude some constants from being values (for example because the
 class CardSuit extends \Consistence\Enum\Enum
 {
 
-	const CLUBS = 'clubs';
-	const DIAMONDS = 'diamonds';
-	const HEARTS = 'hearts';
-	const SPADES = 'spades';
+	public const CLUBS = 'clubs';
+	public const DIAMONDS = 'diamonds';
+	public const HEARTS = 'hearts';
+	public const SPADES = 'spades';
 
-	const SYMBOL_CLUBS = '♣';
-	const SYMBOL_DIAMONDS = '♦';
-	const SYMBOL_HEARTS = '♥';
-	const SYMBOL_SPADES = '♠';
+	public const SYMBOL_CLUBS = '♣';
+	public const SYMBOL_DIAMONDS = '♦';
+	public const SYMBOL_HEARTS = '♥';
+	public const SYMBOL_SPADES = '♠';
 
 	/**
 	 * @var string[] format: value(string) => symbol(string)

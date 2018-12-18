@@ -16,60 +16,60 @@ use DateTimeZone;
 class TimeFormat extends \Consistence\ObjectPrototype
 {
 
-	const ATOM = DATE_ATOM;
-	const COOKIE = DATE_COOKIE;
-	const ISO8601 = DATE_ISO8601;
-	const ISO8601_WITH_MICROSECONDS = 'Y-m-d\TH:i:s.uO';
-	const ISO8601_WITH_MICROSECONDS_WITHOUT_TIMEZONE = 'Y-m-d\TH:i:s.u';
-	const ISO8601_TIMEZONE_WITH_COLON = DATE_RFC3339;
-	const ISO8601_WITHOUT_TIMEZONE = 'Y-m-d\TH:i:s';
-	const RFC822 = DATE_RFC822;
-	const RFC850 = DATE_RFC850;
-	const RFC1036 = DATE_RFC1036;
-	const RFC1123 = DATE_RFC1123;
-	const RFC2822 = DATE_RFC2822;
-	const RFC3339 = DATE_RFC3339;
-	const RSS = DATE_RSS;
-	const W3C = DATE_W3C;
+	public const ATOM = DATE_ATOM;
+	public const COOKIE = DATE_COOKIE;
+	public const ISO8601 = DATE_ISO8601;
+	public const ISO8601_WITH_MICROSECONDS = 'Y-m-d\TH:i:s.uO';
+	public const ISO8601_WITH_MICROSECONDS_WITHOUT_TIMEZONE = 'Y-m-d\TH:i:s.u';
+	public const ISO8601_TIMEZONE_WITH_COLON = DATE_RFC3339;
+	public const ISO8601_WITHOUT_TIMEZONE = 'Y-m-d\TH:i:s';
+	public const RFC822 = DATE_RFC822;
+	public const RFC850 = DATE_RFC850;
+	public const RFC1036 = DATE_RFC1036;
+	public const RFC1123 = DATE_RFC1123;
+	public const RFC2822 = DATE_RFC2822;
+	public const RFC3339 = DATE_RFC3339;
+	public const RSS = DATE_RSS;
+	public const W3C = DATE_W3C;
 
-	const DAY_OF_MONTH = 'j';
-	const DAY_OF_MONTH_LEADING_ZERO = 'd';
-	const DAY_OF_WEEK = 'w';
-	const DAY_OF_WEEK_ISO8601 = 'N';
-	const DAY_OF_WEEK_TEXT_FULL = 'l';
-	const DAY_OF_WEEK_TEXT_THREE_LETTERS = 'D';
-	const DAY_OF_YEAR = 'z';
-	const DAYS_IN_MONTH = 't';
-	const MICROSECOND_OF_SECOND = 'u';
-	const MINUTE_OF_HOUR_LEADING_ZERO = 'i';
-	const MONTH_OF_YEAR = 'n';
-	const MONTH_OF_YEAR_LEADING_ZERO = 'm';
-	const MONTH_OF_YEAR_TEXT_FULL = 'F';
-	const MONTH_OF_YEAR_THREE_LETTERS = 'M';
-	const SECOND_OF_MINUTE_LEADING_ZERO = 's';
-	const TIME_OF_DAY = 'G';
-	const TIME_OF_DAY_LEADING_ZERO = 'H';
-	const TIME_OF_DAY_12_HOUR = 'g';
-	const TIME_OF_DAY_12_HOUR_LEADING_ZERO = 'h';
-	const TIME_OF_DAY_AM_PM = 'a';
-	const TIME_OF_DAY_AM_PM_UPPERCASE = 'A';
-	const TIME_OF_DAY_SWATCH = 'B';
-	const TIMEZONE = 'e';
-	const TIMEZONE_ABBREVIATION = 'T';
-	const TIMEZONE_IS_DAYLIGHT = 'I';
-	const TIMEZONE_OFFSET = 'O';
-	const TIMEZONE_OFFSET_SECONDS = 'Z';
-	const TIMEZONE_OFFSET_WITH_COLON = 'P';
-	const UNIX_TIMESTAMP = 'U';
-	const WEEK_OF_YEAR = 'W';
-	const YEAR = 'Y';
-	const YEAR_IS_LEAP = 'L';
-	const YEAR_ISO8601 = 'o';
-	const YEAR_TWO_DIGIT = 'y';
+	public const DAY_OF_MONTH = 'j';
+	public const DAY_OF_MONTH_LEADING_ZERO = 'd';
+	public const DAY_OF_WEEK = 'w';
+	public const DAY_OF_WEEK_ISO8601 = 'N';
+	public const DAY_OF_WEEK_TEXT_FULL = 'l';
+	public const DAY_OF_WEEK_TEXT_THREE_LETTERS = 'D';
+	public const DAY_OF_YEAR = 'z';
+	public const DAYS_IN_MONTH = 't';
+	public const MICROSECOND_OF_SECOND = 'u';
+	public const MINUTE_OF_HOUR_LEADING_ZERO = 'i';
+	public const MONTH_OF_YEAR = 'n';
+	public const MONTH_OF_YEAR_LEADING_ZERO = 'm';
+	public const MONTH_OF_YEAR_TEXT_FULL = 'F';
+	public const MONTH_OF_YEAR_THREE_LETTERS = 'M';
+	public const SECOND_OF_MINUTE_LEADING_ZERO = 's';
+	public const TIME_OF_DAY = 'G';
+	public const TIME_OF_DAY_LEADING_ZERO = 'H';
+	public const TIME_OF_DAY_12_HOUR = 'g';
+	public const TIME_OF_DAY_12_HOUR_LEADING_ZERO = 'h';
+	public const TIME_OF_DAY_AM_PM = 'a';
+	public const TIME_OF_DAY_AM_PM_UPPERCASE = 'A';
+	public const TIME_OF_DAY_SWATCH = 'B';
+	public const TIMEZONE = 'e';
+	public const TIMEZONE_ABBREVIATION = 'T';
+	public const TIMEZONE_IS_DAYLIGHT = 'I';
+	public const TIMEZONE_OFFSET = 'O';
+	public const TIMEZONE_OFFSET_SECONDS = 'Z';
+	public const TIMEZONE_OFFSET_WITH_COLON = 'P';
+	public const UNIX_TIMESTAMP = 'U';
+	public const WEEK_OF_YEAR = 'W';
+	public const YEAR = 'Y';
+	public const YEAR_IS_LEAP = 'L';
+	public const YEAR_ISO8601 = 'o';
+	public const YEAR_TWO_DIGIT = 'y';
 
-	const TIMEZONE_PHP_TYPE_OFFSET = 1;
-	const TIMEZONE_PHP_TYPE_ABBREVIATION = 2;
-	const TIMEZONE_PHP_TYPE_IDENTIFIER = 3;
+	public const TIMEZONE_PHP_TYPE_OFFSET = 1;
+	public const TIMEZONE_PHP_TYPE_ABBREVIATION = 2;
+	public const TIMEZONE_PHP_TYPE_IDENTIFIER = 3;
 
 	/**
 	 * Convert unix timestamp to DateTime with current timezone
@@ -78,7 +78,7 @@ class TimeFormat extends \Consistence\ObjectPrototype
 	 * @param \DateTimeZone|null $timezone
 	 * @return \DateTime
 	 */
-	public static function createDateTimeFromTimestamp(int $timestamp, DateTimeZone $timezone = null): DateTime
+	public static function createDateTimeFromTimestamp(int $timestamp, ?DateTimeZone $timezone = null): DateTime
 	{
 		$time = new DateTime(date(self::ISO8601_WITHOUT_TIMEZONE, $timestamp));
 		if ($timezone !== null) {
@@ -97,7 +97,7 @@ class TimeFormat extends \Consistence\ObjectPrototype
 	 */
 	public static function createDateTimeImmutableFromTimestamp(
 		int $timestamp,
-		DateTimeZone $timezone = null
+		?DateTimeZone $timezone = null
 	): DateTimeImmutable
 	{
 		$time = new DateTimeImmutable(date(self::ISO8601_WITHOUT_TIMEZONE, $timestamp));
@@ -153,7 +153,7 @@ class TimeFormat extends \Consistence\ObjectPrototype
 	 * @param string $format
 	 * @param string $timeString
 	 */
-	public static function checkTime(string $format, string $timeString)
+	public static function checkTime(string $format, string $timeString): void
 	{
 		$parsedTime = date_parse_from_format($format, $timeString);
 		if ($parsedTime['error_count'] > 0) {
@@ -248,7 +248,7 @@ class TimeFormat extends \Consistence\ObjectPrototype
 	public static function createDateTimeFromFormat(
 		string $format,
 		string $timeString,
-		DateTimeZone $timezone = null
+		?DateTimeZone $timezone = null
 	): DateTime
 	{
 		self::checkTime($format, $timeString);
@@ -272,7 +272,7 @@ class TimeFormat extends \Consistence\ObjectPrototype
 	public static function createDateTimeImmutableFromFormat(
 		string $format,
 		string $timeString,
-		DateTimeZone $timezone = null
+		?DateTimeZone $timezone = null
 	): DateTimeImmutable
 	{
 		self::checkTime($format, $timeString);

@@ -7,12 +7,12 @@ namespace Consistence\Reflection;
 class Foo
 {
 
-	const FOO = 1;
+	public const FOO = 1;
 
 	/** @var mixed */
 	private $foo;
 
-	private function fooMethod()
+	private function fooMethod(): void
 	{
 		// ...
 	}

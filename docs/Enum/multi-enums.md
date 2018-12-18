@@ -13,9 +13,9 @@ In MultiEnum each stored value is represented by a bit - that is why only set of
 class RolesEnum extends \Consistence\Enum\MultiEnum
 {
 
-	const USER = 1;
-	const EMPLOYEE = 2;
-	const ADMIN = 4;
+	public const USER = 1;
+	public const EMPLOYEE = 2;
+	public const ADMIN = 4;
 
 }
 
@@ -198,9 +198,9 @@ The easiest mapping is of course when both the representations are equal:
 class AbcEnum extends \Consistence\Enum\Enum
 {
 
-	const A = 1;
-	const B = 2;
-	const C = 4;
+	public const A = 1;
+	public const B = 2;
+	public const C = 4;
 
 }
 
@@ -230,9 +230,9 @@ use Consistence\Type\ArrayType\ArrayType;
 class RoleEnum extends \Consistence\Enum\Enum
 {
 
-	const USER = 'user';
-	const EMPLOYEE = 'employee';
-	const ADMIN = 'admin';
+	public const USER = 'user';
+	public const EMPLOYEE = 'employee';
+	public const ADMIN = 'admin';
 
 }
 

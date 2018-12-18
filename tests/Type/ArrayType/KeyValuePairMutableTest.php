@@ -7,14 +7,14 @@ namespace Consistence\Type\ArrayType;
 class KeyValuePairMutableTest extends \Consistence\TestCase
 {
 
-	public function testConstruct()
+	public function testConstruct(): void
 	{
 		$pair = new KeyValuePairMutable(0, 'foo');
 		$this->assertSame(0, $pair->getKey());
 		$this->assertSame('foo', $pair->getValue());
 	}
 
-	public function testSetPair()
+	public function testSetPair(): void
 	{
 		$pair = new KeyValuePairMutable(0, 'foo');
 		$pair->setPair(1, 'bar');
@@ -22,7 +22,7 @@ class KeyValuePairMutableTest extends \Consistence\TestCase
 		$this->assertSame('bar', $pair->getValue());
 	}
 
-	public function testSetInvalidKey()
+	public function testSetInvalidKey(): void
 	{
 		$pair = new KeyValuePairMutable(0, 'foo');
 

@@ -9,8 +9,8 @@ use Closure;
 class ArrayType extends \Consistence\ObjectPrototype
 {
 
-	const STRICT_TRUE = true;
-	const STRICT_FALSE = false;
+	public const STRICT_TRUE = true;
+	public const STRICT_FALSE = false;
 
 	final public function __construct()
 	{
@@ -193,7 +193,7 @@ class ArrayType extends \Consistence\ObjectPrototype
 	/**
 	 * @param mixed[] $haystack
 	 * @param int|string $key
-	 * @return mixed|null
+	 * @return mixed
 	 */
 	public static function findValue(array $haystack, $key)
 	{
@@ -225,7 +225,7 @@ class ArrayType extends \Consistence\ObjectPrototype
 	 * @param \Closure $callback
 	 * @return \Consistence\Type\ArrayType\KeyValuePair|null
 	 */
-	public static function findByCallback(array $haystack, Closure $callback)
+	public static function findByCallback(array $haystack, Closure $callback): ?KeyValuePair
 	{
 		$keyValuePair = new KeyValuePairMutable(0, 0);
 		foreach ($haystack as $key => $value) {
@@ -260,7 +260,7 @@ class ArrayType extends \Consistence\ObjectPrototype
 	 *
 	 * @param mixed[] $haystack
 	 * @param \Closure $callback
-	 * @return mixed|null
+	 * @return mixed
 	 */
 	public static function findValueByCallback(array $haystack, Closure $callback)
 	{
@@ -298,7 +298,7 @@ class ArrayType extends \Consistence\ObjectPrototype
 	 * @param \Closure $callback
 	 * @return mixed[] new filtered array
 	 */
-	public static function filterByCallback(array $haystack, Closure $callback)
+	public static function filterByCallback(array $haystack, Closure $callback): array
 	{
 		$filtered = [];
 		$keyValuePair = new KeyValuePairMutable(0, 0);
@@ -319,7 +319,7 @@ class ArrayType extends \Consistence\ObjectPrototype
 	 * @param \Closure $callback
 	 * @return mixed[] new filtered array
 	 */
-	public static function filterValuesByCallback(array $haystack, Closure $callback)
+	public static function filterValuesByCallback(array $haystack, Closure $callback): array
 	{
 		return array_filter($haystack, $callback);
 	}
@@ -331,7 +331,7 @@ class ArrayType extends \Consistence\ObjectPrototype
 	 * @param \Closure $callback
 	 * @return mixed[] new mapped array
 	 */
-	public static function mapByCallback(array $haystack, Closure $callback)
+	public static function mapByCallback(array $haystack, Closure $callback): array
 	{
 		$result = [];
 		$keyValuePair = new KeyValuePairMutable(0, 0);
@@ -351,7 +351,7 @@ class ArrayType extends \Consistence\ObjectPrototype
 	 * @param \Closure $callback
 	 * @return mixed[] new mapped array
 	 */
-	public static function mapValuesByCallback(array $haystack, Closure $callback)
+	public static function mapValuesByCallback(array $haystack, Closure $callback): array
 	{
 		return array_map($callback, $haystack);
 	}
@@ -419,7 +419,7 @@ class ArrayType extends \Consistence\ObjectPrototype
 	 * @param bool $strict
 	 * @return mixed[] new array with unique values
 	 */
-	public static function uniqueValues(array $haystack, bool $strict = self::STRICT_TRUE)
+	public static function uniqueValues(array $haystack, bool $strict = self::STRICT_TRUE): array
 	{
 		$result = [];
 		foreach ($haystack as $key => $value) {
@@ -439,7 +439,7 @@ class ArrayType extends \Consistence\ObjectPrototype
 	 * @param \Closure $callback
 	 * @return mixed[] new array with unique values
 	 */
-	public static function uniqueValuesByCallback(array $haystack, Closure $callback)
+	public static function uniqueValuesByCallback(array $haystack, Closure $callback): array
 	{
 		$result = [];
 		foreach ($haystack as $newKey => $newValue) {

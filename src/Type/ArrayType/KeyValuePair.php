@@ -28,7 +28,7 @@ class KeyValuePair extends \Consistence\ObjectPrototype
 	 * @param int|string $key
 	 * @param mixed $value
 	 */
-	protected function setPair($key, $value)
+	protected function setPair($key, $value): void
 	{
 		Type::checkType($key, 'int|string');
 		$this->key = $key;

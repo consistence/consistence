@@ -13,7 +13,7 @@ class UndefinedPropertyException extends \Consistence\PhpException
 	/** @var string */
 	private $propertyName;
 
-	public function __construct(string $className, string $propertyName, \Throwable $previous = null)
+	public function __construct(string $className, string $propertyName, ?\Throwable $previous = null)
 	{
 		parent::__construct(sprintf('Property %s::$%s is not defined or is not accessible', $className, $propertyName), $previous);
 		$this->className = $className;

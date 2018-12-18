@@ -15,7 +15,7 @@ class AnnotationNotFoundException extends \Consistence\PhpException
 	/** @var \ReflectionProperty */
 	private $property;
 
-	public function __construct(string $annotationName, ReflectionProperty $property, \Throwable $previous = null)
+	public function __construct(string $annotationName, ReflectionProperty $property, ?\Throwable $previous = null)
 	{
 		parent::__construct(
 			sprintf(

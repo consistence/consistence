@@ -42,8 +42,8 @@ Enums represent predefined set of values. The available values are defined stati
 class CardColor extends \Consistence\Enum\Enum
 {
 
-	const BLACK = 'black';
-	const RED = 'red';
+	public const BLACK = 'black';
+	public const RED = 'red';
 
 }
 

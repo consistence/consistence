@@ -9,19 +9,19 @@ use Consistence\Type\ArrayType\ArrayType;
 class EnumTest extends \Consistence\TestCase
 {
 
-	public function testGet()
+	public function testGet(): void
 	{
 		$review = StatusEnum::get(StatusEnum::REVIEW);
 		$this->assertInstanceOf(StatusEnum::class, $review);
 	}
 
-	public function testGetValue()
+	public function testGetValue(): void
 	{
 		$review = StatusEnum::get(StatusEnum::REVIEW);
 		$this->assertSame(StatusEnum::REVIEW, $review->getValue());
 	}
 
-	public function testSameInstances()
+	public function testSameInstances(): void
 	{
 		$review1 = StatusEnum::get(StatusEnum::REVIEW);
 		$review2 = StatusEnum::get(StatusEnum::REVIEW);
@@ -29,7 +29,7 @@ class EnumTest extends \Consistence\TestCase
 		$this->assertSame($review1, $review2);
 	}
 
-	public function testDifferentInstances()
+	public function testDifferentInstances(): void
 	{
 		$review = StatusEnum::get(StatusEnum::REVIEW);
 		$draft = StatusEnum::get(StatusEnum::DRAFT);
@@ -37,7 +37,7 @@ class EnumTest extends \Consistence\TestCase
 		$this->assertNotSame($review, $draft);
 	}
 
-	public function testEquals()
+	public function testEquals(): void
 	{
 		$review1 = StatusEnum::get(StatusEnum::REVIEW);
 		$review2 = StatusEnum::get(StatusEnum::REVIEW);
@@ -45,7 +45,7 @@ class EnumTest extends \Consistence\TestCase
 		$this->assertTrue($review1->equals($review2));
 	}
 
-	public function testNotEquals()
+	public function testNotEquals(): void
 	{
 		$review = StatusEnum::get(StatusEnum::REVIEW);
 		$draft = StatusEnum::get(StatusEnum::DRAFT);
@@ -53,21 +53,21 @@ class EnumTest extends \Consistence\TestCase
 		$this->assertFalse($review->equals($draft));
 	}
 
-	public function testEqualsValue()
+	public function testEqualsValue(): void
 	{
 		$review = StatusEnum::get(StatusEnum::REVIEW);
 
 		$this->assertTrue($review->equalsValue(StatusEnum::REVIEW));
 	}
 
-	public function testNotEqualsValue()
+	public function testNotEqualsValue(): void
 	{
 		$review = StatusEnum::get(StatusEnum::REVIEW);
 
 		$this->assertFalse($review->equalsValue(StatusEnum::DRAFT));
 	}
 
-	public function testGetAvailableValues()
+	public function testGetAvailableValues(): void
 	{
 		$this->assertEquals([
 			'DRAFT' => StatusEnum::DRAFT,
@@ -76,7 +76,7 @@ class EnumTest extends \Consistence\TestCase
 		], StatusEnum::getAvailableValues());
 	}
 
-	public function testGetAvailableEnums()
+	public function testGetAvailableEnums(): void
 	{
 		$this->assertEquals([
 			'DRAFT' => StatusEnum::get(StatusEnum::DRAFT),
@@ -85,17 +85,17 @@ class EnumTest extends \Consistence\TestCase
 		], StatusEnum::getAvailableEnums());
 	}
 
-	public function testIsValidValue()
+	public function testIsValidValue(): void
 	{
 		$this->assertTrue(StatusEnum::isValidValue(StatusEnum::DRAFT));
 	}
 
-	public function testNotValidValue()
+	public function testNotValidValue(): void
 	{
 		$this->assertFalse(StatusEnum::isValidValue(0));
 	}
 
-	public function testInvalidEnumValue()
+	public function testInvalidEnumValue(): void
 	{
 		try {
 			StatusEnum::get(0);
@@ -111,14 +111,14 @@ class EnumTest extends \Consistence\TestCase
 		}
 	}
 
-	public function testCheckValue()
+	public function testCheckValue(): void
 	{
 		StatusEnum::checkValue(StatusEnum::DRAFT);
 		$this->ok();
 	}
 
 
-	public function testCheckInvalidValue()
+	public function testCheckInvalidValue(): void
 	{
 		try {
 			StatusEnum::checkValue('foo');
@@ -134,7 +134,7 @@ class EnumTest extends \Consistence\TestCase
 		}
 	}
 
-	public function testComparingDifferentEnums()
+	public function testComparingDifferentEnums(): void
 	{
 		$review = StatusEnum::get(StatusEnum::REVIEW);
 		$foo = FooEnum::get(FooEnum::FOO);
@@ -148,14 +148,14 @@ class EnumTest extends \Consistence\TestCase
 		}
 	}
 
-	public function testAvailableValuesFooEnum()
+	public function testAvailableValuesFooEnum(): void
 	{
 		$this->assertEquals([
 			'FOO' => FooEnum::FOO,
 		], FooEnum::getAvailableValues());
 	}
 
-	public function testIgnoredConstant()
+	public function testIgnoredConstant(): void
 	{
 		try {
 			StatusEnum::get(StatusEnum::BAR);
@@ -185,14 +185,14 @@ class EnumTest extends \Consistence\TestCase
 	 *
 	 * @param mixed $value
 	 */
-	public function testTypes($value)
+	public function testTypes($value): void
 	{
 		$enum = TypeEnum::get($value);
 		$this->assertInstanceOf(TypeEnum::class, $enum);
 		$this->assertSame($enum->getValue(), $value);
 	}
 
-	public function testDuplicateSpecifiedValues()
+	public function testDuplicateSpecifiedValues(): void
 	{
 		try {
 			DuplicateValuesEnum::get(DuplicateValuesEnum::BAZ);

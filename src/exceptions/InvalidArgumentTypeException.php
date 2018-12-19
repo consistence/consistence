@@ -69,11 +69,7 @@ class InvalidArgumentTypeException extends \Consistence\InvalidArgumentException
 		return (string) $printedValue;
 	}
 
-	/**
-	 * @param object $value
-	 * @return string
-	 */
-	private function getObjectHash($value): string
+	private function getObjectHash(object $value): string
 	{
 		return '#' . substr(md5(spl_object_hash($value)), 0, 4);
 	}

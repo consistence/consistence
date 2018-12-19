@@ -15,7 +15,6 @@
 		<log
 			type="coverage-html"
 			target="../build/log/coverage/html"
-			charset="UTF-8"
 			lowUpperBound="100"
 			highLowerBound="100"
 		/>

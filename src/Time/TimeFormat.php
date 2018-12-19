@@ -164,14 +164,8 @@ class TimeFormat extends \Consistence\ObjectPrototype
 		}
 		switch (true) {
 			case $parsedTime['is_localtime'] && $parsedTime['zone_type'] === self::TIMEZONE_PHP_TYPE_OFFSET:
-				$timezoneOffsetInMinutes = (-1) * $parsedTime['zone'];
-				if (version_compare(PHP_VERSION, '7.2.0', '>=')) {
-					// @codeCoverageIgnoreStart
-					// https://bugs.php.net/bug.php?id=76838
-					$timezoneOffsetInSeconds = $parsedTime['zone'];
-					$timezoneOffsetInMinutes = (int) floor($timezoneOffsetInSeconds / 60);
-					// @codeCoverageIgnoreEnd
-				}
+				$timezoneOffsetInSeconds = $parsedTime['zone'];
+				$timezoneOffsetInMinutes = (int) floor($timezoneOffsetInSeconds / 60);
 				$timezoneOffsetHours = (int) floor($timezoneOffsetInMinutes / 60);
 				$timezoneOffsetMinutes = $timezoneOffsetInMinutes % 60;
 				$timezone = sprintf('%+02d:%02d', $timezoneOffsetHours, $timezoneOffsetMinutes);

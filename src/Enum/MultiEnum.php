@@ -170,6 +170,8 @@ abstract class MultiEnum extends \Consistence\Enum\Enum implements \IteratorAggr
 	}
 
 	/**
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
+	 *
 	 * @param int $value
 	 */
 	public static function checkValue($value): void

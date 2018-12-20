@@ -12,8 +12,6 @@ use ReflectionProperty;
 class ClassReflection extends \Consistence\ObjectPrototype
 {
 
-	public const FILTER_VISIBILITY_NONE = -1;
-
 	public const CASE_SENSITIVE = true;
 	public const CASE_INSENSITIVE = false;
 
@@ -26,12 +24,11 @@ class ClassReflection extends \Consistence\ObjectPrototype
 	 * Retrieves methods defined only at the same level as given ReflectionClass
 	 *
 	 * @param \ReflectionClass $classReflection
-	 * @param int $filter
 	 * @return \ReflectionMethod[]
 	 */
-	public static function getDeclaredMethods(ReflectionClass $classReflection, int $filter = self::FILTER_VISIBILITY_NONE): array
+	public static function getDeclaredMethods(ReflectionClass $classReflection): array
 	{
-		$methods = $classReflection->getMethods($filter);
+		$methods = $classReflection->getMethods();
 		$className = $classReflection->getName();
 		return ArrayType::filterValuesByCallback($methods, function (ReflectionMethod $method) use ($className): bool {
 			return $method->class === $className;
@@ -65,12 +62,11 @@ class ClassReflection extends \Consistence\ObjectPrototype
 	 * Retrieves properties defined only at the same level as given ReflectionClass
 	 *
 	 * @param \ReflectionClass $classReflection
-	 * @param int $filter
 	 * @return \ReflectionProperty[]
 	 */
-	public static function getDeclaredProperties(ReflectionClass $classReflection, int $filter = self::FILTER_VISIBILITY_NONE): array
+	public static function getDeclaredProperties(ReflectionClass $classReflection): array
 	{
-		$properties = $classReflection->getProperties($filter);
+		$properties = $classReflection->getProperties();
 		$className = $classReflection->getName();
 		return ArrayType::filterValuesByCallback($properties, function (ReflectionProperty $property) use ($className): bool {
 			return $property->class === $className;

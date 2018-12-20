@@ -9,6 +9,7 @@ use Consistence\Type\ArrayType\ArrayType;
 use Consistence\Type\ArrayType\KeyValuePair;
 use Consistence\Type\Type;
 use ReflectionClass;
+use ReflectionClassConstant;
 
 abstract class Enum extends \Consistence\ObjectPrototype
 {
@@ -87,7 +88,18 @@ abstract class Enum extends \Consistence\ObjectPrototype
 	private static function getEnumConstants(): array
 	{
 		$classReflection = new ReflectionClass(get_called_class());
-		$declaredConstants = ClassReflection::getDeclaredConstants($classReflection);
+		$declaredConstants = ArrayType::mapByCallback(
+			ClassReflection::getDeclaredConstants($classReflection),
+			function (KeyValuePair $keyValuePair): KeyValuePair {
+				$constant = $keyValuePair->getValue();
+				assert($constant instanceof ReflectionClassConstant);
+
+				return new KeyValuePair(
+					$constant->getName(),
+					$constant->getValue()
+				);
+			}
+		);
 		ArrayType::removeKeys($declaredConstants, static::getIgnoredConstantNames());
 
 		return $declaredConstants;

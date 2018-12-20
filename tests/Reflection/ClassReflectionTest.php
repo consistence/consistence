@@ -71,7 +71,7 @@ class ClassReflectionTest extends \Consistence\TestCase
 		$classReflection = new ReflectionClass(Bar::class);
 		$constants = ClassReflection::getDeclaredConstants($classReflection);
 		$this->assertCount(1, $constants);
-		$this->assertArrayHasKey('BAR', $constants);
+		$this->assertSame('BAR', $constants[0]->name);
 	}
 
 	public function testHasDeclaredConstant(): void

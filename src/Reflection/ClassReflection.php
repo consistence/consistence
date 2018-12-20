@@ -6,6 +6,7 @@ namespace Consistence\Reflection;
 
 use Consistence\Type\ArrayType\ArrayType;
 use ReflectionClass;
+use ReflectionClassConstant;
 use ReflectionMethod;
 use ReflectionProperty;
 
@@ -92,26 +93,23 @@ class ClassReflection extends \Consistence\ObjectPrototype
 	/**
 	 * Retrieves constants defined only at the same level as given ReflectionClass
 	 *
-	 * WARNING: cannot detect redeclarations of the same constant
-	 *
 	 * @param \ReflectionClass $classReflection
-	 * @return string[] format: name(string) => value(mixed)
+	 * @return \ReflectionClassConstant[]
 	 */
 	public static function getDeclaredConstants(ReflectionClass $classReflection): array
 	{
-		$constants = $classReflection->getConstants();
-		$processClass = $classReflection;
-		while (($processClass = $processClass->getParentClass()) !== false) {
-			ArrayType::removeKeysByArrayKeys($constants, $processClass->getConstants());
-		}
-
-		return $constants;
+		$constants = $classReflection->getReflectionConstants();
+		$className = $classReflection->getName();
+		return ArrayType::filterValuesByCallback(
+			$constants,
+			function (ReflectionClassConstant $constant) use ($className): bool {
+				return $constant->getDeclaringClass()->getName() === $className;
+			}
+		);
 	}
 
 	/**
 	 * Is constant of this name defined in this class?
-	 *
-	 * WARNING: cannot detect redeclarations of the same constant
 	 *
 	 * @param \ReflectionClass $classReflection
 	 * @param string $constantName
@@ -119,7 +117,12 @@ class ClassReflection extends \Consistence\ObjectPrototype
 	 */
 	public static function hasDeclaredConstant(ReflectionClass $classReflection, string $constantName): bool
 	{
-		return isset(static::getDeclaredConstants($classReflection)[$constantName]);
+		$constantReflection = $classReflection->getReflectionConstant($constantName);
+		if ($constantReflection === false) {
+			return false;
+		}
+
+		return $constantReflection->getDeclaringClass()->getName() === $classReflection->getName();
 	}
 
 }

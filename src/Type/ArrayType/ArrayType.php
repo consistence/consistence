@@ -58,20 +58,6 @@ class ArrayType extends \Consistence\ObjectPrototype
 	/**
 	 * Returns true when callback(value) is at least once trueish
 	 *
-	 * @deprecated behaves the same way as containsValueByValueCallback, since both use value callback
-	 *
-	 * @param mixed[] $haystack
-	 * @param \Closure $callback
-	 * @return bool
-	 */
-	public static function containsKeyByValueCallback(array $haystack, Closure $callback): bool
-	{
-		return self::containsValueByValueCallback($haystack, $callback);
-	}
-
-	/**
-	 * Returns true when callback(value) is at least once trueish
-	 *
 	 * @param mixed[] $haystack
 	 * @param \Closure $callback
 	 * @return bool

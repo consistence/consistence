@@ -102,7 +102,7 @@ class CardSuit extends \Consistence\Enum\Enum
 	public const HEARTS = 'hearts';
 	public const SPADES = 'spades';
 
-	private static $reds = [
+	private const REDS = [
 		self::DIAMONDS,
 		self::HEARTS,
 	];
@@ -110,7 +110,7 @@ class CardSuit extends \Consistence\Enum\Enum
 	public function getCardColor(): CardColor
 	{
 		return CardColor::get(
-			ArrayType::containsValue($this->getValue(), self::$reds) ? CardColor::RED : CardColor::BLACK
+			ArrayType::containsValue($this->getValue(), self::REDS) ? CardColor::RED : CardColor::BLACK
 		);
 	}
 
@@ -138,9 +138,9 @@ function doMagicTrick(CardSuit $guessedCardSuit)
 Ignored constant values
 -----------------------
 
-By default, values are read from constants defined on the enum class as shown in the `CardColor` and `CardSuit` examples above.
+By default, values are read from public constants defined on the enum class as shown in the `CardColor` and `CardSuit` examples above.
 
-If you want to exclude some constants from being values (for example because they are needed for implementation of methods), you only need to list them in `getIgnoredConstantNames`:
+If you define a constant as private or protected, they will not be available as values:
 
 ```php
 <?php
@@ -153,15 +153,12 @@ class CardSuit extends \Consistence\Enum\Enum
 	public const HEARTS = 'hearts';
 	public const SPADES = 'spades';
 
-	public const SYMBOL_CLUBS = '♣';
-	public const SYMBOL_DIAMONDS = '♦';
-	public const SYMBOL_HEARTS = '♥';
-	public const SYMBOL_SPADES = '♠';
+	private const SYMBOL_CLUBS = '♣';
+	private const SYMBOL_DIAMONDS = '♦';
+	private const SYMBOL_HEARTS = '♥';
+	private const SYMBOL_SPADES = '♠';
 
-	/**
-	 * @var string[] format: value(string) => symbol(string)
-	 */
-	private static $symbolMap = [
+	private const SYMBOL_MAP = [
 		self::CLUBS => self::SYMBOL_CLUBS,
 		self::DIAMONDS => self::SYMBOL_DIAMONDS,
 		self::HEARTS => self::SYMBOL_HEARTS,
@@ -170,31 +167,20 @@ class CardSuit extends \Consistence\Enum\Enum
 
 	public function getSymbol(): string
 	{
-		if (!isset(self::$symbolMap[$this->getValue()])) {
-			throw new \Exception('Undefinded symbol');
+		if (!isset(self::SYMBOL_MAP[$this->getValue()])) {
+			throw new \Exception('Undefined symbol');
 		}
 
-		return self::$symbolMap[$this->getValue()];
-	}
-
-	/**
-	 * @return string[] names of constants which should not be used as valid values of this enum
-	 */
-	protected static function getIgnoredConstantNames()
-	{
-		return [
-			'SYMBOL_CLUBS',
-			'SYMBOL_DIAMONDS',
-			'SYMBOL_HEARTS',
-			'SYMBOL_SPADES',
-		];
+		return self::SYMBOL_MAP[$this->getValue()];
 	}
 
 }
 
 // Consistence\Enum\InvalidEnumValueException: ♣ [string] is not a valid value, accepted values: clubs, diamonds, hearts, spades
-CardSuit::get(CardSuit::SYMBOL_CLUBS);
+CardSuit::get('♣');
 ```
+
+If you need to exclude some public variables, you can do so on by overriding `getAvailableValues` (see next chapter).
 
 Custom definition of values
 ---------------------------

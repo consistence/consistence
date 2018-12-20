@@ -88,8 +88,16 @@ abstract class Enum extends \Consistence\ObjectPrototype
 	private static function getEnumConstants(): array
 	{
 		$classReflection = new ReflectionClass(get_called_class());
-		$declaredConstants = ArrayType::mapByCallback(
-			ClassReflection::getDeclaredConstants($classReflection),
+		$declaredConstants = ClassReflection::getDeclaredConstants($classReflection);
+		$declaredPublicConstants = ArrayType::filterValuesByCallback(
+			$declaredConstants,
+			function (ReflectionClassConstant $constant): bool {
+				return $constant->isPublic();
+			}
+		);
+
+		return ArrayType::mapByCallback(
+			$declaredPublicConstants,
 			function (KeyValuePair $keyValuePair): KeyValuePair {
 				$constant = $keyValuePair->getValue();
 				assert($constant instanceof ReflectionClassConstant);
@@ -100,9 +108,6 @@ abstract class Enum extends \Consistence\ObjectPrototype
 				);
 			}
 		);
-		ArrayType::removeKeys($declaredConstants, static::getIgnoredConstantNames());
-
-		return $declaredConstants;
 	}
 
 	/**
@@ -138,14 +143,6 @@ abstract class Enum extends \Consistence\ObjectPrototype
 		if (!static::isValidValue($value)) {
 			throw new \Consistence\Enum\InvalidEnumValueException($value, static::class);
 		}
-	}
-
-	/**
-	 * @return string[] names of constants which should not be used as valid values of this enum
-	 */
-	protected static function getIgnoredConstantNames(): iterable
-	{
-		return [];
 	}
 
 	protected function checkSameEnum(self $that): void

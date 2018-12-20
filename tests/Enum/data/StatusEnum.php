@@ -11,16 +11,6 @@ class StatusEnum extends \Consistence\Enum\Enum
 	public const REVIEW = 2;
 	public const PUBLISHED = 3;
 
-	public const BAR = 'yy';
-
-	/**
-	 * @return string[]
-	 */
-	protected static function getIgnoredConstantNames(): array
-	{
-		return [
-			'BAR',
-		];
-	}
+	private const BAR = 'bar';
 
 }

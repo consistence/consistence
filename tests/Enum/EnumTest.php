@@ -158,10 +158,10 @@ class EnumTest extends \Consistence\TestCase
 	public function testIgnoredConstant(): void
 	{
 		try {
-			StatusEnum::get(StatusEnum::BAR);
+			StatusEnum::get('bar');
 			$this->fail();
 		} catch (\Consistence\Enum\InvalidEnumValueException $e) {
-			$this->assertSame(StatusEnum::BAR, $e->getValue());
+			$this->assertSame('bar', $e->getValue());
 			$this->assertEquals([
 				'DRAFT' => StatusEnum::DRAFT,
 				'REVIEW' => StatusEnum::REVIEW,

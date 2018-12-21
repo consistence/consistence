@@ -180,7 +180,7 @@ class CardSuit extends \Consistence\Enum\Enum
 CardSuit::get('♣');
 ```
 
-If you need to exclude some public variables, you can do so on by overriding `getAvailableValues` (see next chapter).
+If you need to exclude some public constants, you can do so by overriding `getAvailableValues` (see next chapter).
 
 Custom definition of values
 ---------------------------

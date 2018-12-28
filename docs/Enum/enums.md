@@ -196,7 +196,7 @@ class CardValue extends \Consistence\Enum\Enum
 	/**
 	 * @return string[]
 	 */
-	public static function getAvailableValues()
+	public static function getAvailableValues(): iterable
 	{
 		return array_merge([
 			'A',

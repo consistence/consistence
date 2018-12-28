@@ -210,7 +210,7 @@ class AbcMultiEnum extends \Consistence\Enum\MultiEnum
 	/**
 	 * @return string
 	 */
-	public static function getSingleEnumClass()
+	public static function getSingleEnumClass(): ?string
 	{
 		return AbcEnum::class;
 	}
@@ -240,7 +240,7 @@ class RolesEnum extends \Consistence\Enum\MultiEnum
 {
 
 	/** @var int[] format: single Enum value (string) => MultiEnum value (int) */
-	private static $singleMultiMap = [
+	private const SINGLE_MULTI_MAP = [
 		RoleEnum::USER => 1,
 		RoleEnum::EMPLOYEE => 2,
 		RoleEnum::ADMIN => 4,
@@ -249,7 +249,7 @@ class RolesEnum extends \Consistence\Enum\MultiEnum
 	/**
 	 * @return string
 	 */
-	public static function getSingleEnumClass()
+	public static function getSingleEnumClass(): ?string
 	{
 		return RoleEnum::class;
 	}
@@ -262,7 +262,7 @@ class RolesEnum extends \Consistence\Enum\MultiEnum
 	 */
 	protected static function convertSingleEnumValueToValue($singleEnumValue): int
 	{
-		return ArrayType::getValue(self::$singleMultiMap, $singleEnumValue);
+		return ArrayType::getValue(self::SINGLE_MULTI_MAP, $singleEnumValue);
 	}
 
 	/**
@@ -273,7 +273,7 @@ class RolesEnum extends \Consistence\Enum\MultiEnum
 	 */
 	protected static function convertValueToSingleEnumValue(int $value)
 	{
-		return ArrayType::getKey(self::$singleMultiMap, $value);
+		return ArrayType::getKey(self::SINGLE_MULTI_MAP, $value);
 	}
 
 }

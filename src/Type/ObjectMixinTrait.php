@@ -13,7 +13,7 @@ trait ObjectMixinTrait
 	 * @param string $name method name
 	 * @param mixed[] $args method args
 	 */
-	public function __call(string $name, array $args): void
+	public function __call(string $name, array $args)
 	{
 		ObjectMixin::magicCall($this, $name);
 		// @codeCoverageIgnoreStart
@@ -27,7 +27,7 @@ trait ObjectMixinTrait
 	 * @param string $name method name
 	 * @param mixed[] $args method args
 	 */
-	public static function __callStatic(string $name, array $args): void
+	public static function __callStatic(string $name, array $args)
 	{
 		ObjectMixin::magicCallStatic(get_called_class(), $name);
 		// @codeCoverageIgnoreStart
@@ -40,7 +40,7 @@ trait ObjectMixinTrait
 	 *
 	 * @param string $name property name
 	 */
-	public function &__get(string $name): void
+	public function &__get(string $name)
 	{
 		ObjectMixin::magicGet($this, $name);
 		// @codeCoverageIgnoreStart
@@ -54,7 +54,7 @@ trait ObjectMixinTrait
 	 * @param string $name property name
 	 * @param mixed $value property value
 	 */
-	public function __set(string $name, $value): void
+	public function __set(string $name, $value)
 	{
 		ObjectMixin::magicSet($this, $name);
 		// @codeCoverageIgnoreStart
@@ -67,7 +67,7 @@ trait ObjectMixinTrait
 	 *
 	 * @param string $name property name
 	 */
-	public function __isset(string $name): void
+	public function __isset(string $name)
 	{
 		ObjectMixin::magicIsSet($this, $name);
 		// @codeCoverageIgnoreStart
@@ -80,7 +80,7 @@ trait ObjectMixinTrait
 	 *
 	 * @param string $name property name
 	 */
-	public function __unset(string $name): void
+	public function __unset(string $name)
 	{
 		ObjectMixin::magicUnset($this, $name);
 		// @codeCoverageIgnoreStart

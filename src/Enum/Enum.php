@@ -164,7 +164,7 @@ abstract class Enum extends \Consistence\ObjectPrototype
 	{
 		$this->checkSameEnum($that);
 
-		return $this === $that;
+		return $this->equalsValue($that->getValue());
 	}
 
 	/**

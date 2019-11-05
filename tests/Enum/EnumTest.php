@@ -41,8 +41,10 @@ class EnumTest extends \Consistence\TestCase
 	{
 		$review1 = StatusEnum::get(StatusEnum::REVIEW);
 		$review2 = StatusEnum::get(StatusEnum::REVIEW);
+		$review3 = unserialize(serialize($review1));
 
 		$this->assertTrue($review1->equals($review2));
+		$this->assertTrue($review1->equals($review3));
 	}
 
 	public function testNotEquals(): void

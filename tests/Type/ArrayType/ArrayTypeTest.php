@@ -533,7 +533,7 @@ class ArrayTypeTest extends \Consistence\TestCase
 
 		$actual = ArrayType::uniqueValues($values, ArrayType::STRICT_FALSE);
 
-		$this->assertContains(1, $actual);
+		$this->assertContains('1', $actual);
 		$this->assertCount(1, $actual);
 	}
 
@@ -596,7 +596,7 @@ class ArrayTypeTest extends \Consistence\TestCase
 			return $a == $b;
 		});
 
-		$this->assertContains(1, $actual);
+		$this->assertContains('1', $actual);
 		$this->assertCount(1, $actual);
 	}
 

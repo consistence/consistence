@@ -15,8 +15,8 @@
 	},
 	"require-dev": {
 		"consistence/coding-standard": "3.7",
-		"jakub-onderka/php-console-highlighter": "0.4",
-		"jakub-onderka/php-parallel-lint": "1.0",
+		"php-parallel-lint/php-console-highlighter": "0.5",
+		"php-parallel-lint/php-parallel-lint": "1.2.0",
 		"phing/phing": "2.16.3",
 		"phpunit/phpunit": "7.5.20"
 	},

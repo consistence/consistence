@@ -177,6 +177,10 @@ class ArrayType extends \Consistence\ObjectPrototype
 	}
 
 	/**
+	 * @phpstan-template T
+	 * @phpstan-param T[] $haystack
+	 * @phpstan-return T|null
+	 *
 	 * @param mixed[] $haystack
 	 * @param int|string $key
 	 * @return mixed
@@ -191,6 +195,10 @@ class ArrayType extends \Consistence\ObjectPrototype
 	}
 
 	/**
+	 * @phpstan-template T
+	 * @phpstan-param T[] $haystack
+	 * @phpstan-return T
+	 *
 	 * @param mixed[] $haystack
 	 * @param int|string $key
 	 * @return mixed
@@ -244,6 +252,10 @@ class ArrayType extends \Consistence\ObjectPrototype
 	/**
 	 * Stops on first occurrence when callback(value) is trueish or returns null
 	 *
+	 * @phpstan-template T
+	 * @phpstan-param T[] $haystack
+	 * @phpstan-return T|null
+	 *
 	 * @param mixed[] $haystack
 	 * @param \Closure $callback
 	 * @return mixed
@@ -262,6 +274,10 @@ class ArrayType extends \Consistence\ObjectPrototype
 	/**
 	 * Stops on first occurrence when callback(value) is trueish or throws exception
 	 *
+	 * @phpstan-template T
+	 * @phpstan-param T[] $haystack
+	 * @phpstan-return T
+	 *
 	 * @param mixed[] $haystack
 	 * @param \Closure $callback
 	 * @return mixed
@@ -279,6 +295,10 @@ class ArrayType extends \Consistence\ObjectPrototype
 
 	/**
 	 * Filters arrays by callback(\Consistence\Type\ArrayType\KeyValuePair)
+	 *
+	 * @phpstan-template T
+	 * @phpstan-param T[] $haystack
+	 * @phpstan-return T[]
 	 *
 	 * @param mixed[] $haystack
 	 * @param \Closure $callback
@@ -300,6 +320,10 @@ class ArrayType extends \Consistence\ObjectPrototype
 
 	/**
 	 * Wrapper for PHP array_filter, executes loose comparison
+	 *
+	 * @phpstan-template T
+	 * @phpstan-param T[] $haystack
+	 * @phpstan-return T[]
 	 *
 	 * @param mixed[] $haystack
 	 * @param \Closure $callback
@@ -401,6 +425,10 @@ class ArrayType extends \Consistence\ObjectPrototype
 	/**
 	 * Mimics the behaviour of array_unique, but makes strict comparisons by default
 	 *
+	 * @phpstan-template T
+	 * @phpstan-param T[] $haystack
+	 * @phpstan-return T[]
+	 *
 	 * @param mixed[] $haystack
 	 * @param bool $strict
 	 * @return mixed[] new array with unique values
@@ -420,6 +448,10 @@ class ArrayType extends \Consistence\ObjectPrototype
 	/**
 	 * Returns new array with unique values using callback(valueA, valueB),
 	 * values are same if callback returns trueish value
+	 *
+	 * @phpstan-template T
+	 * @phpstan-param T[] $haystack
+	 * @phpstan-return T[]
 	 *
 	 * @param mixed[] $haystack
 	 * @param \Closure $callback

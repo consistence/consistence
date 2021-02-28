@@ -1,33 +1,31 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <phpunit
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="../vendor/phpunit/phpunit/phpunit.xsd"
 	bootstrap="bootstrap.php"
 	colors="true"
-	backupGlobals="false"
-	backupStaticAttributes="false"
+	verbose="true"
 	beStrictAboutChangesToGlobalState="true"
 	beStrictAboutOutputDuringTests="true"
-	beStrictAboutTestsThatDoNotTestAnything="true"
 	beStrictAboutTodoAnnotatedTests="true"
 	failOnRisky="true"
 	failOnWarning="true"
 >
-	<logging>
-		<log
-			type="coverage-html"
-			target="../build/log/coverage/html"
-			lowUpperBound="100"
-			highLowerBound="100"
-		/>
-		<log
-			type="coverage-text"
-			target="php://stdout"
-			showUncoveredFiles="true"
-			showOnlySummary="true"
-		/>
-	</logging>
-	<filter>
-		<whitelist processUncoveredFilesFromWhitelist="true">
+	<coverage processUncoveredFiles="true">
+		<include>
 			<directory suffix=".php">../src</directory>
-		</whitelist>
-	</filter>
+		</include>
+		<report>
+			<html
+				outputDirectory="../build/log/coverage/html"
+				lowUpperBound="100"
+				highLowerBound="100"
+			/>
+			<text
+				outputFile="php://stdout"
+				showUncoveredFiles="true"
+				showOnlySummary="true"
+			/>
+		</report>
+	</coverage>
 </phpunit>

@@ -14,11 +14,10 @@
 		"php": "~7.4 || ~8.0"
 	},
 	"require-dev": {
-		"consistence/coding-standard": "3.7",
-		"jakub-onderka/php-console-highlighter": "0.4",
-		"jakub-onderka/php-parallel-lint": "1.0",
-		"phing/phing": "2.16.1",
-		"phpunit/phpunit": "7.5.1"
+		"consistence-community/coding-standard": "3.11.0",
+		"php-parallel-lint/php-parallel-lint": "1.2.0",
+		"phing/phing": "2.16.4",
+		"phpunit/phpunit": "9.5.2"
 	},
 	"autoload": {
 		"psr-4": { "Consistence\\": [ "src" ] },

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <ruleset name="ConsistenceCodingStandard">
-	<rule ref="../vendor/consistence/coding-standard/Consistence/ruleset.xml"/>
+	<rule ref="../vendor/consistence-community/coding-standard/Consistence/ruleset.xml"/>
 	<rule ref="SlevomatCodingStandard.Files.TypeNameMatchesFileName">
 		<properties>
 			<property name="rootNamespaces" type="array">
@@ -14,7 +14,10 @@
 	<rule ref="SlevomatCodingStandard.Classes.UnusedPrivateElements">
 		<exclude-pattern>*/data/*.php</exclude-pattern>
 	</rule>
-	<rule ref="SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingReturnTypeHint">
+	<rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint">
+		<exclude-pattern>src/Type/ObjectMixinTrait.php</exclude-pattern><!-- to avoid forcing type hints on magic methods defined in PHP -->
+	</rule>
+	<rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint">
 		<exclude-pattern>src/Type/ObjectMixinTrait.php</exclude-pattern><!-- to avoid forcing type hints on magic methods defined in PHP -->
 	</rule>
 	<rule ref="SlevomatCodingStandard.TypeHints.PropertyTypeHint">

@@ -79,6 +79,7 @@ jobs:
                 with:
                     php-version: '${{ env.CONSISTENCE_PHP_VERSION }}'
                     coverage: 'none'
+                    tools: 'cs2pr'
             -
                 name: 'Composer install'
                 uses: 'ramsey/composer-install@v1'
@@ -86,7 +87,7 @@ jobs:
                     dependency-versions: 'highest'
             -
                 name: 'Check coding standard'
-                run: 'bin/phing cs'
+                run: 'bin/phing create-dirs cs || cat build/log/phpcs-checkstyle.xml | cs2pr'
 
     tests:
         name: 'Tests - PHP ${{ matrix.php-version }}, ${{ matrix.composer-dependencies }} dependencies'

@@ -63,7 +63,7 @@ class InvalidArgumentTypeException extends \Consistence\InvalidArgumentException
 		if (is_object($value) && method_exists($value, '__toString') === false) {
 			return get_class($value) . $this->getObjectHash($value);
 		}
-		if (ArrayType::containsValue(['array', 'null'], $valueType)) {
+		if (ArrayType::containsValue(['array', 'null', 'resource'], $valueType)) {
 			return sprintf('[%s]', $valueType);
 		}
 		if ($valueType === 'bool') {

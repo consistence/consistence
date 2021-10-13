@@ -87,3 +87,37 @@ jobs:
             -
                 name: 'Check coding standard'
                 run: 'bin/phing cs'
+
+    tests:
+        name: 'Tests - PHP ${{ matrix.php-version }}, ${{ matrix.composer-dependencies }} dependencies'
+        needs: 'lint'
+        runs-on: 'ubuntu-latest'
+
+        strategy:
+            fail-fast: false
+            matrix:
+                php-version:
+                    - '7.2'
+                    - '7.3'
+                composer-dependencies:
+                    - 'highest'
+                    - 'lowest'
+
+        steps:
+            -
+                name: 'Checkout'
+                uses: 'actions/checkout@v2'
+            -
+                name: 'Setup PHP ${{ matrix.php-version }}'
+                uses: 'shivammathur/setup-php@v2'
+                with:
+                    php-version: '${{ matrix.php-version }}'
+                    coverage: 'xdebug'
+            -
+                name: 'Composer install'
+                uses: 'ramsey/composer-install@v1'
+                with:
+                    dependency-versions: '${{ matrix.composer-dependencies }}'
+            -
+                name: 'Run tests'
+                run: 'bin/phing tests'

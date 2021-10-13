@@ -114,6 +114,9 @@ jobs:
                     php-version: '${{ matrix.php-version }}'
                     coverage: 'xdebug'
             -
+                name: 'Setup problem matchers for PHPUnit'
+                run: 'echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"'
+            -
                 name: 'Composer install'
                 uses: 'ramsey/composer-install@v1'
                 with:

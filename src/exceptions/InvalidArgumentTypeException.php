@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Consistence;
 
+use Consistence\Type\ArrayType\ArrayType;
 use Consistence\Type\Type;
 
 class InvalidArgumentTypeException extends \Consistence\InvalidArgumentException
@@ -29,7 +30,7 @@ class InvalidArgumentTypeException extends \Consistence\InvalidArgumentException
 		$this->valueType = Type::getType($value);
 		$this->expectedTypes = $expectedTypes;
 		parent::__construct(
-			sprintf('%s expected, %s [%s] given', $this->expectedTypes, $this->getPrintedValue($value), $this->valueType),
+			sprintf('%s expected, %s given', $this->expectedTypes, $this->getPrintedValue($value, $this->valueType)),
 			$previous
 		);
 	}
@@ -54,18 +55,19 @@ class InvalidArgumentTypeException extends \Consistence\InvalidArgumentException
 
 	/**
 	 * @param mixed $value
+	 * @param string $valueType
 	 * @return string
 	 */
-	private function getPrintedValue($value): string
+	private function getPrintedValue($value, string $valueType): string
 	{
 		if (is_object($value) && method_exists($value, '__toString') === false) {
 			return get_class($value) . $this->getObjectHash($value);
 		}
-		if (is_array($value)) {
-			return '';
+		if (ArrayType::containsValue(['array', 'null'], $valueType)) {
+			return sprintf('[%s]', $valueType);
 		}
 
-		return (string) $value;
+		return sprintf('%s [%s]', (string) $value, $valueType);
 	}
 
 	private function getObjectHash(object $value): string

@@ -173,7 +173,7 @@ class EnumTest extends \Consistence\TestCase
 	/**
 	 * @return mixed[][]
 	 */
-	public function typesProvider(): array
+	public function validTypesProvider(): array
 	{
 		return ArrayType::mapValuesByCallback(TypeEnum::getAvailableValues(), function ($value): array {
 			return [$value];
@@ -181,11 +181,11 @@ class EnumTest extends \Consistence\TestCase
 	}
 
 	/**
-	 * @dataProvider typesProvider
+	 * @dataProvider validTypesProvider
 	 *
 	 * @param mixed $value
 	 */
-	public function testTypes($value): void
+	public function testValidTypes($value): void
 	{
 		$enum = TypeEnum::get($value);
 		$this->assertInstanceOf(TypeEnum::class, $enum);

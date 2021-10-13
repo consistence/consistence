@@ -32,3 +32,34 @@ jobs:
             -
                 name: 'Composer validate'
                 run: 'bin/phing composer-validate'
+
+    lint:
+        name: 'Lint - PHP ${{ matrix.php-version }}'
+        needs: 'composer-validate'
+        runs-on: 'ubuntu-latest'
+
+        strategy:
+            fail-fast: false
+            matrix:
+                php-version:
+                    - '7.2'
+                    - '7.3'
+
+        steps:
+            -
+                name: 'Checkout'
+                uses: 'actions/checkout@v2'
+            -
+                name: 'Setup PHP ${{ matrix.php-version }}'
+                uses: 'shivammathur/setup-php@v2'
+                with:
+                    php-version: '${{ matrix.php-version }}'
+                    coverage: 'none'
+            -
+                name: 'Composer install'
+                uses: 'ramsey/composer-install@v1'
+                with:
+                    dependency-versions: 'highest'
+            -
+                name: 'Lint'
+                run: 'bin/phing phplint'

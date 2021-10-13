@@ -58,7 +58,6 @@ class InvalidArgumentTypeException extends \Consistence\InvalidArgumentException
 	 */
 	private function getPrintedValue($value): string
 	{
-		$printedValue = $value;
 		if (is_object($value) && method_exists($value, '__toString') === false) {
 			return get_class($value) . $this->getObjectHash($value);
 		}
@@ -66,7 +65,7 @@ class InvalidArgumentTypeException extends \Consistence\InvalidArgumentException
 			return '';
 		}
 
-		return (string) $printedValue;
+		return (string) $value;
 	}
 
 	private function getObjectHash(object $value): string

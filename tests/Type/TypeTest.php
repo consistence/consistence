@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Consistence\Type;
 
 use ArrayObject;
+use Closure;
 use DateTimeImmutable;
 use DateTimeInterface;
 use stdClass;
@@ -32,6 +33,10 @@ class TypeTest extends \Consistence\TestCase
 			[[], 'array'],
 			[null, 'null'],
 			[new DateTimeImmutable(), DateTimeImmutable::class],
+			[static function (): void {
+				return;
+			}, Closure::class],
+			[fopen(__DIR__, 'r'), 'resource'],
 		];
 	}
 
@@ -196,12 +201,12 @@ class TypeTest extends \Consistence\TestCase
 	public function testCheckTypeExceptionValues($value, string $valueType): void
 	{
 		try {
-			Type::checkType($value, 'resource');
+			Type::checkType($value, 'Foo');
 			$this->fail();
 		} catch (\Consistence\InvalidArgumentTypeException $e) {
 			$this->assertSame($value, $e->getValue());
 			$this->assertSame($valueType, $e->getValueType());
-			$this->assertSame('resource', $e->getExpectedTypes());
+			$this->assertSame('Foo', $e->getExpectedTypes());
 		}
 	}
 

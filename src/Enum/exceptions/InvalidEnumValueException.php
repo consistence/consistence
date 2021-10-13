@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Consistence\Enum;
 
+use Consistence\Type\ArrayType\ArrayType;
 use Consistence\Type\Type;
 
 class InvalidEnumValueException extends \Consistence\PhpException
@@ -39,9 +40,8 @@ class InvalidEnumValueException extends \Consistence\PhpException
 		$availableValues = $enumClassName::getAvailableValues();
 
 		parent::__construct(sprintf(
-			'%s [%s] is not a valid value for %s, accepted values: %s',
-			$value,
-			Type::getType($value),
+			'%s is not a valid value for %s, accepted values: %s',
+			$this->getPrintedValue($value),
 			$enumClassName,
 			implode(', ', $availableValues)
 		), $previous);
@@ -70,6 +70,31 @@ class InvalidEnumValueException extends \Consistence\PhpException
 	public function getEnumClassName(): string
 	{
 		return $this->enumClassName;
+	}
+
+	/**
+	 * @param mixed $value
+	 * @return string
+	 */
+	private function getPrintedValue($value): string
+	{
+		$valueType = Type::getType($value);
+		if (is_object($value) && method_exists($value, '__toString') === false) {
+			return get_class($value) . $this->getObjectHash($value);
+		}
+		if (ArrayType::containsValue(['array', 'null', 'resource'], $valueType)) {
+			return sprintf('[%s]', $valueType);
+		}
+		if ($valueType === 'bool') {
+			return sprintf('%s [%s]', $value ? 'true' : 'false', $valueType);
+		}
+
+		return sprintf('%s [%s]', (string) $value, $valueType);
+	}
+
+	private function getObjectHash(object $value): string
+	{
+		return '#' . substr(md5(spl_object_hash($value)), 0, 4);
 	}
 
 }

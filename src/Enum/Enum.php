@@ -52,6 +52,12 @@ abstract class Enum extends \Consistence\ObjectPrototype
 	 */
 	private static function getValueIndex($value): string
 	{
+		try {
+			Type::checkType($value, 'string|int|float|bool|null');
+		} catch (\Consistence\InvalidArgumentTypeException $e) {
+			throw new \Consistence\Enum\InvalidEnumValueException($value, static::class, $e);
+		}
+
 		$type = Type::getType($value);
 		return $value . sprintf('[%s]', $type);
 	}

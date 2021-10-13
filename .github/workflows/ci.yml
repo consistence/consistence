@@ -25,6 +25,9 @@ jobs:
                      php-version: '${{ env.CONSISTENCE_PHP_VERSION }}'
                      coverage: 'none'
             -
+                name: 'Setup problem matchers for PHP'
+                run: 'echo "::add-matcher::${{ runner.tool_cache }}/php.json"'
+            -
                 name: 'Composer install'
                 uses: 'ramsey/composer-install@v1'
                 with:
@@ -56,6 +59,9 @@ jobs:
                     php-version: '${{ matrix.php-version }}'
                     coverage: 'none'
             -
+                name: 'Setup problem matchers for PHP'
+                run: 'echo "::add-matcher::${{ runner.tool_cache }}/php.json"'
+            -
                 name: 'Composer install'
                 uses: 'ramsey/composer-install@v1'
                 with:
@@ -80,6 +86,9 @@ jobs:
                     php-version: '${{ env.CONSISTENCE_PHP_VERSION }}'
                     coverage: 'none'
                     tools: 'cs2pr'
+            -
+                name: 'Setup problem matchers for PHP'
+                run: 'echo "::add-matcher::${{ runner.tool_cache }}/php.json"'
             -
                 name: 'Composer install'
                 uses: 'ramsey/composer-install@v1'
@@ -114,6 +123,9 @@ jobs:
                 with:
                     php-version: '${{ matrix.php-version }}'
                     coverage: 'xdebug'
+            -
+                name: 'Setup problem matchers for PHP'
+                run: 'echo "::add-matcher::${{ runner.tool_cache }}/php.json"'
             -
                 name: 'Setup problem matchers for PHPUnit'
                 run: 'echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"'

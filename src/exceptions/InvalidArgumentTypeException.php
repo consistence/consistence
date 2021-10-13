@@ -66,6 +66,9 @@ class InvalidArgumentTypeException extends \Consistence\InvalidArgumentException
 		if (ArrayType::containsValue(['array', 'null'], $valueType)) {
 			return sprintf('[%s]', $valueType);
 		}
+		if ($valueType === 'bool') {
+			return sprintf('%s [%s]', $value ? 'true' : 'false', $valueType);
+		}
 
 		return sprintf('%s [%s]', (string) $value, $valueType);
 	}

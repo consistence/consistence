@@ -6,7 +6,10 @@
 
 	<property file="${path.build.properties.local}"/>
 
+	<property name="file.mode.writable" value="0775"/>
+
 	<property name="path.bin" value="${path.root}/bin"/>
+	<property name="path.build.log" value="${path.build}/log"/>
 	<property name="path.composer.executable" value="composer"/>
 	<property name="path.phpcs.executable" value="${path.bin}/phpcs"/>
 	<property name="path.phpcs.ruleset" value="${path.build}/cs-ruleset.xml"/>
@@ -16,37 +19,16 @@
 	<property name="path.root" value="${project.basedir}"/>
 	<property name="path.src" value="${path.root}/src"/>
 	<property name="path.tests" value="${path.root}/tests"/>
-	<property name="path.tests.coverage.clover" value="${path.build}/log/coverage/clover.xml"/>
+	<property name="path.tests.coverage.clover" value="${path.build.log}/coverage/clover.xml"/>
 	<property name="path.vendor" value="${path.root}/vendor"/>
 
 	<target name="build" depends="
+		create-dirs,
 		composer,
 		phplint,
 		cs,
 		tests
 	"/>
-
-	<target name="ci-build" depends="
-		composer-validate,
-		phplint,
-		cs,
-		ci-tests
-	"/>
-
-	<target name="ci-tests">
-		<exec
-			executable="${path.phpunit.executable}"
-			logoutput="true"
-			passthru="true"
-			checkreturn="true"
-		>
-			<arg value="--configuration"/>
-			<arg value="${path.phpunit.configuration}"/>
-			<arg value="--coverage-clover"/>
-			<arg value="${path.tests.coverage.clover}"/>
-			<arg path="${path.tests}"/>
-		</exec>
-	</target>
 
 	<target name="composer" depends="composer-validate">
 		<exec
@@ -71,6 +53,10 @@
 		</exec>
 	</target>
 
+	<target name="create-dirs">
+		<mkdir dir="${path.build.log}" mode="${file.mode.writable}"/>
+	</target>
+
 	<target name="cs">
 		<exec
 			executable="${path.phpcs.executable}"
@@ -81,6 +67,8 @@
 			<arg value="--standard=${path.phpcs.ruleset}"/>
 			<arg value="--extensions=php"/>
 			<arg value="--encoding=utf-8"/>
+			<arg value="--report=full"/>
+			<arg value="--report-checkstyle=${path.build.log}/phpcs-checkstyle.xml"/>
 			<arg value="-sp"/>
 			<arg path="${path.src}"/>
 			<arg path="${path.tests}"/>
@@ -108,6 +96,8 @@
 		>
 			<arg value="--configuration"/>
 			<arg value="${path.phpunit.configuration}"/>
+			<arg value="--coverage-clover"/>
+			<arg value="${path.tests.coverage.clover}"/>
 			<arg path="${path.tests}"/>
 		</exec>
 	</target>

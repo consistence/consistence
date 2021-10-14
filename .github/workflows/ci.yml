@@ -1,0 +1,161 @@
+name: 'CI'
+
+on:
+    pull_request:
+    push:
+        branches:
+            - 'master'
+
+env:
+    CONSISTENCE_PHP_VERSION: '7.3'
+
+jobs:
+    composer-validate:
+        name: 'Composer validate'
+        runs-on: 'ubuntu-latest'
+
+        steps:
+            -
+                name: 'Checkout'
+                uses: 'actions/checkout@v2'
+            -
+                name: 'Setup PHP ${{ env.CONSISTENCE_PHP_VERSION }}'
+                uses: 'shivammathur/setup-php@v2'
+                with:
+                     php-version: '${{ env.CONSISTENCE_PHP_VERSION }}'
+                     coverage: 'none'
+            -
+                name: 'Setup problem matchers for PHP'
+                run: 'echo "::add-matcher::${{ runner.tool_cache }}/php.json"'
+            -
+                name: 'Composer install'
+                uses: 'ramsey/composer-install@v1'
+                with:
+                    dependency-versions: 'highest'
+            -
+                name: 'Composer validate'
+                run: 'bin/phing composer-validate'
+
+    lint:
+        name: 'Lint - PHP ${{ matrix.php-version }}'
+        needs: 'composer-validate'
+        runs-on: 'ubuntu-latest'
+
+        strategy:
+            fail-fast: false
+            matrix:
+                php-version:
+                    - '7.2'
+                    - '7.3'
+
+        steps:
+            -
+                name: 'Checkout'
+                uses: 'actions/checkout@v2'
+            -
+                name: 'Setup PHP ${{ matrix.php-version }}'
+                uses: 'shivammathur/setup-php@v2'
+                with:
+                    php-version: '${{ matrix.php-version }}'
+                    coverage: 'none'
+            -
+                name: 'Setup problem matchers for PHP'
+                run: 'echo "::add-matcher::${{ runner.tool_cache }}/php.json"'
+            -
+                name: 'Composer install'
+                uses: 'ramsey/composer-install@v1'
+                with:
+                    dependency-versions: 'highest'
+            -
+                name: 'Lint'
+                run: 'bin/phing phplint'
+
+    coding-standard:
+        name: 'Coding standard'
+        needs: 'lint'
+        runs-on: 'ubuntu-latest'
+
+        steps:
+            -
+                name: 'Checkout'
+                uses: 'actions/checkout@v2'
+            -
+                name: 'Setup PHP ${{ env.CONSISTENCE_PHP_VERSION }}'
+                uses: 'shivammathur/setup-php@v2'
+                with:
+                    php-version: '${{ env.CONSISTENCE_PHP_VERSION }}'
+                    coverage: 'none'
+                    tools: 'cs2pr'
+            -
+                name: 'Setup problem matchers for PHP'
+                run: 'echo "::add-matcher::${{ runner.tool_cache }}/php.json"'
+            -
+                name: 'Composer install'
+                uses: 'ramsey/composer-install@v1'
+                with:
+                    dependency-versions: 'highest'
+            -
+                name: 'Check coding standard'
+                run: 'bin/phing create-dirs cs || cat build/log/phpcs-checkstyle.xml | cs2pr'
+
+    tests:
+        name: 'Tests - PHP ${{ matrix.php-version }}, ${{ matrix.composer-dependencies }} dependencies'
+        needs: 'lint'
+        runs-on: 'ubuntu-latest'
+
+        strategy:
+            fail-fast: false
+            matrix:
+                php-version:
+                    - '7.2'
+                    - '7.3'
+                composer-dependencies:
+                    - 'highest'
+                    - 'lowest'
+
+        steps:
+            -
+                name: 'Checkout'
+                uses: 'actions/checkout@v2'
+            -
+                name: 'Setup PHP ${{ matrix.php-version }}'
+                uses: 'shivammathur/setup-php@v2'
+                with:
+                    php-version: '${{ matrix.php-version }}'
+                    coverage: 'xdebug'
+            -
+                name: 'Setup problem matchers for PHP'
+                run: 'echo "::add-matcher::${{ runner.tool_cache }}/php.json"'
+            -
+                name: 'Setup problem matchers for PHPUnit'
+                run: 'echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"'
+            -
+                name: 'Composer install'
+                uses: 'ramsey/composer-install@v1'
+                with:
+                    dependency-versions: '${{ matrix.composer-dependencies }}'
+            -
+                name: 'Run tests'
+                run: 'bin/phing tests'
+            -
+                name: 'Upload code coverage to Coveralls'
+                env:
+                    COVERALLS_REPO_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+                    COVERALLS_PARALLEL: true
+                    COVERALLS_FLAG_NAME: 'php-${{ matrix.php-version }}+${{ matrix.composer-dependencies }}-dependencies'
+                run: |
+                    wget https://github.com/php-coveralls/php-coveralls/releases/download/v2.4.3/php-coveralls.phar
+                    php php-coveralls.phar --verbose --config build/coveralls.yml
+
+    finish_coveralls:
+        name: 'Finish Coveralls upload'
+        needs: 'tests'
+        runs-on: 'ubuntu-latest'
+
+        steps:
+            -
+                name: 'Finish Coveralls upload'
+                uses: 'coverallsapp/github-action@1.1.3'
+                with:
+                    github-token: '${{ secrets.GITHUB_TOKEN }}'
+                    parallel-finished: true

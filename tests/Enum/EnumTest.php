@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Consistence\Enum;
 
 use Consistence\Type\ArrayType\ArrayType;
+use DateTimeImmutable;
 
 class EnumTest extends \Consistence\TestCase
 {
@@ -95,13 +96,47 @@ class EnumTest extends \Consistence\TestCase
 		$this->assertFalse(StatusEnum::isValidValue(0));
 	}
 
-	public function testInvalidEnumValue(): void
+	/**
+	 * @return mixed[][]
+	 */
+	public function invalidTypesProvider(): array
+	{
+		return [
+			[[]],
+			[new DateTimeImmutable()],
+			[static function (): void {
+				return;
+			}],
+			[fopen(__DIR__, 'r')],
+		];
+	}
+
+	/**
+	 * @return mixed[][]
+	 */
+	public function invalidEnumValuesProvider(): array
+	{
+		return array_merge([
+			[0],
+			[1.5],
+			[false],
+			[true],
+			[null],
+		], array_values($this->invalidTypesProvider()));
+	}
+
+	/**
+	 * @dataProvider invalidEnumValuesProvider
+	 *
+	 * @param mixed $value
+	 */
+	public function testInvalidEnumValue($value): void
 	{
 		try {
-			StatusEnum::get(0);
+			StatusEnum::get($value);
 			$this->fail();
 		} catch (\Consistence\Enum\InvalidEnumValueException $e) {
-			$this->assertSame(0, $e->getValue());
+			$this->assertSame($value, $e->getValue());
 			$this->assertEquals([
 				'DRAFT' => StatusEnum::DRAFT,
 				'REVIEW' => StatusEnum::REVIEW,
@@ -173,7 +208,7 @@ class EnumTest extends \Consistence\TestCase
 	/**
 	 * @return mixed[][]
 	 */
-	public function typesProvider(): array
+	public function validTypesProvider(): array
 	{
 		return ArrayType::mapValuesByCallback(TypeEnum::getAvailableValues(), function ($value): array {
 			return [$value];
@@ -181,11 +216,11 @@ class EnumTest extends \Consistence\TestCase
 	}
 
 	/**
-	 * @dataProvider typesProvider
+	 * @dataProvider validTypesProvider
 	 *
 	 * @param mixed $value
 	 */
-	public function testTypes($value): void
+	public function testValidTypes($value): void
 	{
 		$enum = TypeEnum::get($value);
 		$this->assertInstanceOf(TypeEnum::class, $enum);

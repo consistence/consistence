@@ -14,7 +14,4 @@
 	<rule ref="SlevomatCodingStandard.Classes.UnusedPrivateElements">
 		<exclude-pattern>*/data/*.php</exclude-pattern>
 	</rule>
-	<rule ref="SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingReturnTypeHint">
-		<exclude-pattern>src/Type/ObjectMixinTrait.php</exclude-pattern><!-- to avoid forcing type hints on magic methods defined in PHP -->
-	</rule>
 </ruleset>

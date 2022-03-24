@@ -47,6 +47,7 @@ jobs:
                 php-version:
                     - '7.2'
                     - '7.3'
+                    - '7.4'
 
         steps:
             -
@@ -109,6 +110,7 @@ jobs:
                 php-version:
                     - '7.2'
                     - '7.3'
+                    - '7.4'
                 composer-dependencies:
                     - 'highest'
                     - 'lowest'

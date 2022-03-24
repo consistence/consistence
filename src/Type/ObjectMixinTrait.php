@@ -10,6 +10,8 @@ trait ObjectMixinTrait
 	/**
 	 * Call to undefined method
 	 *
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint
+	 *
 	 * @param string $name method name
 	 * @param mixed[] $args method args
 	 */
@@ -23,6 +25,8 @@ trait ObjectMixinTrait
 
 	/**
 	 * Call to undefined static method
+	 *
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint
 	 *
 	 * @param string $name method name
 	 * @param mixed[] $args method args
@@ -38,6 +42,8 @@ trait ObjectMixinTrait
 	/**
 	 * Access to undefined property
 	 *
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint
+	 *
 	 * @param string $name property name
 	 */
 	public function &__get(string $name)
@@ -50,6 +56,8 @@ trait ObjectMixinTrait
 
 	/**
 	 * Write to undefined property
+	 *
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint
 	 *
 	 * @param string $name property name
 	 * @param mixed $value property value
@@ -65,6 +73,8 @@ trait ObjectMixinTrait
 	/**
 	 * Isset undefined property
 	 *
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint
+	 *
 	 * @param string $name property name
 	 */
 	public function __isset(string $name)
@@ -77,6 +87,8 @@ trait ObjectMixinTrait
 
 	/**
 	 * Unset undefined property
+	 *
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint
 	 *
 	 * @param string $name property name
 	 */

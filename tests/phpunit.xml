@@ -8,6 +8,7 @@
 	beStrictAboutOutputDuringTests="true"
 	beStrictAboutTestsThatDoNotTestAnything="true"
 	beStrictAboutTodoAnnotatedTests="true"
+	convertDeprecationsToExceptions="true"
 	failOnRisky="true"
 	failOnWarning="true"
 >

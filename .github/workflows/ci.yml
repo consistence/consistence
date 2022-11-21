@@ -29,7 +29,7 @@ jobs:
                 run: 'echo "::add-matcher::${{ runner.tool_cache }}/php.json"'
             -
                 name: 'Composer install'
-                uses: 'ramsey/composer-install@v1'
+                uses: 'ramsey/composer-install@v2'
                 with:
                     dependency-versions: 'highest'
             -
@@ -64,7 +64,7 @@ jobs:
                 run: 'echo "::add-matcher::${{ runner.tool_cache }}/php.json"'
             -
                 name: 'Composer install'
-                uses: 'ramsey/composer-install@v1'
+                uses: 'ramsey/composer-install@v2'
                 with:
                     dependency-versions: 'highest'
             -
@@ -92,7 +92,7 @@ jobs:
                 run: 'echo "::add-matcher::${{ runner.tool_cache }}/php.json"'
             -
                 name: 'Composer install'
-                uses: 'ramsey/composer-install@v1'
+                uses: 'ramsey/composer-install@v2'
                 with:
                     dependency-versions: 'highest'
             -
@@ -133,7 +133,7 @@ jobs:
                 run: 'echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"'
             -
                 name: 'Composer install'
-                uses: 'ramsey/composer-install@v1'
+                uses: 'ramsey/composer-install@v2'
                 with:
                     dependency-versions: '${{ matrix.composer-dependencies }}'
             -

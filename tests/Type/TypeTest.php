@@ -531,11 +531,17 @@ class TypeTest extends \Consistence\TestCase
 		$this->assertFalse(Type::hasType($value, $type));
 	}
 
-	public function testCheckTypeOk(): void
+	/**
+	 * @dataProvider typesProvider
+	 *
+	 * @param mixed $value
+	 * @param string $expectedType
+	 */
+	public function testCheckTypeOk($value, string $expectedType): void
 	{
 		$this->expectNotToPerformAssertions();
 
-		Type::checkType('foo', 'string');
+		Type::checkType($value, $expectedType);
 	}
 
 	public function testCheckTypeException(): void

@@ -23,7 +23,7 @@ class TypeTest extends \Consistence\TestCase
 	/**
 	 * @return mixed[][]
 	 */
-	public function typesProvider(): array
+	public function typesDataProvider(): array
 	{
 		return [
 			'DP #1' => [
@@ -70,7 +70,7 @@ class TypeTest extends \Consistence\TestCase
 	/**
 	 * @return mixed[][]
 	 */
-	public function typeChecksProvider(): array
+	public function hasTypesCorrectDataProvider(): array
 	{
 		return [
 			'DP #1' => [
@@ -367,7 +367,7 @@ class TypeTest extends \Consistence\TestCase
 	/**
 	 * @return mixed[][]
 	 */
-	public function typeChecksProviderIncorrect(): array
+	public function hasTypesIncorrectDataProvider(): array
 	{
 		return [
 			'DP #15' => [
@@ -498,7 +498,7 @@ class TypeTest extends \Consistence\TestCase
 	}
 
 	/**
-	 * @dataProvider typesProvider
+	 * @dataProvider typesDataProvider
 	 *
 	 * @param mixed $value
 	 * @param string $expectedType
@@ -509,8 +509,8 @@ class TypeTest extends \Consistence\TestCase
 	}
 
 	/**
-	 * @dataProvider typesProvider
-	 * @dataProvider typeChecksProvider
+	 * @dataProvider typesDataProvider
+	 * @dataProvider hasTypesCorrectDataProvider
 	 *
 	 * @param mixed $value
 	 * @param string $expectedType
@@ -521,7 +521,7 @@ class TypeTest extends \Consistence\TestCase
 	}
 
 	/**
-	 * @dataProvider typeChecksProviderIncorrect
+	 * @dataProvider hasTypesIncorrectDataProvider
 	 *
 	 * @param mixed $value
 	 * @param string $type
@@ -532,7 +532,7 @@ class TypeTest extends \Consistence\TestCase
 	}
 
 	/**
-	 * @dataProvider typesProvider
+	 * @dataProvider typesDataProvider
 	 *
 	 * @param mixed $value
 	 * @param string $expectedType
@@ -553,7 +553,7 @@ class TypeTest extends \Consistence\TestCase
 	}
 
 	/**
-	 * @dataProvider typesProvider
+	 * @dataProvider typesDataProvider
 	 *
 	 * @param mixed $value
 	 * @param string $expectedType

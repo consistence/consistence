@@ -500,12 +500,12 @@ class TypeTest extends \Consistence\TestCase
 	/**
 	 * @dataProvider typesProvider
 	 *
-	 * @param mixed $type
-	 * @param string $expected
+	 * @param mixed $value
+	 * @param string $expectedType
 	 */
-	public function testTypes($type, string $expected): void
+	public function testTypes($value, string $expectedType): void
 	{
-		$this->assertSame($expected, Type::getType($type));
+		$this->assertSame($expectedType, Type::getType($value));
 	}
 
 	/**
@@ -513,22 +513,22 @@ class TypeTest extends \Consistence\TestCase
 	 * @dataProvider typeChecksProvider
 	 *
 	 * @param mixed $value
-	 * @param string $expectedTypes
+	 * @param string $expectedType
 	 */
-	public function testHasType($value, string $expectedTypes): void
+	public function testHasType($value, string $expectedType): void
 	{
-		$this->assertTrue(Type::hasType($value, $expectedTypes));
+		$this->assertTrue(Type::hasType($value, $expectedType));
 	}
 
 	/**
 	 * @dataProvider typeChecksProviderIncorrect
 	 *
 	 * @param mixed $value
-	 * @param string $expectedTypes
+	 * @param string $type
 	 */
-	public function testHasTypeIncorrect($value, string $expectedTypes): void
+	public function testHasTypeIncorrect($value, string $type): void
 	{
-		$this->assertFalse(Type::hasType($value, $expectedTypes));
+		$this->assertFalse(Type::hasType($value, $type));
 	}
 
 	public function testCheckTypeOk(): void
@@ -549,16 +549,16 @@ class TypeTest extends \Consistence\TestCase
 	 * @dataProvider typesProvider
 	 *
 	 * @param mixed $value
-	 * @param string $valueType
+	 * @param string $expectedType
 	 */
-	public function testCheckTypeExceptionValues($value, string $valueType): void
+	public function testCheckTypeExceptionValues($value, string $expectedType): void
 	{
 		try {
 			Type::checkType($value, 'Foo');
 			$this->fail();
 		} catch (\Consistence\InvalidArgumentTypeException $e) {
 			$this->assertSame($value, $e->getValue());
-			$this->assertSame($valueType, $e->getValueType());
+			$this->assertSame($expectedType, $e->getValueType());
 			$this->assertSame('Foo', $e->getExpectedTypes());
 		}
 	}

@@ -129,11 +129,6 @@ class TypeTest extends \Consistence\TestCase
 				'value' => new DateTimeImmutable(),
 				'expectedType' => 'object',
 			],
-			'DP #15' => [
-				'value' => 'foo',
-				'expectedType' => 'object',
-				'isTheSameType' => false,
-			],
 			'DP #16' => [
 				'value' => 1,
 				'expectedType' => 'mixed',
@@ -154,19 +149,9 @@ class TypeTest extends \Consistence\TestCase
 				'value' => [],
 				'expectedType' => 'string[]',
 			],
-			'DP #21' => [
-				'value' => 'foo',
-				'expectedType' => 'string[]',
-				'isTheSameType' => false,
-			],
 			'DP #22' => [
 				'value' => ['foo'],
 				'expectedType' => 'string[]',
-			],
-			'DP #23' => [
-				'value' => [1],
-				'expectedType' => 'string[]',
-				'isTheSameType' => false,
 			],
 			'DP #24' => [
 				'value' => ['foo', 'bar'],
@@ -196,19 +181,9 @@ class TypeTest extends \Consistence\TestCase
 				'value' => [new DateTimeImmutable(), new stdClass()],
 				'expectedType' => 'object[]',
 			],
-			'DP #31' => [
-				'value' => [new DateTimeImmutable(), 'foo'],
-				'expectedType' => 'object[]',
-				'isTheSameType' => false,
-			],
 			'DP #32' => [
 				'value' => [1, 'foo'],
 				'expectedType' => 'mixed[]',
-			],
-			'DP #33' => [
-				'value' => 1,
-				'expectedType' => 'mixed[]',
-				'isTheSameType' => false,
 			],
 			'DP #34' => [
 				'value' => [1, 'foo'],
@@ -226,21 +201,6 @@ class TypeTest extends \Consistence\TestCase
 				'value' => [[1, 2], [3, 4]],
 				'expectedType' => 'integer[][]',
 			],
-			'DP #38' => [
-				'value' => [[1, 2], ['foo']],
-				'expectedType' => 'int[][]',
-				'isTheSameType' => false,
-			],
-			'DP #39' => [
-				'value' => [['foo']],
-				'expectedType' => 'int[][]',
-				'isTheSameType' => false,
-			],
-			'DP #40' => [
-				'value' => [1, 2],
-				'expectedType' => 'int[][]',
-				'isTheSameType' => false,
-			],
 			'DP #41' => [
 				'value' => new ArrayObject([]),
 				'expectedType' => 'string[]',
@@ -248,11 +208,6 @@ class TypeTest extends \Consistence\TestCase
 			'DP #42' => [
 				'value' => new ArrayObject(['foo']),
 				'expectedType' => 'string[]',
-			],
-			'DP #43' => [
-				'value' => new ArrayObject([1]),
-				'expectedType' => 'string[]',
-				'isTheSameType' => false,
 			],
 			'DP #44' => [
 				'value' => new ArrayObject(['foo', 'bar']),
@@ -278,21 +233,6 @@ class TypeTest extends \Consistence\TestCase
 				'value' => new ArrayObject([new ArrayObject([1, 2]), new ArrayObject([3, 4])]),
 				'expectedType' => 'int[][]',
 			],
-			'DP #50' => [
-				'value' => new ArrayObject([new ArrayObject([1, 2]), new ArrayObject(['foo'])]),
-				'expectedType' => 'int[][]',
-				'isTheSameType' => false,
-			],
-			'DP #51' => [
-				'value' => new ArrayObject([new ArrayObject(['foo'])]),
-				'expectedType' => 'int[][]',
-				'isTheSameType' => false,
-			],
-			'DP #52' => [
-				'value' => new ArrayObject([1, 2]),
-				'expectedType' => 'int[][]',
-				'isTheSameType' => false,
-			],
 			'DP #53' => [
 				'value' => new ArrayObject([]),
 				'expectedType' => 'string[]',
@@ -300,11 +240,6 @@ class TypeTest extends \Consistence\TestCase
 			'DP #54' => [
 				'value' => new ArrayObject(['foo']),
 				'expectedType' => 'string[]',
-			],
-			'DP #55' => [
-				'value' => new ArrayObject([1]),
-				'expectedType' => 'string[]',
-				'isTheSameType' => false,
 			],
 			'DP #56' => [
 				'value' => new ArrayObject(['foo', 'bar']),
@@ -330,38 +265,13 @@ class TypeTest extends \Consistence\TestCase
 				'value' => new ArrayObject([new ArrayObject([1, 2]), new ArrayObject([3, 4])]),
 				'expectedType' => 'int[][]',
 			],
-			'DP #62' => [
-				'value' => new ArrayObject([new ArrayObject([1, 2]), new ArrayObject(['foo'])]),
-				'expectedType' => 'int[][]',
-				'isTheSameType' => false,
-			],
-			'DP #63' => [
-				'value' => new ArrayObject([new ArrayObject(['foo'])]),
-				'expectedType' => 'int[][]',
-				'isTheSameType' => false,
-			],
-			'DP #64' => [
-				'value' => new ArrayObject([1, 2]),
-				'expectedType' => 'int[][]',
-				'isTheSameType' => false,
-			],
 			'DP #65' => [
 				'value' => [],
 				'expectedType' => 'int:string[]',
 			],
-			'DP #66' => [
-				'value' => 'foo',
-				'expectedType' => 'int:string[]',
-				'isTheSameType' => false,
-			],
 			'DP #67' => [
 				'value' => ['foo'],
 				'expectedType' => 'int:string[]',
-			],
-			'DP #68' => [
-				'value' => [1],
-				'expectedType' => 'int:string[]',
-				'isTheSameType' =>false,
 			],
 			'DP #69' => [
 				'value' => ['foo', 'bar'],
@@ -383,11 +293,6 @@ class TypeTest extends \Consistence\TestCase
 				'value' => [1, 'foo'],
 				'expectedType' => 'int:mixed[]',
 			],
-			'DP #74' => [
-				'value' => 1,
-				'expectedType' => 'int:mixed[]',
-				'isTheSameType' => false,
-			],
 			'DP #75' => [
 				'value' => [[1, 2]],
 				'expectedType' => 'int:int:int[][]',
@@ -396,21 +301,6 @@ class TypeTest extends \Consistence\TestCase
 				'value' => [[1, 2], [3, 4]],
 				'expectedType' => 'int:int:int[][]',
 			],
-			'DP #77' => [
-				'value' => [[1, 2], ['foo']],
-				'expectedType' => 'int:int:int[][]',
-				'isTheSameType' => false,
-			],
-			'DP #78' => [
-				'value' => [['foo']],
-				'expectedType' => 'int[][]',
-				'isTheSameType' => false,
-			],
-			'DP #79' => [
-				'value' => [1, 2],
-				'expectedType' => 'int[][]',
-				'isTheSameType' => false,
-			],
 			'DP #80' => [
 				'value' => new ArrayObject([]),
 				'expectedType' => 'int:string[]',
@@ -418,11 +308,6 @@ class TypeTest extends \Consistence\TestCase
 			'DP #81' => [
 				'value' => new ArrayObject(['foo']),
 				'expectedType' => 'int:string[]',
-			],
-			'DP #82' => [
-				'value' => new ArrayObject([1]),
-				'expectedType' => 'int:string[]',
-				'isTheSameType' => false,
 			],
 			'DP #83' => [
 				'value' => new ArrayObject(['foo', 'bar']),
@@ -448,6 +333,158 @@ class TypeTest extends \Consistence\TestCase
 				'value' => new ArrayObject([new ArrayObject([1, 2]), new ArrayObject([3, 4])]),
 				'expectedType' => 'int:int:int[][]',
 			],
+			'DP #92' => [
+				'value' => ['foo' => 'bar'],
+				'expectedType' => 'string:string[]',
+			],
+			'DP #94' => [
+				'value' => ['foo', 'bar'],
+				'expectedType' => 'string:string[]|int:string[]',
+			],
+			'DP #95' => [
+				'value' => ['foo' => 'bar'],
+				'expectedType' => 'string:string[]|int:string[]',
+			],
+			'DP #96' => [
+				'value' => ['foo' => ['bar']],
+				'expectedType' => 'string:int:string[][]',
+			],
+			'DP #98' => [
+				'value' => [['foo' => 'bar']],
+				'expectedType' => 'int:string:string[][]',
+			],
+			'DP #100' => [
+				'value' => ['foo' => ['bar']],
+				'expectedType' => 'string:string[][]',
+			],
+			'DP #102' => [
+				'value' => ['foo' => ['bar']],
+				'expectedType' => 'mixed:int:string[][]',
+			],
+		];
+	}
+
+	/**
+	 * @return mixed[][]
+	 */
+	public function typeChecksProviderIncorrect(): array
+	{
+		return [
+			'DP #15' => [
+				'value' => 'foo',
+				'expectedType' => 'object',
+				'isTheSameType' => false,
+			],
+			'DP #21' => [
+				'value' => 'foo',
+				'expectedType' => 'string[]',
+				'isTheSameType' => false,
+			],
+			'DP #23' => [
+				'value' => [1],
+				'expectedType' => 'string[]',
+				'isTheSameType' => false,
+			],
+			'DP #31' => [
+				'value' => [new DateTimeImmutable(), 'foo'],
+				'expectedType' => 'object[]',
+				'isTheSameType' => false,
+			],
+			'DP #33' => [
+				'value' => 1,
+				'expectedType' => 'mixed[]',
+				'isTheSameType' => false,
+			],
+			'DP #38' => [
+				'value' => [[1, 2], ['foo']],
+				'expectedType' => 'int[][]',
+				'isTheSameType' => false,
+			],
+			'DP #39' => [
+				'value' => [['foo']],
+				'expectedType' => 'int[][]',
+				'isTheSameType' => false,
+			],
+			'DP #40' => [
+				'value' => [1, 2],
+				'expectedType' => 'int[][]',
+				'isTheSameType' => false,
+			],
+			'DP #43' => [
+				'value' => new ArrayObject([1]),
+				'expectedType' => 'string[]',
+				'isTheSameType' => false,
+			],
+			'DP #50' => [
+				'value' => new ArrayObject([new ArrayObject([1, 2]), new ArrayObject(['foo'])]),
+				'expectedType' => 'int[][]',
+				'isTheSameType' => false,
+			],
+			'DP #51' => [
+				'value' => new ArrayObject([new ArrayObject(['foo'])]),
+				'expectedType' => 'int[][]',
+				'isTheSameType' => false,
+			],
+			'DP #52' => [
+				'value' => new ArrayObject([1, 2]),
+				'expectedType' => 'int[][]',
+				'isTheSameType' => false,
+			],
+			'DP #55' => [
+				'value' => new ArrayObject([1]),
+				'expectedType' => 'string[]',
+				'isTheSameType' => false,
+			],
+			'DP #62' => [
+				'value' => new ArrayObject([new ArrayObject([1, 2]), new ArrayObject(['foo'])]),
+				'expectedType' => 'int[][]',
+				'isTheSameType' => false,
+			],
+			'DP #63' => [
+				'value' => new ArrayObject([new ArrayObject(['foo'])]),
+				'expectedType' => 'int[][]',
+				'isTheSameType' => false,
+			],
+			'DP #64' => [
+				'value' => new ArrayObject([1, 2]),
+				'expectedType' => 'int[][]',
+				'isTheSameType' => false,
+			],
+			'DP #66' => [
+				'value' => 'foo',
+				'expectedType' => 'int:string[]',
+				'isTheSameType' => false,
+			],
+			'DP #68' => [
+				'value' => [1],
+				'expectedType' => 'int:string[]',
+				'isTheSameType' => false,
+			],
+			'DP #74' => [
+				'value' => 1,
+				'expectedType' => 'int:mixed[]',
+				'isTheSameType' => false,
+			],
+			'DP #77' => [
+				'value' => [[1, 2], ['foo']],
+				'expectedType' => 'int:int:int[][]',
+				'isTheSameType' => false,
+			],
+			'DP #78' => [
+				'value' => [['foo']],
+				'expectedType' => 'int[][]',
+				'isTheSameType' => false,
+			],
+			'DP #79' => [
+				'value' => [1, 2],
+				'expectedType' => 'int[][]',
+				'isTheSameType' => false,
+			],
+			'DP #82' => [
+				'value' => new ArrayObject([1]),
+				'expectedType' => 'int:string[]',
+				'isTheSameType' => false,
+			],
 			'DP #89' => [
 				'value' => new ArrayObject([new ArrayObject([1, 2]), new ArrayObject(['foo'])]),
 				'expectedType' => 'int:int:int[][]',
@@ -463,53 +500,25 @@ class TypeTest extends \Consistence\TestCase
 				'expectedType' => 'int:int:int[][]',
 				'isTheSameType' => false,
 			],
-			'DP #92' => [
-				'value' => ['foo' => 'bar'],
-				'expectedType' => 'string:string[]',
-			],
 			'DP #93' => [
 				'value' => ['foo', 'bar'],
 				'expectedType' => 'string:string[]',
 				'isTheSameType' => false,
-			],
-			'DP #94' => [
-				'value' => ['foo', 'bar'],
-				'expectedType' => 'string:string[]|int:string[]',
-			],
-			'DP #95' => [
-				'value' => ['foo' => 'bar'],
-				'expectedType' => 'string:string[]|int:string[]',
-			],
-			'DP #96' => [
-				'value' => ['foo' => ['bar']],
-				'expectedType' => 'string:int:string[][]',
 			],
 			'DP #97' => [
 				'value' => ['foo' => ['bar']],
 				'expectedType' => 'string:string:string[][]',
 				'isTheSameType' => false,
 			],
-			'DP #98' => [
-				'value' => [['foo' => 'bar']],
-				'expectedType' => 'int:string:string[][]',
-			],
 			'DP #99' => [
 				'value' => [['foo' => 'bar']],
 				'expectedType' => 'int:int:string[][]',
 				'isTheSameType' => false,
 			],
-			'DP #100' => [
-				'value' => ['foo' => ['bar']],
-				'expectedType' => 'string:string[][]',
-			],
 			'DP #101' => [
 				'value' => ['foo' => ['bar']],
 				'expectedType' => 'int:string[][]',
 				'isTheSameType' => false,
-			],
-			'DP #102' => [
-				'value' => ['foo' => ['bar']],
-				'expectedType' => 'mixed:int:string[][]',
 			],
 			'DP #103' => [
 				'value' => ['foo' => ['bar']],
@@ -533,6 +542,7 @@ class TypeTest extends \Consistence\TestCase
 	/**
 	 * @dataProvider typesProvider
 	 * @dataProvider typeChecksProvider
+	 * @dataProvider typeChecksProviderIncorrect
 	 *
 	 * @param mixed $value
 	 * @param string $expectedTypes

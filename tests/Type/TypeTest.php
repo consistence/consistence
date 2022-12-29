@@ -533,8 +533,9 @@ class TypeTest extends \Consistence\TestCase
 
 	public function testCheckTypeOk(): void
 	{
+		$this->expectNotToPerformAssertions();
+
 		Type::checkType('foo', 'string');
-		$this->ok();
 	}
 
 	public function testCheckTypeException(): void

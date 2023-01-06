@@ -71,7 +71,7 @@ class TimeFormatTest extends \Consistence\TestCase
 	/**
 	 * @return string[][]
 	 */
-	public function validTimesProvider(): array
+	public function validTimesDataProvider(): array
 	{
 		return [
 			['H:i', '02:00'],
@@ -94,7 +94,7 @@ class TimeFormatTest extends \Consistence\TestCase
 	/**
 	 * @return string[][]
 	 */
-	public function invalidTimesForFormatProvider(): array
+	public function invalidTimesForFormatDataProvider(): array
 	{
 		return [
 			['', TimeFormat::ISO8601, 'empty string'],
@@ -110,7 +110,7 @@ class TimeFormatTest extends \Consistence\TestCase
 	/**
 	 * @return string[][]
 	 */
-	public function nonExistingTimesProvider(): array
+	public function nonExistingTimesDataProvider(): array
 	{
 		return [
 			['H:i', '25:00', 'there is no 25th hour in the day'],
@@ -122,16 +122,16 @@ class TimeFormatTest extends \Consistence\TestCase
 	/**
 	 * @return string[][]
 	 */
-	public function invalidTimesProvider(): array
+	public function invalidTimesDataProvider(): array
 	{
 		return array_merge(
-			$this->invalidTimesForFormatProvider(),
-			$this->nonExistingTimesProvider()
+			$this->invalidTimesForFormatDataProvider(),
+			$this->nonExistingTimesDataProvider()
 		);
 	}
 
 	/**
-	 * @dataProvider validTimesProvider
+	 * @dataProvider validTimesDataProvider
 	 *
 	 * @param string $format
 	 * @param string $timeString
@@ -143,7 +143,7 @@ class TimeFormatTest extends \Consistence\TestCase
 	}
 
 	/**
-	 * @dataProvider invalidTimesForFormatProvider
+	 * @dataProvider invalidTimesForFormatDataProvider
 	 *
 	 * @param string $format
 	 * @param string $timeString
@@ -161,7 +161,7 @@ class TimeFormatTest extends \Consistence\TestCase
 	}
 
 	/**
-	 * @dataProvider nonExistingTimesProvider
+	 * @dataProvider nonExistingTimesDataProvider
 	 *
 	 * @param string $format
 	 * @param string $timeString
@@ -178,7 +178,7 @@ class TimeFormatTest extends \Consistence\TestCase
 	}
 
 	/**
-	 * @dataProvider validTimesProvider
+	 * @dataProvider validTimesDataProvider
 	 *
 	 * @param string $format
 	 * @param string $timeString
@@ -189,7 +189,7 @@ class TimeFormatTest extends \Consistence\TestCase
 	}
 
 	/**
-	 * @dataProvider invalidTimesProvider
+	 * @dataProvider invalidTimesDataProvider
 	 *
 	 * @param string $format
 	 * @param string $timeString
@@ -204,7 +204,7 @@ class TimeFormatTest extends \Consistence\TestCase
 	}
 
 	/**
-	 * @dataProvider validTimesProvider
+	 * @dataProvider validTimesDataProvider
 	 *
 	 * @param string $format
 	 * @param string $timeString
@@ -231,7 +231,7 @@ class TimeFormatTest extends \Consistence\TestCase
 	}
 
 	/**
-	 * @dataProvider invalidTimesProvider
+	 * @dataProvider invalidTimesDataProvider
 	 *
 	 * @param string $format
 	 * @param string $timeString
@@ -253,7 +253,7 @@ class TimeFormatTest extends \Consistence\TestCase
 	}
 
 	/**
-	 * @dataProvider validTimesProvider
+	 * @dataProvider validTimesDataProvider
 	 *
 	 * @param string $format
 	 * @param string $timeString
@@ -280,7 +280,7 @@ class TimeFormatTest extends \Consistence\TestCase
 	}
 
 	/**
-	 * @dataProvider invalidTimesProvider
+	 * @dataProvider invalidTimesDataProvider
 	 *
 	 * @param string $format
 	 * @param string $timeString

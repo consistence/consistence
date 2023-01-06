@@ -12,7 +12,7 @@ class MathTest extends \Consistence\TestCase
 	/**
 	 * @return int[][]
 	 */
-	public function moduloProvider(): array
+	public function moduloDataProvider(): array
 	{
 		return [
 			[4, 2, 0],
@@ -22,7 +22,7 @@ class MathTest extends \Consistence\TestCase
 	}
 
 	/**
-	 * @dataProvider moduloProvider
+	 * @dataProvider moduloDataProvider
 	 *
 	 * @param int $dividend
 	 * @param int $modulo
@@ -46,7 +46,7 @@ class MathTest extends \Consistence\TestCase
 	/**
 	 * @return mixed[][]
 	 */
-	public function powersOfTwoProvider(): array
+	public function powersOfTwoDataProvider(): array
 	{
 		return [
 			[-2, false],
@@ -65,7 +65,7 @@ class MathTest extends \Consistence\TestCase
 	}
 
 	/**
-	 * @dataProvider powersOfTwoProvider
+	 * @dataProvider powersOfTwoDataProvider
 	 *
 	 * @param int $value
 	 * @param bool $result

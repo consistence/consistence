@@ -24,7 +24,7 @@ class TypeTest extends \Consistence\TestCase
 	/**
 	 * @return mixed[][]
 	 */
-	public function typesProvider(): array
+	public function typesDataProvider(): array
 	{
 		return [
 			['foo', 'string'],
@@ -44,10 +44,10 @@ class TypeTest extends \Consistence\TestCase
 	/**
 	 * @return mixed[][]
 	 */
-	public function typeChecksProvider(): array
+	public function typeChecksDataProvider(): array
 	{
 		return array_merge(
-			$this->typesProvider(),
+			$this->typesDataProvider(),
 			[
 				[null, 'NULL'],
 				[1, 'string|int'],
@@ -143,7 +143,7 @@ class TypeTest extends \Consistence\TestCase
 	}
 
 	/**
-	 * @dataProvider typesProvider
+	 * @dataProvider typesDataProvider
 	 *
 	 * @param mixed $type
 	 * @param string $expected
@@ -154,7 +154,7 @@ class TypeTest extends \Consistence\TestCase
 	}
 
 	/**
-	 * @dataProvider typeChecksProvider
+	 * @dataProvider typeChecksDataProvider
 	 *
 	 * @param mixed $value
 	 * @param string $expectedTypes
@@ -180,7 +180,7 @@ class TypeTest extends \Consistence\TestCase
 	}
 
 	/**
-	 * @dataProvider typesProvider
+	 * @dataProvider typesDataProvider
 	 *
 	 * @param mixed $value
 	 * @param string $valueType

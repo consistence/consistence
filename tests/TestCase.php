@@ -4,6 +4,8 @@ declare(strict_types = 1);
 
 namespace Consistence;
 
+use PHPUnit\Framework\Assert;
+
 abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
 
@@ -12,7 +14,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	 */
 	protected function ok(): void
 	{
-		$this->assertTrue(true);
+		Assert::assertTrue(true);
 	}
 
 }

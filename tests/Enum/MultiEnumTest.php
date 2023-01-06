@@ -4,73 +4,75 @@ declare(strict_types = 1);
 
 namespace Consistence\Enum;
 
+use PHPUnit\Framework\Assert;
+
 class MultiEnumTest extends \Consistence\TestCase
 {
 
 	public function testGet(): void
 	{
 		$userAndAdmin = RolesEnum::get(RoleEnum::USER | RoleEnum::ADMIN);
-		$this->assertInstanceOf(RolesEnum::class, $userAndAdmin);
+		Assert::assertInstanceOf(RolesEnum::class, $userAndAdmin);
 	}
 
 	public function testGetSingle(): void
 	{
 		$employee = RolesEnum::get(RoleEnum::EMPLOYEE);
-		$this->assertInstanceOf(RolesEnum::class, $employee);
+		Assert::assertInstanceOf(RolesEnum::class, $employee);
 	}
 
 	public function testGetMulti(): void
 	{
 		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
-		$this->assertInstanceOf(RolesEnum::class, $userAndAdmin);
+		Assert::assertInstanceOf(RolesEnum::class, $userAndAdmin);
 	}
 
 	public function testGetMultiByArray(): void
 	{
 		$userAndAdmin = RolesEnum::getMultiByArray([RoleEnum::USER, RoleEnum::ADMIN]);
-		$this->assertInstanceOf(RolesEnum::class, $userAndAdmin);
+		Assert::assertInstanceOf(RolesEnum::class, $userAndAdmin);
 	}
 
 	public function testGetMultiByEnum(): void
 	{
 		$user = RolesEnum::getMultiByEnum(RoleEnum::get(RoleEnum::USER));
-		$this->assertInstanceOf(RolesEnum::class, $user);
+		Assert::assertInstanceOf(RolesEnum::class, $user);
 	}
 
 	public function testGetMultiByEnums(): void
 	{
 		$userAndAdmin = RolesEnum::getMultiByEnums([RoleEnum::get(RoleEnum::USER), RoleEnum::get(RoleEnum::ADMIN)]);
-		$this->assertInstanceOf(RolesEnum::class, $userAndAdmin);
+		Assert::assertInstanceOf(RolesEnum::class, $userAndAdmin);
 	}
 
 	public function testGetValue(): void
 	{
 		$userAndAdmin = RolesEnum::get(RoleEnum::USER | RoleEnum::ADMIN);
-		$this->assertSame(RoleEnum::USER | RoleEnum::ADMIN, $userAndAdmin->getValue());
+		Assert::assertSame(RoleEnum::USER | RoleEnum::ADMIN, $userAndAdmin->getValue());
 	}
 
 	public function testGetValueSingle(): void
 	{
 		$employee = RolesEnum::get(RoleEnum::EMPLOYEE);
-		$this->assertSame(RoleEnum::EMPLOYEE, $employee->getValue());
+		Assert::assertSame(RoleEnum::EMPLOYEE, $employee->getValue());
 	}
 
 	public function testGetMultiValue(): void
 	{
 		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
-		$this->assertSame(RoleEnum::USER | RoleEnum::ADMIN, $userAndAdmin->getValue());
+		Assert::assertSame(RoleEnum::USER | RoleEnum::ADMIN, $userAndAdmin->getValue());
 	}
 
 	public function testGetMultiByArrayValue(): void
 	{
 		$userAndAdmin = RolesEnum::getMultiByArray([RoleEnum::USER, RoleEnum::ADMIN]);
-		$this->assertSame(RoleEnum::USER | RoleEnum::ADMIN, $userAndAdmin->getValue());
+		Assert::assertSame(RoleEnum::USER | RoleEnum::ADMIN, $userAndAdmin->getValue());
 	}
 
 	public function testGetEnums(): void
 	{
 		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
-		$this->assertSame([
+		Assert::assertSame([
 			'USER' => RoleEnum::get(RoleEnum::USER),
 			'ADMIN' => RoleEnum::get(RoleEnum::ADMIN),
 		], $userAndAdmin->getEnums());
@@ -80,14 +82,14 @@ class MultiEnumTest extends \Consistence\TestCase
 	{
 		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
 		foreach ($userAndAdmin as $role) {
-			$this->assertInstanceOf(RoleEnum::class, $role);
+			Assert::assertInstanceOf(RoleEnum::class, $role);
 		}
 	}
 
 	public function testGetValues(): void
 	{
 		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
-		$this->assertEquals([
+		Assert::assertEquals([
 			'USER' => RoleEnum::USER,
 			'ADMIN' => RoleEnum::ADMIN,
 		], $userAndAdmin->getValues());
@@ -98,7 +100,7 @@ class MultiEnumTest extends \Consistence\TestCase
 		$userAndAdmin1 = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
 		$userAndAdmin2 = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
 
-		$this->assertSame($userAndAdmin1, $userAndAdmin2);
+		Assert::assertSame($userAndAdmin1, $userAndAdmin2);
 	}
 
 	public function testSameInstancesIndependentOrder(): void
@@ -106,7 +108,7 @@ class MultiEnumTest extends \Consistence\TestCase
 		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
 		$adminAndUser = RolesEnum::getMulti(RoleEnum::ADMIN, RoleEnum::USER);
 
-		$this->assertSame($userAndAdmin, $adminAndUser);
+		Assert::assertSame($userAndAdmin, $adminAndUser);
 	}
 
 	public function testDifferentInstances(): void
@@ -114,7 +116,7 @@ class MultiEnumTest extends \Consistence\TestCase
 		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
 		$user = RolesEnum::getMulti(RoleEnum::USER);
 
-		$this->assertNotSame($userAndAdmin, $user);
+		Assert::assertNotSame($userAndAdmin, $user);
 	}
 
 	public function testEquals(): void
@@ -122,7 +124,7 @@ class MultiEnumTest extends \Consistence\TestCase
 		$userAndAdmin1 = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
 		$userAndAdmin2 = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
 
-		$this->assertTrue($userAndAdmin1->equals($userAndAdmin2));
+		Assert::assertTrue($userAndAdmin1->equals($userAndAdmin2));
 	}
 
 	public function testNotEquals(): void
@@ -130,26 +132,26 @@ class MultiEnumTest extends \Consistence\TestCase
 		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
 		$user = RolesEnum::getMulti(RoleEnum::USER);
 
-		$this->assertFalse($userAndAdmin->equals($user));
+		Assert::assertFalse($userAndAdmin->equals($user));
 	}
 
 	public function testEqualsValue(): void
 	{
 		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
 
-		$this->assertTrue($userAndAdmin->equalsValue(RoleEnum::USER | RoleEnum::ADMIN));
+		Assert::assertTrue($userAndAdmin->equalsValue(RoleEnum::USER | RoleEnum::ADMIN));
 	}
 
 	public function testNotEqualsValue(): void
 	{
 		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
 
-		$this->assertFalse($userAndAdmin->equalsValue(RoleEnum::USER));
+		Assert::assertFalse($userAndAdmin->equalsValue(RoleEnum::USER));
 	}
 
 	public function testGetAvailableValues(): void
 	{
-		$this->assertEquals([
+		Assert::assertEquals([
 			'USER' => RoleEnum::USER,
 			'EMPLOYEE' => RoleEnum::EMPLOYEE,
 			'ADMIN' => RoleEnum::ADMIN,
@@ -158,7 +160,7 @@ class MultiEnumTest extends \Consistence\TestCase
 
 	public function testGetAvailableEnums(): void
 	{
-		$this->assertEquals([
+		Assert::assertEquals([
 			'USER' => RolesEnum::get(RoleEnum::USER),
 			'EMPLOYEE' => RolesEnum::get(RoleEnum::EMPLOYEE),
 			'ADMIN' => RolesEnum::get(RoleEnum::ADMIN),
@@ -168,22 +170,22 @@ class MultiEnumTest extends \Consistence\TestCase
 	public function testGetNoValue(): void
 	{
 		$empty = RolesEnum::get(0);
-		$this->assertSame(0, $empty->getValue());
-		$this->assertEquals([], $empty->getValues());
+		Assert::assertSame(0, $empty->getValue());
+		Assert::assertEquals([], $empty->getValues());
 	}
 
 	public function testGetMultiNoValue(): void
 	{
 		$empty = RolesEnum::getMulti();
-		$this->assertSame(0, $empty->getValue());
-		$this->assertEquals([], $empty->getValues());
+		Assert::assertSame(0, $empty->getValue());
+		Assert::assertEquals([], $empty->getValues());
 	}
 
 	public function testGetMultiByArrayNoValue(): void
 	{
 		$empty = RolesEnum::getMultiByArray([]);
-		$this->assertSame(0, $empty->getValue());
-		$this->assertEquals([], $empty->getValues());
+		Assert::assertSame(0, $empty->getValue());
+		Assert::assertEquals([], $empty->getValues());
 	}
 
 	public function testGetCombinations(): void
@@ -223,15 +225,15 @@ class MultiEnumTest extends \Consistence\TestCase
 	{
 		try {
 			RolesEnum::get(8);
-			$this->fail();
+			Assert::fail();
 		} catch (\Consistence\Enum\InvalidEnumValueException $e) {
-			$this->assertSame(8, $e->getValue());
-			$this->assertEquals([
+			Assert::assertSame(8, $e->getValue());
+			Assert::assertEquals([
 				'USER' => RoleEnum::USER,
 				'EMPLOYEE' => RoleEnum::EMPLOYEE,
 				'ADMIN' => RoleEnum::ADMIN,
 			], $e->getAvailableValues());
-			$this->assertSame(RolesEnum::class, $e->getEnumClassName());
+			Assert::assertSame(RolesEnum::class, $e->getEnumClassName());
 		}
 	}
 
@@ -242,10 +244,10 @@ class MultiEnumTest extends \Consistence\TestCase
 		try {
 			$userAndAdmin->equals($foo);
 
-			$this->fail();
+			Assert::fail();
 		} catch (\Consistence\Enum\OperationSupportedOnlyForSameEnumException $e) {
-			$this->assertSame($userAndAdmin, $e->getExpected());
-			$this->assertSame($foo, $e->getGiven());
+			Assert::assertSame($userAndAdmin, $e->getExpected());
+			Assert::assertSame($foo, $e->getGiven());
 		}
 	}
 
@@ -253,9 +255,9 @@ class MultiEnumTest extends \Consistence\TestCase
 	{
 		try {
 			FooEnum::getMulti(FooEnum::FOO)->getEnums();
-			$this->fail();
+			Assert::fail();
 		} catch (\Consistence\Enum\NoSingleEnumSpecifiedException $e) {
-			$this->assertSame(FooEnum::class, $e->getClass());
+			Assert::assertSame(FooEnum::class, $e->getClass());
 		}
 	}
 
@@ -263,11 +265,11 @@ class MultiEnumTest extends \Consistence\TestCase
 	{
 		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
 
-		$this->assertTrue($userAndAdmin->contains(RolesEnum::get(RoleEnum::USER)));
-		$this->assertTrue($userAndAdmin->contains(RolesEnum::get(RoleEnum::ADMIN)));
-		$this->assertTrue($userAndAdmin->contains(RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN)));
-		$this->assertFalse($userAndAdmin->contains(RolesEnum::get(RoleEnum::EMPLOYEE)));
-		$this->assertFalse($userAndAdmin->contains(RolesEnum::getMulti(RoleEnum::USER, RoleEnum::EMPLOYEE)));
+		Assert::assertTrue($userAndAdmin->contains(RolesEnum::get(RoleEnum::USER)));
+		Assert::assertTrue($userAndAdmin->contains(RolesEnum::get(RoleEnum::ADMIN)));
+		Assert::assertTrue($userAndAdmin->contains(RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN)));
+		Assert::assertFalse($userAndAdmin->contains(RolesEnum::get(RoleEnum::EMPLOYEE)));
+		Assert::assertFalse($userAndAdmin->contains(RolesEnum::getMulti(RoleEnum::USER, RoleEnum::EMPLOYEE)));
 	}
 
 	public function testContainsDifferentEnum(): void
@@ -283,9 +285,9 @@ class MultiEnumTest extends \Consistence\TestCase
 	{
 		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
 
-		$this->assertTrue($userAndAdmin->containsEnum(RoleEnum::get(RoleEnum::USER)));
-		$this->assertTrue($userAndAdmin->containsEnum(RoleEnum::get(RoleEnum::ADMIN)));
-		$this->assertFalse($userAndAdmin->containsEnum(RoleEnum::get(RoleEnum::EMPLOYEE)));
+		Assert::assertTrue($userAndAdmin->containsEnum(RoleEnum::get(RoleEnum::USER)));
+		Assert::assertTrue($userAndAdmin->containsEnum(RoleEnum::get(RoleEnum::ADMIN)));
+		Assert::assertFalse($userAndAdmin->containsEnum(RoleEnum::get(RoleEnum::EMPLOYEE)));
 	}
 
 	public function testContainsEnumSingleEnumNotDefined(): void
@@ -309,9 +311,9 @@ class MultiEnumTest extends \Consistence\TestCase
 	{
 		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
 
-		$this->assertTrue($userAndAdmin->containsValue(RoleEnum::USER));
-		$this->assertTrue($userAndAdmin->containsValue(RoleEnum::ADMIN));
-		$this->assertFalse($userAndAdmin->containsValue(RoleEnum::EMPLOYEE));
+		Assert::assertTrue($userAndAdmin->containsValue(RoleEnum::USER));
+		Assert::assertTrue($userAndAdmin->containsValue(RoleEnum::ADMIN));
+		Assert::assertFalse($userAndAdmin->containsValue(RoleEnum::EMPLOYEE));
 	}
 
 	public function testContainsInvalidValue(): void
@@ -326,10 +328,10 @@ class MultiEnumTest extends \Consistence\TestCase
 
 	public function testIsEmpty(): void
 	{
-		$this->assertTrue(RolesEnum::getMulti()->isEmpty());
-		$this->assertTrue(RolesEnum::get(0)->isEmpty());
-		$this->assertTrue(RolesEnum::getMultiByArray([])->isEmpty());
-		$this->assertFalse(RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN)->isEmpty());
+		Assert::assertTrue(RolesEnum::getMulti()->isEmpty());
+		Assert::assertTrue(RolesEnum::get(0)->isEmpty());
+		Assert::assertTrue(RolesEnum::getMultiByArray([])->isEmpty());
+		Assert::assertFalse(RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN)->isEmpty());
 	}
 
 	public function testAdd(): void
@@ -337,7 +339,7 @@ class MultiEnumTest extends \Consistence\TestCase
 		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
 		$newRoles = $userAndAdmin->add(RolesEnum::get(RoleEnum::EMPLOYEE));
 
-		$this->assertSame(RolesEnum::getMulti(RoleEnum::USER, RoleEnum::EMPLOYEE, RoleEnum::ADMIN), $newRoles);
+		Assert::assertSame(RolesEnum::getMulti(RoleEnum::USER, RoleEnum::EMPLOYEE, RoleEnum::ADMIN), $newRoles);
 	}
 
 	public function testAddExisting(): void
@@ -345,7 +347,7 @@ class MultiEnumTest extends \Consistence\TestCase
 		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
 		$newRoles = $userAndAdmin->add(RolesEnum::get(RoleEnum::USER));
 
-		$this->assertSame($userAndAdmin, $newRoles);
+		Assert::assertSame($userAndAdmin, $newRoles);
 	}
 
 	public function testAddDifferentEnum(): void
@@ -362,7 +364,7 @@ class MultiEnumTest extends \Consistence\TestCase
 		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
 		$newRoles = $userAndAdmin->addEnum(RoleEnum::get(RoleEnum::EMPLOYEE));
 
-		$this->assertSame(RolesEnum::getMulti(RoleEnum::USER, RoleEnum::EMPLOYEE, RoleEnum::ADMIN), $newRoles);
+		Assert::assertSame(RolesEnum::getMulti(RoleEnum::USER, RoleEnum::EMPLOYEE, RoleEnum::ADMIN), $newRoles);
 	}
 
 	public function testAddEnumExisting(): void
@@ -370,7 +372,7 @@ class MultiEnumTest extends \Consistence\TestCase
 		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
 		$newRoles = $userAndAdmin->addEnum(RoleEnum::get(RoleEnum::USER));
 
-		$this->assertSame($userAndAdmin, $newRoles);
+		Assert::assertSame($userAndAdmin, $newRoles);
 	}
 
 	public function testAddEnumSingleEnumNotDefined(): void
@@ -395,7 +397,7 @@ class MultiEnumTest extends \Consistence\TestCase
 		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
 		$newRoles = $userAndAdmin->addValue(RoleEnum::EMPLOYEE);
 
-		$this->assertSame(RolesEnum::getMulti(RoleEnum::USER, RoleEnum::EMPLOYEE, RoleEnum::ADMIN), $newRoles);
+		Assert::assertSame(RolesEnum::getMulti(RoleEnum::USER, RoleEnum::EMPLOYEE, RoleEnum::ADMIN), $newRoles);
 	}
 
 	public function testAddValueExisting(): void
@@ -403,7 +405,7 @@ class MultiEnumTest extends \Consistence\TestCase
 		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
 		$newRoles = $userAndAdmin->addValue(RoleEnum::USER);
 
-		$this->assertSame($userAndAdmin, $newRoles);
+		Assert::assertSame($userAndAdmin, $newRoles);
 	}
 
 	public function testAddInvalidValue(): void
@@ -421,7 +423,7 @@ class MultiEnumTest extends \Consistence\TestCase
 		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
 		$newRoles = $userAndAdmin->remove(RolesEnum::get(RoleEnum::USER));
 
-		$this->assertSame(RolesEnum::get(RoleEnum::ADMIN), $newRoles);
+		Assert::assertSame(RolesEnum::get(RoleEnum::ADMIN), $newRoles);
 	}
 
 	public function testRemoveDisabled(): void
@@ -429,7 +431,7 @@ class MultiEnumTest extends \Consistence\TestCase
 		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
 		$newRoles = $userAndAdmin->remove(RolesEnum::get(RoleEnum::EMPLOYEE));
 
-		$this->assertSame($userAndAdmin, $newRoles);
+		Assert::assertSame($userAndAdmin, $newRoles);
 	}
 
 	public function testRemoveDifferentEnum(): void
@@ -446,7 +448,7 @@ class MultiEnumTest extends \Consistence\TestCase
 		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
 		$newRoles = $userAndAdmin->removeEnum(RoleEnum::get(RoleEnum::USER));
 
-		$this->assertSame(RolesEnum::get(RoleEnum::ADMIN), $newRoles);
+		Assert::assertSame(RolesEnum::get(RoleEnum::ADMIN), $newRoles);
 	}
 
 	public function testRemoveEnumDisabled(): void
@@ -454,7 +456,7 @@ class MultiEnumTest extends \Consistence\TestCase
 		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
 		$newRoles = $userAndAdmin->removeEnum(RoleEnum::get(RoleEnum::EMPLOYEE));
 
-		$this->assertSame($userAndAdmin, $newRoles);
+		Assert::assertSame($userAndAdmin, $newRoles);
 	}
 
 	public function testRemoveEnumSingleEnumNotDefined(): void
@@ -479,7 +481,7 @@ class MultiEnumTest extends \Consistence\TestCase
 		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
 		$newRoles = $userAndAdmin->removeValue(RoleEnum::USER);
 
-		$this->assertSame(RolesEnum::get(RoleEnum::ADMIN), $newRoles);
+		Assert::assertSame(RolesEnum::get(RoleEnum::ADMIN), $newRoles);
 	}
 
 	public function testRemoveValueDisabled(): void
@@ -487,7 +489,7 @@ class MultiEnumTest extends \Consistence\TestCase
 		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
 		$newRoles = $userAndAdmin->removeValue(RoleEnum::EMPLOYEE);
 
-		$this->assertSame($userAndAdmin, $newRoles);
+		Assert::assertSame($userAndAdmin, $newRoles);
 	}
 
 	public function testRemoveInvalidValue(): void
@@ -505,7 +507,7 @@ class MultiEnumTest extends \Consistence\TestCase
 		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
 		$newRoles = $userAndAdmin->intersect(RolesEnum::get(RoleEnum::USER));
 
-		$this->assertSame(RolesEnum::get(RoleEnum::USER), $newRoles);
+		Assert::assertSame(RolesEnum::get(RoleEnum::USER), $newRoles);
 	}
 
 	public function testIntersectEmptyResult(): void
@@ -513,7 +515,7 @@ class MultiEnumTest extends \Consistence\TestCase
 		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
 		$newRoles = $userAndAdmin->intersect(RolesEnum::get(RoleEnum::EMPLOYEE));
 
-		$this->assertSame(RolesEnum::getMulti(), $newRoles);
+		Assert::assertSame(RolesEnum::getMulti(), $newRoles);
 	}
 
 	public function testIntersectWithEmpty(): void
@@ -521,7 +523,7 @@ class MultiEnumTest extends \Consistence\TestCase
 		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
 		$newRoles = $userAndAdmin->intersect(RolesEnum::getMulti());
 
-		$this->assertSame(RolesEnum::getMulti(), $newRoles);
+		Assert::assertSame(RolesEnum::getMulti(), $newRoles);
 	}
 
 	public function testIntersectWithSame(): void
@@ -529,7 +531,7 @@ class MultiEnumTest extends \Consistence\TestCase
 		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
 		$newRoles = $userAndAdmin->intersect(RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN));
 
-		$this->assertSame($userAndAdmin, $newRoles);
+		Assert::assertSame($userAndAdmin, $newRoles);
 	}
 
 	public function testIntersectDifferentEnum(): void
@@ -546,7 +548,7 @@ class MultiEnumTest extends \Consistence\TestCase
 		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
 		$newRoles = $userAndAdmin->intersectEnum(RoleEnum::get(RoleEnum::USER));
 
-		$this->assertSame(RolesEnum::get(RoleEnum::USER), $newRoles);
+		Assert::assertSame(RolesEnum::get(RoleEnum::USER), $newRoles);
 	}
 
 	public function testIntersectEnumEmptyResult(): void
@@ -554,7 +556,7 @@ class MultiEnumTest extends \Consistence\TestCase
 		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
 		$newRoles = $userAndAdmin->intersectEnum(RoleEnum::get(RoleEnum::EMPLOYEE));
 
-		$this->assertSame(RolesEnum::getMulti(), $newRoles);
+		Assert::assertSame(RolesEnum::getMulti(), $newRoles);
 	}
 
 	public function testIntersectEnumSingleEnumNotDefined(): void
@@ -579,7 +581,7 @@ class MultiEnumTest extends \Consistence\TestCase
 		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
 		$newRoles = $userAndAdmin->intersectValue(RoleEnum::USER);
 
-		$this->assertSame(RolesEnum::get(RoleEnum::USER), $newRoles);
+		Assert::assertSame(RolesEnum::get(RoleEnum::USER), $newRoles);
 	}
 
 	public function testIntersectValueEmptyResult(): void
@@ -587,7 +589,7 @@ class MultiEnumTest extends \Consistence\TestCase
 		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
 		$newRoles = $userAndAdmin->intersectValue(RoleEnum::EMPLOYEE);
 
-		$this->assertSame(RolesEnum::getMulti(), $newRoles);
+		Assert::assertSame(RolesEnum::getMulti(), $newRoles);
 	}
 
 	public function testIntersectInvalidValue(): void
@@ -607,7 +609,7 @@ class MultiEnumTest extends \Consistence\TestCase
 			return $singleEnum->equalsValue(RoleEnum::USER);
 		});
 
-		$this->assertSame(RolesEnum::get(RoleEnum::USER), $newRoles);
+		Assert::assertSame(RolesEnum::get(RoleEnum::USER), $newRoles);
 	}
 
 	public function testFilterValue(): void
@@ -617,17 +619,17 @@ class MultiEnumTest extends \Consistence\TestCase
 			return $value === RoleEnum::USER;
 		});
 
-		$this->assertSame(RolesEnum::get(RoleEnum::USER), $newRoles);
+		Assert::assertSame(RolesEnum::get(RoleEnum::USER), $newRoles);
 	}
 
 	public function testDuplicateSpecifiedValues(): void
 	{
 		try {
 			MultiEnumWithValuesNotPowerOfTwo::get(MultiEnumWithValuesNotPowerOfTwo::FOO);
-			$this->fail();
+			Assert::fail();
 		} catch (\Consistence\Enum\MultiEnumValueIsNotPowerOfTwoException $e) {
-			$this->assertSame(MultiEnumWithValuesNotPowerOfTwo::BAZ, $e->getValue());
-			$this->assertSame(MultiEnumWithValuesNotPowerOfTwo::class, $e->getClass());
+			Assert::assertSame(MultiEnumWithValuesNotPowerOfTwo::BAZ, $e->getValue());
+			Assert::assertSame(MultiEnumWithValuesNotPowerOfTwo::class, $e->getClass());
 		}
 	}
 

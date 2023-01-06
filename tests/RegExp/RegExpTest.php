@@ -4,6 +4,8 @@ declare(strict_types = 1);
 
 namespace Consistence\RegExp;
 
+use PHPUnit\Framework\Assert;
+
 class RegExpTest extends \Consistence\TestCase
 {
 
@@ -17,18 +19,18 @@ class RegExpTest extends \Consistence\TestCase
 	public function testMatch(): void
 	{
 		$matches = RegExp::match('foo', '~o+~');
-		$this->assertCount(1, $matches);
-		$this->assertSame('oo', $matches[0]);
+		Assert::assertCount(1, $matches);
+		Assert::assertSame('oo', $matches[0]);
 	}
 
 	public function testMatchNotFound(): void
 	{
-		$this->assertSame([], RegExp::match('foo', '~x+~'));
+		Assert::assertSame([], RegExp::match('foo', '~x+~'));
 	}
 
 	public function testMatchOffsetTooBig(): void
 	{
-		$this->assertSame([], RegExp::match('foo', '~o+~', 0, 5));
+		Assert::assertSame([], RegExp::match('foo', '~o+~', 0, 5));
 	}
 
 	public function testPregException(): void
@@ -41,8 +43,8 @@ class RegExpTest extends \Consistence\TestCase
 
 	public function testMatches(): void
 	{
-		$this->assertTrue(RegExp::matches('foo', '~o+~'));
-		$this->assertFalse(RegExp::matches('foo', '~x+~'));
+		Assert::assertTrue(RegExp::matches('foo', '~o+~'));
+		Assert::assertFalse(RegExp::matches('foo', '~x+~'));
 	}
 
 }

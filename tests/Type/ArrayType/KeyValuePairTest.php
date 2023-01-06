@@ -4,15 +4,17 @@ declare(strict_types = 1);
 
 namespace Consistence\Type\ArrayType;
 
+use PHPUnit\Framework\Assert;
+
 class KeyValuePairTest extends \Consistence\TestCase
 {
 
 	public function testConstruct(): void
 	{
 		$pair = new KeyValuePair(0, 'foo');
-		$this->assertInstanceOf(KeyValuePair::class, $pair);
-		$this->assertSame(0, $pair->getKey());
-		$this->assertSame('foo', $pair->getValue());
+		Assert::assertInstanceOf(KeyValuePair::class, $pair);
+		Assert::assertSame(0, $pair->getKey());
+		Assert::assertSame('foo', $pair->getValue());
 	}
 
 	public function testConstructInvalidKey(): void

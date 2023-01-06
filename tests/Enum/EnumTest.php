@@ -8,7 +8,7 @@ use Consistence\Type\ArrayType\ArrayType;
 use DateTimeImmutable;
 use PHPUnit\Framework\Assert;
 
-class EnumTest extends \Consistence\TestCase
+class EnumTest extends \PHPUnit\Framework\TestCase
 {
 
 	public function testGet(): void
@@ -149,8 +149,9 @@ class EnumTest extends \Consistence\TestCase
 
 	public function testCheckValue(): void
 	{
+		$this->expectNotToPerformAssertions();
+
 		StatusEnum::checkValue(StatusEnum::DRAFT);
-		$this->ok();
 	}
 
 

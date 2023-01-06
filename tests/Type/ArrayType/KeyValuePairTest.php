@@ -6,7 +6,7 @@ namespace Consistence\Type\ArrayType;
 
 use PHPUnit\Framework\Assert;
 
-class KeyValuePairTest extends \Consistence\TestCase
+class KeyValuePairTest extends \PHPUnit\Framework\TestCase
 {
 
 	public function testConstruct(): void

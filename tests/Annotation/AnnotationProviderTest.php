@@ -7,7 +7,7 @@ namespace Consistence\Annotation;
 use PHPUnit\Framework\Assert;
 use ReflectionProperty;
 
-class AnnotationProviderTest extends \Consistence\TestCase
+class AnnotationProviderTest extends \PHPUnit\Framework\TestCase
 {
 
 	public function testGetAnnotation(): void

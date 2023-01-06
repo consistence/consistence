@@ -6,7 +6,7 @@ namespace Consistence\Annotation;
 
 use PHPUnit\Framework\Assert;
 
-class AnnotationFieldTest extends \Consistence\TestCase
+class AnnotationFieldTest extends \PHPUnit\Framework\TestCase
 {
 
 	public function testCreate(): void

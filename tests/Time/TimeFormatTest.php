@@ -9,7 +9,7 @@ use DateTimeImmutable;
 use DateTimeZone;
 use PHPUnit\Framework\Assert;
 
-class TimeFormatTest extends \Consistence\TestCase
+class TimeFormatTest extends \PHPUnit\Framework\TestCase
 {
 
 	public function testCreateDateTimeFromTimestamp(): void
@@ -138,8 +138,9 @@ class TimeFormatTest extends \Consistence\TestCase
 	 */
 	public function testCheckValidTimes(string $format, string $timeString): void
 	{
+		$this->expectNotToPerformAssertions();
+
 		TimeFormat::checkTime($format, $timeString);
-		$this->ok();
 	}
 
 	/**

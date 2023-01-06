@@ -7,7 +7,7 @@ namespace Consistence\Type\ArrayType;
 use DateTimeImmutable;
 use PHPUnit\Framework\Assert;
 
-class ArrayTypeTest extends \Consistence\TestCase
+class ArrayTypeTest extends \PHPUnit\Framework\TestCase
 {
 
 	public function testContainsKeyIsNotStrict(): void

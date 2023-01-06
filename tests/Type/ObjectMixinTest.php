@@ -7,7 +7,7 @@ namespace Consistence\Type;
 use PHPUnit\Framework\Assert;
 use stdClass;
 
-class ObjectMixinTest extends \Consistence\TestCase
+class ObjectMixinTest extends \PHPUnit\Framework\TestCase
 {
 
 	public function testStaticConstruct(): void

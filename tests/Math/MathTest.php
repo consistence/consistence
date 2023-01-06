@@ -15,9 +15,9 @@ class MathTest extends \PHPUnit\Framework\TestCase
 	public function moduloDataProvider(): array
 	{
 		return [
-			[4, 2, 0],
-			[5, 2, 1],
-			[-5, 2, 1],
+			'dividend positive, no remainder after division by modulo' => [4, 2, 0],
+			'dividend positive, remainder after division by modulo' => [5, 2, 1],
+			'dividend negative, remainder after division by modulo' => [-5, 2, 1],
 		];
 	}
 
@@ -49,18 +49,18 @@ class MathTest extends \PHPUnit\Framework\TestCase
 	public function powersOfTwoDataProvider(): array
 	{
 		return [
-			[-2, false],
-			[-1, false],
-			[0, false],
-			[1, true],
-			[2, true],
-			[3, false],
-			[4, true],
-			[6, false],
-			[8, true],
-			[10, false],
-			[16, true],
-			[32, true],
+			'-2 - not power of two' => [-2, false],
+			'-1 - not power of two' => [-1, false],
+			'0 - not power of two' => [0, false],
+			'1 - 2^0' => [1, true],
+			'2 - 2^1' => [2, true],
+			'3 - not power of two' => [3, false],
+			'4 - 2^2' => [4, true],
+			'6 - not power of two' => [6, false],
+			'8 - 2^3' => [8, true],
+			'10 - not power of two' => [10, false],
+			'16 - 2^4' => [16, true],
+			'32 - 2^5' => [32, true],
 		];
 	}
 

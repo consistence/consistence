@@ -103,12 +103,12 @@ class EnumTest extends \PHPUnit\Framework\TestCase
 	public function invalidTypesDataProvider(): array
 	{
 		return [
-			[[]],
-			[new DateTimeImmutable()],
-			[static function (): void {
+			'array' => [[]],
+			'object' => [new DateTimeImmutable()],
+			'Closure' => [static function (): void {
 				return;
 			}],
-			[fopen(__DIR__, 'r')],
+			'resource' => [fopen(__DIR__, 'r')],
 		];
 	}
 
@@ -118,11 +118,11 @@ class EnumTest extends \PHPUnit\Framework\TestCase
 	public function invalidEnumValuesDataProvider(): array
 	{
 		return array_merge([
-			[0],
-			[1.5],
-			[false],
-			[true],
-			[null],
+			'integer, which is not in available values' => [0],
+			'float' => [1.5],
+			'false' => [false],
+			'true' => [true],
+			'null' => [null],
 		], array_values($this->invalidTypesDataProvider()));
 	}
 

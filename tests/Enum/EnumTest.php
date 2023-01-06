@@ -6,6 +6,7 @@ namespace Consistence\Enum;
 
 use Consistence\Type\ArrayType\ArrayType;
 use DateTimeImmutable;
+use PHPUnit\Framework\Assert;
 
 class EnumTest extends \Consistence\TestCase
 {
@@ -13,13 +14,13 @@ class EnumTest extends \Consistence\TestCase
 	public function testGet(): void
 	{
 		$review = StatusEnum::get(StatusEnum::REVIEW);
-		$this->assertInstanceOf(StatusEnum::class, $review);
+		Assert::assertInstanceOf(StatusEnum::class, $review);
 	}
 
 	public function testGetValue(): void
 	{
 		$review = StatusEnum::get(StatusEnum::REVIEW);
-		$this->assertSame(StatusEnum::REVIEW, $review->getValue());
+		Assert::assertSame(StatusEnum::REVIEW, $review->getValue());
 	}
 
 	public function testSameInstances(): void
@@ -27,7 +28,7 @@ class EnumTest extends \Consistence\TestCase
 		$review1 = StatusEnum::get(StatusEnum::REVIEW);
 		$review2 = StatusEnum::get(StatusEnum::REVIEW);
 
-		$this->assertSame($review1, $review2);
+		Assert::assertSame($review1, $review2);
 	}
 
 	public function testDifferentInstances(): void
@@ -35,7 +36,7 @@ class EnumTest extends \Consistence\TestCase
 		$review = StatusEnum::get(StatusEnum::REVIEW);
 		$draft = StatusEnum::get(StatusEnum::DRAFT);
 
-		$this->assertNotSame($review, $draft);
+		Assert::assertNotSame($review, $draft);
 	}
 
 	public function testEquals(): void
@@ -43,7 +44,7 @@ class EnumTest extends \Consistence\TestCase
 		$review1 = StatusEnum::get(StatusEnum::REVIEW);
 		$review2 = StatusEnum::get(StatusEnum::REVIEW);
 
-		$this->assertTrue($review1->equals($review2));
+		Assert::assertTrue($review1->equals($review2));
 	}
 
 	public function testNotEquals(): void
@@ -51,26 +52,26 @@ class EnumTest extends \Consistence\TestCase
 		$review = StatusEnum::get(StatusEnum::REVIEW);
 		$draft = StatusEnum::get(StatusEnum::DRAFT);
 
-		$this->assertFalse($review->equals($draft));
+		Assert::assertFalse($review->equals($draft));
 	}
 
 	public function testEqualsValue(): void
 	{
 		$review = StatusEnum::get(StatusEnum::REVIEW);
 
-		$this->assertTrue($review->equalsValue(StatusEnum::REVIEW));
+		Assert::assertTrue($review->equalsValue(StatusEnum::REVIEW));
 	}
 
 	public function testNotEqualsValue(): void
 	{
 		$review = StatusEnum::get(StatusEnum::REVIEW);
 
-		$this->assertFalse($review->equalsValue(StatusEnum::DRAFT));
+		Assert::assertFalse($review->equalsValue(StatusEnum::DRAFT));
 	}
 
 	public function testGetAvailableValues(): void
 	{
-		$this->assertEquals([
+		Assert::assertSame([
 			'DRAFT' => StatusEnum::DRAFT,
 			'REVIEW' => StatusEnum::REVIEW,
 			'PUBLISHED' => StatusEnum::PUBLISHED,
@@ -79,7 +80,7 @@ class EnumTest extends \Consistence\TestCase
 
 	public function testGetAvailableEnums(): void
 	{
-		$this->assertEquals([
+		Assert::assertSame([
 			'DRAFT' => StatusEnum::get(StatusEnum::DRAFT),
 			'REVIEW' => StatusEnum::get(StatusEnum::REVIEW),
 			'PUBLISHED' => StatusEnum::get(StatusEnum::PUBLISHED),
@@ -88,12 +89,12 @@ class EnumTest extends \Consistence\TestCase
 
 	public function testIsValidValue(): void
 	{
-		$this->assertTrue(StatusEnum::isValidValue(StatusEnum::DRAFT));
+		Assert::assertTrue(StatusEnum::isValidValue(StatusEnum::DRAFT));
 	}
 
 	public function testNotValidValue(): void
 	{
-		$this->assertFalse(StatusEnum::isValidValue(0));
+		Assert::assertFalse(StatusEnum::isValidValue('bar'));
 	}
 
 	/**
@@ -134,15 +135,15 @@ class EnumTest extends \Consistence\TestCase
 	{
 		try {
 			StatusEnum::get($value);
-			$this->fail();
+			Assert::fail();
 		} catch (\Consistence\Enum\InvalidEnumValueException $e) {
-			$this->assertSame($value, $e->getValue());
-			$this->assertEquals([
+			Assert::assertSame($value, $e->getValue());
+			Assert::assertEquals([
 				'DRAFT' => StatusEnum::DRAFT,
 				'REVIEW' => StatusEnum::REVIEW,
 				'PUBLISHED' => StatusEnum::PUBLISHED,
 			], $e->getAvailableValues());
-			$this->assertSame(StatusEnum::class, $e->getEnumClassName());
+			Assert::assertSame(StatusEnum::class, $e->getEnumClassName());
 		}
 	}
 
@@ -156,15 +157,15 @@ class EnumTest extends \Consistence\TestCase
 	{
 		try {
 			StatusEnum::checkValue('foo');
-			$this->fail();
+			Assert::fail();
 		} catch (\Consistence\Enum\InvalidEnumValueException $e) {
-			$this->assertSame('foo', $e->getValue());
-			$this->assertEquals([
+			Assert::assertSame('foo', $e->getValue());
+			Assert::assertEquals([
 				'DRAFT' => StatusEnum::DRAFT,
 				'REVIEW' => StatusEnum::REVIEW,
 				'PUBLISHED' => StatusEnum::PUBLISHED,
 			], $e->getAvailableValues());
-			$this->assertSame(StatusEnum::class, $e->getEnumClassName());
+			Assert::assertSame(StatusEnum::class, $e->getEnumClassName());
 		}
 	}
 
@@ -175,16 +176,16 @@ class EnumTest extends \Consistence\TestCase
 		try {
 			$review->equals($foo);
 
-			$this->fail();
+			Assert::fail();
 		} catch (\Consistence\Enum\OperationSupportedOnlyForSameEnumException $e) {
-			$this->assertSame($review, $e->getExpected());
-			$this->assertSame($foo, $e->getGiven());
+			Assert::assertSame($review, $e->getExpected());
+			Assert::assertSame($foo, $e->getGiven());
 		}
 	}
 
 	public function testAvailableValuesFooEnum(): void
 	{
-		$this->assertEquals([
+		Assert::assertEquals([
 			'FOO' => FooEnum::FOO,
 		], FooEnum::getAvailableValues());
 	}
@@ -193,10 +194,10 @@ class EnumTest extends \Consistence\TestCase
 	{
 		try {
 			StatusEnum::get('bar');
-			$this->fail();
+			Assert::fail();
 		} catch (\Consistence\Enum\InvalidEnumValueException $e) {
-			$this->assertSame('bar', $e->getValue());
-			$this->assertEquals([
+			Assert::assertSame('bar', $e->getValue());
+			Assert::assertEquals([
 				'DRAFT' => StatusEnum::DRAFT,
 				'REVIEW' => StatusEnum::REVIEW,
 				'PUBLISHED' => StatusEnum::PUBLISHED,
@@ -222,18 +223,18 @@ class EnumTest extends \Consistence\TestCase
 	public function testValidTypes($value): void
 	{
 		$enum = TypeEnum::get($value);
-		$this->assertInstanceOf(TypeEnum::class, $enum);
-		$this->assertSame($enum->getValue(), $value);
+		Assert::assertInstanceOf(TypeEnum::class, $enum);
+		Assert::assertSame($enum->getValue(), $value);
 	}
 
 	public function testDuplicateSpecifiedValues(): void
 	{
 		try {
 			DuplicateValuesEnum::get(DuplicateValuesEnum::BAZ);
-			$this->fail();
+			Assert::fail();
 		} catch (\Consistence\Enum\DuplicateValueSpecifiedException $e) {
-			$this->assertSame(DuplicateValuesEnum::FOO, $e->getValue());
-			$this->assertSame(DuplicateValuesEnum::class, $e->getClass());
+			Assert::assertSame(DuplicateValuesEnum::FOO, $e->getValue());
+			Assert::assertSame(DuplicateValuesEnum::class, $e->getClass());
 		}
 	}
 

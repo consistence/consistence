@@ -8,6 +8,7 @@ use ArrayObject;
 use Closure;
 use DateTimeImmutable;
 use DateTimeInterface;
+use PHPUnit\Framework\Assert;
 use stdClass;
 
 class TypeTest extends \Consistence\TestCase
@@ -149,7 +150,7 @@ class TypeTest extends \Consistence\TestCase
 	 */
 	public function testTypes($value, string $valueType): void
 	{
-		$this->assertSame($valueType, Type::getType($value));
+		Assert::assertSame($valueType, Type::getType($value));
 	}
 
 	/**
@@ -161,7 +162,7 @@ class TypeTest extends \Consistence\TestCase
 	 */
 	public function testHasType($value, string $expectedTypes, bool $result = true): void
 	{
-		$this->assertSame($result, Type::hasType($value, $expectedTypes));
+		Assert::assertSame($result, Type::hasType($value, $expectedTypes));
 	}
 
 	public function testCheckTypeOk(): void
@@ -180,22 +181,22 @@ class TypeTest extends \Consistence\TestCase
 	{
 		try {
 			Type::checkType($value, 'Foo');
-			$this->fail();
+			Assert::fail();
 		} catch (\Consistence\InvalidArgumentTypeException $e) {
-			$this->assertSame($value, $e->getValue());
-			$this->assertSame($valueType, $e->getValueType());
-			$this->assertSame('Foo', $e->getExpectedTypes());
+			Assert::assertSame($value, $e->getValue());
+			Assert::assertSame($valueType, $e->getValueType());
+			Assert::assertSame('Foo', $e->getExpectedTypes());
 		}
 	}
 
 	public function testAllowSubtypes(): void
 	{
-		$this->assertTrue(Type::hasType(new DateTimeImmutable(), DateTimeInterface::class));
+		Assert::assertTrue(Type::hasType(new DateTimeImmutable(), DateTimeInterface::class));
 	}
 
 	public function testDisallowSubtypes(): void
 	{
-		$this->assertFalse(Type::hasType(new DateTimeImmutable(), DateTimeInterface::class, Type::SUBTYPES_DISALLOW));
+		Assert::assertFalse(Type::hasType(new DateTimeImmutable(), DateTimeInterface::class, Type::SUBTYPES_DISALLOW));
 	}
 
 }

@@ -4,6 +4,8 @@ declare(strict_types = 1);
 
 namespace Consistence\Math;
 
+use PHPUnit\Framework\Assert;
+
 class MathTest extends \Consistence\TestCase
 {
 
@@ -28,16 +30,16 @@ class MathTest extends \Consistence\TestCase
 	 */
 	public function testModulo(int $dividend, int $modulo, int $result): void
 	{
-		$this->assertSame(Math::modulo($dividend, $modulo), $result);
+		Assert::assertSame(Math::modulo($dividend, $modulo), $result);
 	}
 
 	public function testModuloNegativeModulus(): void
 	{
 		try {
 			Math::modulo(5, -1);
-			$this->fail();
+			Assert::fail();
 		} catch (\Consistence\Math\NonNegativeIntegerExpectedException $e) {
-			$this->assertSame(-1, $e->getValue());
+			Assert::assertSame(-1, $e->getValue());
 		}
 	}
 
@@ -70,7 +72,7 @@ class MathTest extends \Consistence\TestCase
 	 */
 	public function testIsPowerOfTwo(int $value, bool $result): void
 	{
-		$this->assertSame(Math::isPowerOfTwo($value), $result);
+		Assert::assertSame(Math::isPowerOfTwo($value), $result);
 	}
 
 }

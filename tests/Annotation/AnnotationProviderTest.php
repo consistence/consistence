@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Consistence\Annotation;
 
+use PHPUnit\Framework\Assert;
 use ReflectionProperty;
 
 class AnnotationProviderTest extends \Consistence\TestCase
@@ -14,13 +15,13 @@ class AnnotationProviderTest extends \Consistence\TestCase
 		$property = new ReflectionProperty(Foo::class, 'foo');
 		$annotationProvider = $this->createMock(AnnotationProvider::class);
 		$annotationProvider
-			->expects($this->once())
+			->expects(self::once())
 			->method('getPropertyAnnotation')
 			->with($property, 'test')
-			->will($this->returnValue(Annotation::createAnnotationWithoutParams('test')));
+			->will(self::returnValue(Annotation::createAnnotationWithoutParams('test')));
 
 		$annotation = $annotationProvider->getPropertyAnnotation($property, 'test');
-		$this->assertInstanceOf(Annotation::class, $annotation);
+		Assert::assertInstanceOf(Annotation::class, $annotation);
 	}
 
 	public function testGetMissingAnnotation(): void
@@ -28,18 +29,18 @@ class AnnotationProviderTest extends \Consistence\TestCase
 		$property = new ReflectionProperty(Foo::class, 'foo');
 		$annotationProvider = $this->createMock(AnnotationProvider::class);
 		$annotationProvider
-			->expects($this->once())
+			->expects(self::once())
 			->method('getPropertyAnnotation')
 			->with($property, 'test')
-			->will($this->throwException(new \Consistence\Annotation\AnnotationNotFoundException('test', $property)));
+			->will(self::throwException(new \Consistence\Annotation\AnnotationNotFoundException('test', $property)));
 
 		try {
 			$annotationProvider->getPropertyAnnotation($property, 'test');
 
-			$this->fail();
+			Assert::fail();
 		} catch (\Consistence\Annotation\AnnotationNotFoundException $e) {
-			$this->assertSame('test', $e->getAnnotationName());
-			$this->assertSame($property, $e->getProperty());
+			Assert::assertSame('test', $e->getAnnotationName());
+			Assert::assertSame($property, $e->getProperty());
 		}
 	}
 
@@ -48,16 +49,16 @@ class AnnotationProviderTest extends \Consistence\TestCase
 		$property = new ReflectionProperty(Foo::class, 'foo');
 		$annotationProvider = $this->createMock(AnnotationProvider::class);
 		$annotationProvider
-			->expects($this->once())
+			->expects(self::once())
 			->method('getPropertyAnnotations')
 			->with($property, 'test')
-			->will($this->returnValue([
+			->will(self::returnValue([
 				Annotation::createAnnotationWithoutParams('test'),
 				Annotation::createAnnotationWithoutParams('test'),
 			]));
 
 		$annotations = $annotationProvider->getPropertyAnnotations($property, 'test');
-		$this->assertCount(2, $annotations);
+		Assert::assertCount(2, $annotations);
 	}
 
 }

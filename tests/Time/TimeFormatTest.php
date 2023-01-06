@@ -7,6 +7,7 @@ namespace Consistence\Time;
 use DateTime;
 use DateTimeImmutable;
 use DateTimeZone;
+use PHPUnit\Framework\Assert;
 
 class TimeFormatTest extends \Consistence\TestCase
 {
@@ -15,8 +16,8 @@ class TimeFormatTest extends \Consistence\TestCase
 	{
 		$original = new DateTime();
 		$converted = TimeFormat::createDateTimeFromTimestamp($original->getTimestamp());
-		$this->assertSame($original->getTimestamp(), $converted->getTimestamp());
-		$this->assertEquals($original->getTimezone(), $converted->getTimezone());
+		Assert::assertSame($original->getTimestamp(), $converted->getTimestamp());
+		Assert::assertEquals($original->getTimezone(), $converted->getTimezone());
 	}
 
 	public function testCreateDateTimeFromTimestampWithCustomTimezone(): void
@@ -26,16 +27,16 @@ class TimeFormatTest extends \Consistence\TestCase
 
 		$converted = TimeFormat::createDateTimeFromTimestamp($original->getTimestamp(), $timezone);
 
-		$this->assertSame($original->getTimestamp(), $converted->getTimestamp());
-		$this->assertEquals($timezone, $converted->getTimezone());
+		Assert::assertSame($original->getTimestamp(), $converted->getTimestamp());
+		Assert::assertEquals($timezone, $converted->getTimezone());
 	}
 
 	public function testCreateDateTimeImmutableFromTimestamp(): void
 	{
 		$original = new DateTimeImmutable();
 		$converted = TimeFormat::createDateTimeImmutableFromTimestamp($original->getTimestamp());
-		$this->assertSame($original->getTimestamp(), $converted->getTimestamp());
-		$this->assertEquals($original->getTimezone(), $converted->getTimezone());
+		Assert::assertSame($original->getTimestamp(), $converted->getTimestamp());
+		Assert::assertEquals($original->getTimezone(), $converted->getTimezone());
 	}
 
 	public function testCreateDateTimeImmutableFromTimestampWithCustomTimezone(): void
@@ -45,26 +46,26 @@ class TimeFormatTest extends \Consistence\TestCase
 
 		$converted = TimeFormat::createDateTimeImmutableFromTimestamp($original->getTimestamp(), $timezone);
 
-		$this->assertSame($original->getTimestamp(), $converted->getTimestamp());
-		$this->assertEquals($timezone, $converted->getTimezone());
+		Assert::assertSame($original->getTimestamp(), $converted->getTimestamp());
+		Assert::assertEquals($timezone, $converted->getTimezone());
 	}
 
 	public function testCreateDateTimeFromDateTimeInterface(): void
 	{
 		$original = new DateTimeImmutable();
 		$converted = TimeFormat::createDateTimeFromDateTimeInterface($original);
-		$this->assertInstanceOf(DateTime::class, $converted);
-		$this->assertEquals($original, $converted);
-		$this->assertEquals($original->getTimezone(), $converted->getTimezone());
+		Assert::assertInstanceOf(DateTime::class, $converted);
+		Assert::assertEquals($original, $converted);
+		Assert::assertEquals($original->getTimezone(), $converted->getTimezone());
 	}
 
 	public function testCreateDateTimeImmutableFromDateTimeInterface(): void
 	{
 		$original = new DateTime();
 		$converted = TimeFormat::createDateTimeImmutableFromDateTimeInterface($original);
-		$this->assertInstanceOf(DateTimeImmutable::class, $converted);
-		$this->assertEquals($original, $converted);
-		$this->assertEquals($original->getTimezone(), $converted->getTimezone());
+		Assert::assertInstanceOf(DateTimeImmutable::class, $converted);
+		Assert::assertEquals($original, $converted);
+		Assert::assertEquals($original->getTimezone(), $converted->getTimezone());
 	}
 
 	/**
@@ -152,10 +153,10 @@ class TimeFormatTest extends \Consistence\TestCase
 	{
 		try {
 			TimeFormat::checkTime($format, $timeString);
-			$this->fail(sprintf('Exception was expected for time %s given for format %s, because %s', $timeString, $format, $reason));
+			Assert::fail(sprintf('Exception was expected for time %s given for format %s, because %s', $timeString, $format, $reason));
 		} catch (\Consistence\Time\TimeDoesNotMatchFormatException $e) {
-			$this->assertSame($format, $e->getFormat());
-			$this->assertSame($timeString, $e->getTimeString());
+			Assert::assertSame($format, $e->getFormat());
+			Assert::assertSame($timeString, $e->getTimeString());
 		}
 	}
 
@@ -170,9 +171,9 @@ class TimeFormatTest extends \Consistence\TestCase
 	{
 		try {
 			TimeFormat::checkTime($format, $timeString);
-			$this->fail(sprintf('Exception was expected for time %s given for format %s, because %s', $timeString, $format, $reason));
+			Assert::fail(sprintf('Exception was expected for time %s given for format %s, because %s', $timeString, $format, $reason));
 		} catch (\Consistence\Time\TimeDoesNotExistException $e) {
-			$this->assertSame($timeString, $e->getTimeString());
+			Assert::assertSame($timeString, $e->getTimeString());
 		}
 	}
 
@@ -184,7 +185,7 @@ class TimeFormatTest extends \Consistence\TestCase
 	 */
 	public function testValidTimes(string $format, string $timeString): void
 	{
-		$this->assertTrue(TimeFormat::isValidTime($format, $timeString));
+		Assert::assertTrue(TimeFormat::isValidTime($format, $timeString));
 	}
 
 	/**
@@ -196,7 +197,7 @@ class TimeFormatTest extends \Consistence\TestCase
 	 */
 	public function testInvalidTimes(string $format, string $timeString, string $reason): void
 	{
-		$this->assertFalse(
+		Assert::assertFalse(
 			TimeFormat::isValidTime($format, $timeString),
 			sprintf('Expected that time %s given for format %s is invalid, because %s', $timeString, $format, $reason)
 		);
@@ -216,8 +217,8 @@ class TimeFormatTest extends \Consistence\TestCase
 			new DateTimeZone('UTC')
 		);
 
-		$this->assertInstanceOf(DateTime::class, $time);
-		$this->assertSame(DateTime::createFromFormat(
+		Assert::assertInstanceOf(DateTime::class, $time);
+		Assert::assertSame(DateTime::createFromFormat(
 			$format,
 			$timeString,
 			new DateTimeZone('UTC')
@@ -226,7 +227,7 @@ class TimeFormatTest extends \Consistence\TestCase
 
 	public function testCreateDateTimeWithDefaultTimezone(): void
 	{
-		$this->assertInstanceOf(DateTime::class, TimeFormat::createDateTimeFromFormat('Y', '2016'));
+		Assert::assertInstanceOf(DateTime::class, TimeFormat::createDateTimeFromFormat('Y', '2016'));
 	}
 
 	/**
@@ -245,9 +246,9 @@ class TimeFormatTest extends \Consistence\TestCase
 				new DateTimeZone('UTC')
 			);
 
-			$this->fail(sprintf('Exception was expected for time %s given for format %s, because %s', $timeString, $format, $reason));
+			Assert::fail(sprintf('Exception was expected for time %s given for format %s, because %s', $timeString, $format, $reason));
 		} catch (\Consistence\Time\InvalidTimeForFormatException $e) {
-			$this->assertSame($timeString, $e->getTimeString());
+			Assert::assertSame($timeString, $e->getTimeString());
 		}
 	}
 
@@ -265,8 +266,8 @@ class TimeFormatTest extends \Consistence\TestCase
 			new DateTimeZone('UTC')
 		);
 
-		$this->assertInstanceOf(DateTimeImmutable::class, $time);
-		$this->assertSame(DateTimeImmutable::createFromFormat(
+		Assert::assertInstanceOf(DateTimeImmutable::class, $time);
+		Assert::assertSame(DateTimeImmutable::createFromFormat(
 			$format,
 			$timeString,
 			new DateTimeZone('UTC')
@@ -275,7 +276,7 @@ class TimeFormatTest extends \Consistence\TestCase
 
 	public function testCreateDateTimeImmutableWithDefaultTimezone(): void
 	{
-		$this->assertInstanceOf(DateTimeImmutable::class, TimeFormat::createDateTimeImmutableFromFormat('Y', '2016'));
+		Assert::assertInstanceOf(DateTimeImmutable::class, TimeFormat::createDateTimeImmutableFromFormat('Y', '2016'));
 	}
 
 	/**
@@ -294,9 +295,9 @@ class TimeFormatTest extends \Consistence\TestCase
 				new DateTimeZone('UTC')
 			);
 
-			$this->fail(sprintf('Exception was expected for time %s given for format %s, because %s', $timeString, $format, $reason));
+			Assert::fail(sprintf('Exception was expected for time %s given for format %s, because %s', $timeString, $format, $reason));
 		} catch (\Consistence\Time\InvalidTimeForFormatException $e) {
-			$this->assertSame($timeString, $e->getTimeString());
+			Assert::assertSame($timeString, $e->getTimeString());
 		}
 	}
 

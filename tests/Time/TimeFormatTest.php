@@ -71,7 +71,7 @@ class TimeFormatTest extends \PHPUnit\Framework\TestCase
 	/**
 	 * @return string[][]
 	 */
-	public function validTimeProvider(): array
+	public function validTimeDataProvider(): array
 	{
 		return [
 			['H:i', '02:00'],
@@ -94,7 +94,7 @@ class TimeFormatTest extends \PHPUnit\Framework\TestCase
 	/**
 	 * @return string[][]
 	 */
-	public function invalidTimeForFormatProvider(): array
+	public function invalidTimeForFormatDataProvider(): array
 	{
 		return [
 			[TimeFormat::ISO8601, '', 'empty string'],
@@ -110,7 +110,7 @@ class TimeFormatTest extends \PHPUnit\Framework\TestCase
 	/**
 	 * @return string[][]
 	 */
-	public function nonExistingTimeProvider(): array
+	public function nonExistingTimeDataProvider(): array
 	{
 		return [
 			['H:i', '25:00', 'there is no 25th hour in the day'],
@@ -122,16 +122,16 @@ class TimeFormatTest extends \PHPUnit\Framework\TestCase
 	/**
 	 * @return string[][]
 	 */
-	public function invalidTimeProvider(): array
+	public function invalidTimeDataProvider(): array
 	{
 		return array_merge(
-			$this->invalidTimeForFormatProvider(),
-			$this->nonExistingTimeProvider()
+			$this->invalidTimeForFormatDataProvider(),
+			$this->nonExistingTimeDataProvider()
 		);
 	}
 
 	/**
-	 * @dataProvider validTimeProvider
+	 * @dataProvider validTimeDataProvider
 	 *
 	 * @param string $format
 	 * @param string $timeString
@@ -144,7 +144,7 @@ class TimeFormatTest extends \PHPUnit\Framework\TestCase
 	}
 
 	/**
-	 * @dataProvider invalidTimeForFormatProvider
+	 * @dataProvider invalidTimeForFormatDataProvider
 	 *
 	 * @param string $format
 	 * @param string $timeString
@@ -162,7 +162,7 @@ class TimeFormatTest extends \PHPUnit\Framework\TestCase
 	}
 
 	/**
-	 * @dataProvider nonExistingTimeProvider
+	 * @dataProvider nonExistingTimeDataProvider
 	 *
 	 * @param string $format
 	 * @param string $timeString
@@ -179,7 +179,7 @@ class TimeFormatTest extends \PHPUnit\Framework\TestCase
 	}
 
 	/**
-	 * @dataProvider validTimeProvider
+	 * @dataProvider validTimeDataProvider
 	 *
 	 * @param string $format
 	 * @param string $timeString
@@ -190,7 +190,7 @@ class TimeFormatTest extends \PHPUnit\Framework\TestCase
 	}
 
 	/**
-	 * @dataProvider invalidTimeProvider
+	 * @dataProvider invalidTimeDataProvider
 	 *
 	 * @param string $format
 	 * @param string $timeString
@@ -205,7 +205,7 @@ class TimeFormatTest extends \PHPUnit\Framework\TestCase
 	}
 
 	/**
-	 * @dataProvider validTimeProvider
+	 * @dataProvider validTimeDataProvider
 	 *
 	 * @param string $format
 	 * @param string $timeString
@@ -232,7 +232,7 @@ class TimeFormatTest extends \PHPUnit\Framework\TestCase
 	}
 
 	/**
-	 * @dataProvider invalidTimeProvider
+	 * @dataProvider invalidTimeDataProvider
 	 *
 	 * @param string $format
 	 * @param string $timeString
@@ -254,7 +254,7 @@ class TimeFormatTest extends \PHPUnit\Framework\TestCase
 	}
 
 	/**
-	 * @dataProvider validTimeProvider
+	 * @dataProvider validTimeDataProvider
 	 *
 	 * @param string $format
 	 * @param string $timeString
@@ -281,7 +281,7 @@ class TimeFormatTest extends \PHPUnit\Framework\TestCase
 	}
 
 	/**
-	 * @dataProvider invalidTimeProvider
+	 * @dataProvider invalidTimeDataProvider
 	 *
 	 * @param string $format
 	 * @param string $timeString

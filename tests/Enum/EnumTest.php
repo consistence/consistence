@@ -100,7 +100,7 @@ class EnumTest extends \PHPUnit\Framework\TestCase
 	/**
 	 * @return mixed[][]
 	 */
-	public function invalidTypeProvider(): array
+	public function invalidTypeDataProvider(): array
 	{
 		return [
 			[[]],
@@ -115,7 +115,7 @@ class EnumTest extends \PHPUnit\Framework\TestCase
 	/**
 	 * @return mixed[][]
 	 */
-	public function invalidEnumValueProvider(): array
+	public function invalidEnumValueDataProvider(): array
 	{
 		return array_merge([
 			[0],
@@ -123,11 +123,11 @@ class EnumTest extends \PHPUnit\Framework\TestCase
 			[false],
 			[true],
 			[null],
-		], array_values($this->invalidTypeProvider()));
+		], array_values($this->invalidTypeDataProvider()));
 	}
 
 	/**
-	 * @dataProvider invalidEnumValueProvider
+	 * @dataProvider invalidEnumValueDataProvider
 	 *
 	 * @param mixed $value
 	 */
@@ -209,7 +209,7 @@ class EnumTest extends \PHPUnit\Framework\TestCase
 	/**
 	 * @return mixed[][]
 	 */
-	public function validTypeProvider(): array
+	public function validTypeDataProvider(): array
 	{
 		return ArrayType::mapValuesByCallback(TypeEnum::getAvailableValues(), function ($value): array {
 			return [$value];
@@ -217,7 +217,7 @@ class EnumTest extends \PHPUnit\Framework\TestCase
 	}
 
 	/**
-	 * @dataProvider validTypeProvider
+	 * @dataProvider validTypeDataProvider
 	 *
 	 * @param mixed $value
 	 */

@@ -24,7 +24,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
 	/**
 	 * @return mixed[][]
 	 */
-	public function typeProvider(): array
+	public function typeDataProvider(): array
 	{
 		return [
 			['foo', 'string'],
@@ -44,10 +44,10 @@ class TypeTest extends \PHPUnit\Framework\TestCase
 	/**
 	 * @return mixed[][]
 	 */
-	public function hasTypeProvider(): array
+	public function hasTypeDataProvider(): array
 	{
 		return array_merge(
-			$this->typeProvider(),
+			$this->typeDataProvider(),
 			[
 				[null, 'NULL'],
 				[1, 'string|int'],
@@ -143,7 +143,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
 	}
 
 	/**
-	 * @dataProvider typeProvider
+	 * @dataProvider typeDataProvider
 	 *
 	 * @param mixed $value
 	 * @param string $valueType
@@ -154,7 +154,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
 	}
 
 	/**
-	 * @dataProvider hasTypeProvider
+	 * @dataProvider hasTypeDataProvider
 	 *
 	 * @param mixed $value
 	 * @param string $expectedTypes
@@ -173,7 +173,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
 	}
 
 	/**
-	 * @dataProvider typeProvider
+	 * @dataProvider typeDataProvider
 	 *
 	 * @param mixed $value
 	 * @param string $valueType

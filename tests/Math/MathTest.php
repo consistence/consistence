@@ -12,7 +12,7 @@ class MathTest extends \PHPUnit\Framework\TestCase
 	/**
 	 * @return int[][]
 	 */
-	public function moduloProvider(): array
+	public function moduloDataProvider(): array
 	{
 		return [
 			[4, 2, 0],
@@ -22,7 +22,7 @@ class MathTest extends \PHPUnit\Framework\TestCase
 	}
 
 	/**
-	 * @dataProvider moduloProvider
+	 * @dataProvider moduloDataProvider
 	 *
 	 * @param int $dividend
 	 * @param int $modulo
@@ -46,7 +46,7 @@ class MathTest extends \PHPUnit\Framework\TestCase
 	/**
 	 * @return mixed[][]
 	 */
-	public function powerOfTwoProvider(): array
+	public function powerOfTwoDataProvider(): array
 	{
 		return [
 			[-2, false],
@@ -65,7 +65,7 @@ class MathTest extends \PHPUnit\Framework\TestCase
 	}
 
 	/**
-	 * @dataProvider powerOfTwoProvider
+	 * @dataProvider powerOfTwoDataProvider
 	 *
 	 * @param int $value
 	 * @param bool $result

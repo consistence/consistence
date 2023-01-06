@@ -4,7 +4,6 @@ declare(strict_types = 1);
 
 namespace Consistence\Enum;
 
-use Consistence\Type\ArrayType\ArrayType;
 use DateTimeImmutable;
 use PHPUnit\Framework\Assert;
 
@@ -103,12 +102,12 @@ class EnumTest extends \PHPUnit\Framework\TestCase
 	public function invalidTypeDataProvider(): array
 	{
 		return [
-			[[]],
-			[new DateTimeImmutable()],
-			[static function (): void {
+			'array' => [[]],
+			'object' => [new DateTimeImmutable()],
+			'Closure' => [static function (): void {
 				return;
 			}],
-			[fopen(__DIR__, 'r')],
+			'resource' => [fopen(__DIR__, 'r')],
 		];
 	}
 
@@ -118,11 +117,11 @@ class EnumTest extends \PHPUnit\Framework\TestCase
 	public function invalidEnumValueDataProvider(): array
 	{
 		return array_merge([
-			[0],
-			[1.5],
-			[false],
-			[true],
-			[null],
+			'integer, which is not in available values' => [0],
+			'float' => [1.5],
+			'false' => [false],
+			'true' => [true],
+			'null' => [null],
 		], array_values($this->invalidTypeDataProvider()));
 	}
 
@@ -211,9 +210,13 @@ class EnumTest extends \PHPUnit\Framework\TestCase
 	 */
 	public function validTypeDataProvider(): array
 	{
-		return ArrayType::mapValuesByCallback(TypeEnum::getAvailableValues(), function ($value): array {
-			return [$value];
-		});
+		return [
+			'integer' => [TypeEnum::INTEGER],
+			'string' => [TypeEnum::STRING],
+			'float' => [TypeEnum::FLOAT],
+			'boolean' => [TypeEnum::BOOLEAN],
+			'null' => [TypeEnum::NULL],
+		];
 	}
 
 	/**

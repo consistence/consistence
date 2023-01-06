@@ -7,7 +7,7 @@ namespace Consistence\Reflection;
 use PHPUnit\Framework\Assert;
 use ReflectionClass;
 
-class ClassReflectionTest extends \Consistence\TestCase
+class ClassReflectionTest extends \PHPUnit\Framework\TestCase
 {
 
 	public function testStaticConstruct(): void

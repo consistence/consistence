@@ -6,7 +6,7 @@ namespace Consistence\Type\String;
 
 use PHPUnit\Framework\Assert;
 
-class Utf8StringTypeTest extends \Consistence\TestCase
+class Utf8StringTypeTest extends \PHPUnit\Framework\TestCase
 {
 
 	public function testStaticConstruct(): void

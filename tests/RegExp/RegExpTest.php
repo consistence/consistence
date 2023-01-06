@@ -6,7 +6,7 @@ namespace Consistence\RegExp;
 
 use PHPUnit\Framework\Assert;
 
-class RegExpTest extends \Consistence\TestCase
+class RegExpTest extends \PHPUnit\Framework\TestCase
 {
 
 	public function testStaticConstruct(): void

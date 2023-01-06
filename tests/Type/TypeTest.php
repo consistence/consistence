@@ -11,7 +11,7 @@ use DateTimeInterface;
 use PHPUnit\Framework\Assert;
 use stdClass;
 
-class TypeTest extends \Consistence\TestCase
+class TypeTest extends \PHPUnit\Framework\TestCase
 {
 
 	public function testStaticConstruct(): void
@@ -167,8 +167,9 @@ class TypeTest extends \Consistence\TestCase
 
 	public function testCheckTypeOk(): void
 	{
+		$this->expectNotToPerformAssertions();
+
 		Type::checkType('foo', 'string');
-		$this->ok();
 	}
 
 	/**

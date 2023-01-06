@@ -6,7 +6,7 @@ namespace Consistence\Annotation;
 
 use PHPUnit\Framework\Assert;
 
-class AnnotationTest extends \Consistence\TestCase
+class AnnotationTest extends \PHPUnit\Framework\TestCase
 {
 
 	public function testCreateNoParams(): void

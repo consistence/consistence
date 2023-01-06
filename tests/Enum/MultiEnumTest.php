@@ -6,7 +6,7 @@ namespace Consistence\Enum;
 
 use PHPUnit\Framework\Assert;
 
-class MultiEnumTest extends \Consistence\TestCase
+class MultiEnumTest extends \PHPUnit\Framework\TestCase
 {
 
 	public function testGet(): void

@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Consistence;
 
-class ObjectPrototypeTest extends \Consistence\TestCase
+class ObjectPrototypeTest extends \PHPUnit\Framework\TestCase
 {
 
 	public function testMagicCall(): void

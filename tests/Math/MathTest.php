@@ -6,7 +6,7 @@ namespace Consistence\Math;
 
 use PHPUnit\Framework\Assert;
 
-class MathTest extends \Consistence\TestCase
+class MathTest extends \PHPUnit\Framework\TestCase
 {
 
 	/**

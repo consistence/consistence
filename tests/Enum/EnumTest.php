@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Consistence\Enum;
 
 use DateTimeImmutable;
+use Generator;
 use PHPUnit\Framework\Assert;
 
 class EnumTest extends \PHPUnit\Framework\TestCase
@@ -97,32 +98,32 @@ class EnumTest extends \PHPUnit\Framework\TestCase
 	}
 
 	/**
-	 * @return mixed[][]
+	 * @return mixed[][]|\Generator
 	 */
-	public function invalidTypeDataProvider(): array
+	public function invalidTypeDataProvider(): Generator
 	{
-		return [
-			'array' => [[]],
-			'object' => [new DateTimeImmutable()],
-			'Closure' => [static function (): void {
-				return;
-			}],
-			'resource' => [fopen(__DIR__, 'r')],
-		];
+		yield 'array' => [[]];
+		yield 'object' => [new DateTimeImmutable()];
+		yield 'Closure' => [static function (): void {
+			return;
+		}];
+		yield 'resource' => [fopen(__DIR__, 'r')];
 	}
 
 	/**
-	 * @return mixed[][]
+	 * @return mixed[][]|\Generator
 	 */
-	public function invalidEnumValueDataProvider(): array
+	public function invalidEnumValueDataProvider(): Generator
 	{
-		return array_merge([
-			'integer, which is not in available values' => [0],
-			'float' => [1.5],
-			'false' => [false],
-			'true' => [true],
-			'null' => [null],
-		], array_values($this->invalidTypeDataProvider()));
+		yield 'integer, which is not in available values' => [0];
+		yield 'float' => [1.5];
+		yield 'false' => [false];
+		yield 'true' => [true];
+		yield 'null' => [null];
+
+		foreach ($this->invalidTypeDataProvider() as $caseName => $caseData) {
+			yield $caseName => $caseData;
+		}
 	}
 
 	/**
@@ -206,17 +207,15 @@ class EnumTest extends \PHPUnit\Framework\TestCase
 	}
 
 	/**
-	 * @return mixed[][]
+	 * @return mixed[][]|\Generator
 	 */
-	public function validTypeDataProvider(): array
+	public function validTypeDataProvider(): Generator
 	{
-		return [
-			'integer' => [TypeEnum::INTEGER],
-			'string' => [TypeEnum::STRING],
-			'float' => [TypeEnum::FLOAT],
-			'boolean' => [TypeEnum::BOOLEAN],
-			'null' => [TypeEnum::NULL],
-		];
+		yield 'integer' => [TypeEnum::INTEGER];
+		yield 'string' => [TypeEnum::STRING];
+		yield 'float' => [TypeEnum::FLOAT];
+		yield 'boolean' => [TypeEnum::BOOLEAN];
+		yield 'null' => [TypeEnum::NULL];
 	}
 
 	/**

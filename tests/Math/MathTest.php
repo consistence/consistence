@@ -4,21 +4,20 @@ declare(strict_types = 1);
 
 namespace Consistence\Math;
 
+use Generator;
 use PHPUnit\Framework\Assert;
 
 class MathTest extends \PHPUnit\Framework\TestCase
 {
 
 	/**
-	 * @return int[][]
+	 * @return int[][]|\Generator
 	 */
-	public function moduloDataProvider(): array
+	public function moduloDataProvider(): Generator
 	{
-		return [
-			'dividend positive, no remainder after division by modulo' => [4, 2, 0],
-			'dividend positive, remainder after division by modulo' => [5, 2, 1],
-			'dividend negative, remainder after division by modulo' => [-5, 2, 1],
-		];
+		yield 'dividend positive, no remainder after division by modulo' => [4, 2, 0];
+		yield 'dividend positive, remainder after division by modulo' => [5, 2, 1];
+		yield 'dividend negative, remainder after division by modulo' => [-5, 2, 1];
 	}
 
 	/**
@@ -44,24 +43,22 @@ class MathTest extends \PHPUnit\Framework\TestCase
 	}
 
 	/**
-	 * @return mixed[][]
+	 * @return mixed[][]|\Generator
 	 */
-	public function powerOfTwoDataProvider(): array
+	public function powerOfTwoDataProvider(): Generator
 	{
-		return [
-			'-2 - not power of two' => [-2, false],
-			'-1 - not power of two' => [-1, false],
-			'0 - not power of two' => [0, false],
-			'1 - 2^0' => [1, true],
-			'2 - 2^1' => [2, true],
-			'3 - not power of two' => [3, false],
-			'4 - 2^2' => [4, true],
-			'6 - not power of two' => [6, false],
-			'8 - 2^3' => [8, true],
-			'10 - not power of two' => [10, false],
-			'16 - 2^4' => [16, true],
-			'32 - 2^5' => [32, true],
-		];
+		yield '-2 - not power of two' => [-2, false];
+		yield '-1 - not power of two' => [-1, false];
+		yield '0 - not power of two' => [0, false];
+		yield '1 - 2^0' => [1, true];
+		yield '2 - 2^1' => [2, true];
+		yield '3 - not power of two' => [3, false];
+		yield '4 - 2^2' => [4, true];
+		yield '6 - not power of two' => [6, false];
+		yield '8 - 2^3' => [8, true];
+		yield '10 - not power of two' => [10, false];
+		yield '16 - 2^4' => [16, true];
+		yield '32 - 2^5' => [32, true];
 	}
 
 	/**

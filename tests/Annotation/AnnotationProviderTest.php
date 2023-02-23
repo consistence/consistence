@@ -37,7 +37,7 @@ class AnnotationProviderTest extends \Consistence\TestCase
 		try {
 			$annotationProvider->getPropertyAnnotation($property, 'test');
 
-			Assert::fail();
+			Assert::fail('Exception expected');
 		} catch (\Consistence\Annotation\AnnotationNotFoundException $e) {
 			Assert::assertSame('test', $e->getAnnotationName());
 			Assert::assertSame($property, $e->getProperty());

@@ -21,7 +21,7 @@ class ObjectMixinTest extends \Consistence\TestCase
 	{
 		try {
 			ObjectMixin::magicCall(new stdClass(), 'getFoo');
-			Assert::fail();
+			Assert::fail('Exception expected');
 		} catch (\Consistence\UndefinedMethodException $e) {
 			Assert::assertSame(stdClass::class, $e->getClassName());
 			Assert::assertSame('getFoo', $e->getMethodName());
@@ -32,7 +32,7 @@ class ObjectMixinTest extends \Consistence\TestCase
 	{
 		try {
 			ObjectMixin::magicCallStatic(stdClass::class, 'doStatic');
-			Assert::fail();
+			Assert::fail('Exception expected');
 		} catch (\Consistence\UndefinedMethodException $e) {
 			Assert::assertSame(stdClass::class, $e->getClassName());
 			Assert::assertSame('doStatic', $e->getMethodName());
@@ -43,7 +43,7 @@ class ObjectMixinTest extends \Consistence\TestCase
 	{
 		try {
 			ObjectMixin::magicGet(new stdClass(), 'foo');
-			Assert::fail();
+			Assert::fail('Exception expected');
 		} catch (\Consistence\UndefinedPropertyException $e) {
 			Assert::assertSame(stdClass::class, $e->getClassName());
 			Assert::assertSame('foo', $e->getPropertyName());
@@ -54,7 +54,7 @@ class ObjectMixinTest extends \Consistence\TestCase
 	{
 		try {
 			ObjectMixin::magicSet(new stdClass(), 'foo');
-			Assert::fail();
+			Assert::fail('Exception expected');
 		} catch (\Consistence\UndefinedPropertyException $e) {
 			Assert::assertSame(stdClass::class, $e->getClassName());
 			Assert::assertSame('foo', $e->getPropertyName());
@@ -65,7 +65,7 @@ class ObjectMixinTest extends \Consistence\TestCase
 	{
 		try {
 			ObjectMixin::magicIsSet(new stdClass(), 'foo');
-			Assert::fail();
+			Assert::fail('Exception expected');
 		} catch (\Consistence\UndefinedPropertyException $e) {
 			Assert::assertSame(stdClass::class, $e->getClassName());
 			Assert::assertSame('foo', $e->getPropertyName());
@@ -76,7 +76,7 @@ class ObjectMixinTest extends \Consistence\TestCase
 	{
 		try {
 			ObjectMixin::magicUnset(new stdClass(), 'foo');
-			Assert::fail();
+			Assert::fail('Exception expected');
 		} catch (\Consistence\UndefinedPropertyException $e) {
 			Assert::assertSame(stdClass::class, $e->getClassName());
 			Assert::assertSame('foo', $e->getPropertyName());

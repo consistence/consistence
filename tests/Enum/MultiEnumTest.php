@@ -222,7 +222,7 @@ class MultiEnumTest extends \Consistence\TestCase
 	{
 		try {
 			RolesEnum::get(8);
-			Assert::fail();
+			Assert::fail('Exception expected');
 		} catch (\Consistence\Enum\InvalidEnumValueException $e) {
 			Assert::assertSame(8, $e->getValue());
 			Assert::assertEquals([
@@ -241,7 +241,7 @@ class MultiEnumTest extends \Consistence\TestCase
 		try {
 			$userAndAdmin->equals($foo);
 
-			Assert::fail();
+			Assert::fail('Exception expected');
 		} catch (\Consistence\Enum\OperationSupportedOnlyForSameEnumException $e) {
 			Assert::assertSame($userAndAdmin, $e->getExpected());
 			Assert::assertSame($foo, $e->getGiven());
@@ -252,7 +252,7 @@ class MultiEnumTest extends \Consistence\TestCase
 	{
 		try {
 			FooEnum::getMulti(FooEnum::FOO)->getEnums();
-			Assert::fail();
+			Assert::fail('Exception expected');
 		} catch (\Consistence\Enum\NoSingleEnumSpecifiedException $e) {
 			Assert::assertSame(FooEnum::class, $e->getClass());
 		}
@@ -623,7 +623,7 @@ class MultiEnumTest extends \Consistence\TestCase
 	{
 		try {
 			MultiEnumWithValuesNotPowerOfTwo::get(MultiEnumWithValuesNotPowerOfTwo::FOO);
-			Assert::fail();
+			Assert::fail('Exception expected');
 		} catch (\Consistence\Enum\MultiEnumValueIsNotPowerOfTwoException $e) {
 			Assert::assertSame(MultiEnumWithValuesNotPowerOfTwo::BAZ, $e->getValue());
 			Assert::assertSame(MultiEnumWithValuesNotPowerOfTwo::class, $e->getClass());

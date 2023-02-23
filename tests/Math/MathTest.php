@@ -37,7 +37,7 @@ class MathTest extends \Consistence\TestCase
 	{
 		try {
 			Math::modulo(5, -1);
-			Assert::fail();
+			Assert::fail('Exception expected');
 		} catch (\Consistence\Math\NonNegativeIntegerExpectedException $e) {
 			Assert::assertSame(-1, $e->getValue());
 		}

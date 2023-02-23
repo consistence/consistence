@@ -135,7 +135,7 @@ class EnumTest extends \Consistence\TestCase
 	{
 		try {
 			StatusEnum::get($value);
-			Assert::fail();
+			Assert::fail('Exception expected');
 		} catch (\Consistence\Enum\InvalidEnumValueException $e) {
 			Assert::assertSame($value, $e->getValue());
 			Assert::assertEquals([
@@ -157,7 +157,7 @@ class EnumTest extends \Consistence\TestCase
 	{
 		try {
 			StatusEnum::checkValue('foo');
-			Assert::fail();
+			Assert::fail('Exception expected');
 		} catch (\Consistence\Enum\InvalidEnumValueException $e) {
 			Assert::assertSame('foo', $e->getValue());
 			Assert::assertEquals([
@@ -176,7 +176,7 @@ class EnumTest extends \Consistence\TestCase
 		try {
 			$review->equals($foo);
 
-			Assert::fail();
+			Assert::fail('Exception expected');
 		} catch (\Consistence\Enum\OperationSupportedOnlyForSameEnumException $e) {
 			Assert::assertSame($review, $e->getExpected());
 			Assert::assertSame($foo, $e->getGiven());
@@ -194,7 +194,7 @@ class EnumTest extends \Consistence\TestCase
 	{
 		try {
 			StatusEnum::get('bar');
-			Assert::fail();
+			Assert::fail('Exception expected');
 		} catch (\Consistence\Enum\InvalidEnumValueException $e) {
 			Assert::assertSame('bar', $e->getValue());
 			Assert::assertEquals([
@@ -231,7 +231,7 @@ class EnumTest extends \Consistence\TestCase
 	{
 		try {
 			DuplicateValuesEnum::get(DuplicateValuesEnum::BAZ);
-			Assert::fail();
+			Assert::fail('Exception expected');
 		} catch (\Consistence\Enum\DuplicateValueSpecifiedException $e) {
 			Assert::assertSame(DuplicateValuesEnum::FOO, $e->getValue());
 			Assert::assertSame(DuplicateValuesEnum::class, $e->getClass());

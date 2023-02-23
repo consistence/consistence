@@ -55,7 +55,7 @@ class AnnotationTest extends \Consistence\TestCase
 			$annotation = Annotation::createAnnotationWithoutParams('lorem');
 			$annotation->getField('test');
 
-			Assert::fail();
+			Assert::fail('Exception expected');
 		} catch (\Consistence\Annotation\AnnotationFieldNotFoundException $e) {
 			Assert::assertSame('test', $e->getFieldName());
 		}

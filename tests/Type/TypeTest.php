@@ -181,7 +181,7 @@ class TypeTest extends \Consistence\TestCase
 	{
 		try {
 			Type::checkType($value, 'Foo');
-			Assert::fail();
+			Assert::fail('Exception expected');
 		} catch (\Consistence\InvalidArgumentTypeException $e) {
 			Assert::assertSame($value, $e->getValue());
 			Assert::assertSame($valueType, $e->getValueType());

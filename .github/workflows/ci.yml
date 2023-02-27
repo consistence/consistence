@@ -157,7 +157,7 @@ jobs:
         steps:
             -
                 name: 'Finish Coveralls upload'
-                uses: 'coverallsapp/github-action@1.1.3'
+                uses: 'coverallsapp/github-action@v1.2.2'
                 with:
                     github-token: '${{ secrets.GITHUB_TOKEN }}'
                     parallel-finished: true

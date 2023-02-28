@@ -74,20 +74,62 @@ class TimeFormatTest extends \PHPUnit\Framework\TestCase
 	 */
 	public function validTimeDataProvider(): Generator
 	{
-		yield 'hour:minute' => ['H:i', '02:00'];
-		yield 'year-month-day' => ['Y-m-d', '2016-01-02'];
-		yield 'year-month-day, leap year' => ['Y-m-d', '2016-02-29'];
-		yield 'year-month-day without leading zeros' => ['Y-n-j', '2016-1-2'];
-		yield 'ISO8601 with +1 hour offset without colon' => [TimeFormat::ISO8601, '2016-03-21T14:30:32+0100'];
-		yield 'ISO8601 with +1 hour offset with colon' => [TimeFormat::ISO8601_TIMEZONE_WITH_COLON, '2016-03-21T14:30:32+01:00'];
-		yield 'year-month-dayThour:minute:second with Zulu offset' => ['Y-m-d\TH:i:se', '2016-03-21T14:30:32Z'];
-		yield 'year-month-day hour:minute:second with timezone identifier separated by whitespace' => ['Y-m-d H:i:s e', '2016-03-21 14:30:00 Europe/Prague'];
-		yield 'year-month-day hour:minute:second with timezone abbreviation' => ['Y-m-d H:i:s T', '2016-03-21 14:30:00 CEST'];
-		yield 'ISO8601 with -1 hour offset without colon' => [TimeFormat::ISO8601, '2016-03-21T14:30:32-0100'];
-		yield 'ISO8601 with microseconds - first microsecond' => [TimeFormat::ISO8601_WITH_MICROSECONDS, '2016-03-21T14:30:32.000001+0100'];
-		yield 'ISO8601 with microseconds - first 1/10 of a second' => [TimeFormat::ISO8601_WITH_MICROSECONDS, '2016-03-21T14:30:32.100000+0100'];
-		yield 'ISO8601 with microseconds - middle microsecond' => [TimeFormat::ISO8601_WITH_MICROSECONDS, '2016-03-21T14:30:32.123456+0100'];
-		yield 'ISO8601 with microseconds - last microsecond' => [TimeFormat::ISO8601_WITH_MICROSECONDS, '2016-03-21T14:30:32.999999+0100'];
+		yield 'hour:minute' => [
+			'H:i',
+			'02:00',
+		];
+		yield 'year-month-day' => [
+			'Y-m-d',
+			'2016-01-02',
+		];
+		yield 'year-month-day, leap year' => [
+			'Y-m-d',
+			'2016-02-29',
+		];
+		yield 'year-month-day without leading zeros' => [
+			'Y-n-j',
+			'2016-1-2',
+		];
+		yield 'ISO8601 with +1 hour offset without colon' => [
+			TimeFormat::ISO8601,
+			'2016-03-21T14:30:32+0100',
+		];
+		yield 'ISO8601 with +1 hour offset with colon' => [
+			TimeFormat::ISO8601_TIMEZONE_WITH_COLON,
+			'2016-03-21T14:30:32+01:00',
+		];
+		yield 'year-month-dayThour:minute:second with Zulu offset' => [
+			'Y-m-d\TH:i:se',
+			'2016-03-21T14:30:32Z',
+		];
+		yield 'year-month-day hour:minute:second with timezone identifier separated by whitespace' => [
+			'Y-m-d H:i:s e',
+			'2016-03-21 14:30:00 Europe/Prague',
+		];
+		yield 'year-month-day hour:minute:second with timezone abbreviation' => [
+			'Y-m-d H:i:s T',
+			'2016-03-21 14:30:00 CEST',
+		];
+		yield 'ISO8601 with -1 hour offset without colon' => [
+			TimeFormat::ISO8601,
+			'2016-03-21T14:30:32-0100',
+		];
+		yield 'ISO8601 with microseconds - first microsecond' => [
+			TimeFormat::ISO8601_WITH_MICROSECONDS,
+			'2016-03-21T14:30:32.000001+0100',
+		];
+		yield 'ISO8601 with microseconds - first 1/10 of a second' => [
+			TimeFormat::ISO8601_WITH_MICROSECONDS,
+			'2016-03-21T14:30:32.100000+0100',
+		];
+		yield 'ISO8601 with microseconds - middle microsecond' => [
+			TimeFormat::ISO8601_WITH_MICROSECONDS,
+			'2016-03-21T14:30:32.123456+0100',
+		];
+		yield 'ISO8601 with microseconds - last microsecond' => [
+			TimeFormat::ISO8601_WITH_MICROSECONDS,
+			'2016-03-21T14:30:32.999999+0100',
+		];
 	}
 
 	/**
@@ -95,13 +137,34 @@ class TimeFormatTest extends \PHPUnit\Framework\TestCase
 	 */
 	public function invalidTimeForFormatDataProvider(): Generator
 	{
-		yield 'empty string' => [TimeFormat::ISO8601, ''];
-		yield 'containing different hour-minute separator' => ['H:i', '02;30'];
-		yield 'missing leading zero in hour' => ['H:i', '2:30'];
-		yield 'there are missing zeroes at the beginning of day and month' => ['Y-m-d', '2016-1-2'];
-		yield '`:` is missing as timezone hour:minute separator' => [TimeFormat::ISO8601_TIMEZONE_WITH_COLON, '2016-03-21T14:30:32+0100'];
-		yield 'microseconds must have 6 digits, there are too few' => ['s.u', '25.2'];
-		yield 'microseconds must have 6 digits, there are too many' => ['s.u', '25.1234567'];
+		yield 'empty string' => [
+			TimeFormat::ISO8601,
+			'',
+		];
+		yield 'containing different hour-minute separator' => [
+			'H:i',
+			'02;30',
+		];
+		yield 'missing leading zero in hour' => [
+			'H:i',
+			'2:30',
+		];
+		yield 'there are missing zeroes at the beginning of day and month' => [
+			'Y-m-d',
+			'2016-1-2',
+		];
+		yield '`:` is missing as timezone hour:minute separator' => [
+			TimeFormat::ISO8601_TIMEZONE_WITH_COLON,
+			'2016-03-21T14:30:32+0100',
+		];
+		yield 'microseconds must have 6 digits, there are too few' => [
+			's.u',
+			'25.2',
+		];
+		yield 'microseconds must have 6 digits, there are too many' => [
+			's.u',
+			'25.1234567',
+		];
 	}
 
 	/**
@@ -109,9 +172,18 @@ class TimeFormatTest extends \PHPUnit\Framework\TestCase
 	 */
 	public function nonExistingTimeDataProvider(): Generator
 	{
-		yield 'there is no 25th hour in the day' => ['H:i', '25:00'];
-		yield 'this day does not exist when not in leap year' => ['Y-m-d', '2015-02-29'];
-		yield 'this time does not exist, the time is moving to DST, skipping from 2:00 to 3:00' => ['Y-m-d H:i:s e', '2016-03-27 02:30:00 Europe/Prague'];
+		yield 'there is no 25th hour in the day' => [
+			'H:i',
+			'25:00',
+		];
+		yield 'this day does not exist when not in leap year' => [
+			'Y-m-d',
+			'2015-02-29',
+		];
+		yield 'this time does not exist, the time is moving to DST, skipping from 2:00 to 3:00' => [
+			'Y-m-d H:i:s e',
+			'2016-03-27 02:30:00 Europe/Prague',
+		];
 	}
 
 	/**

@@ -102,12 +102,20 @@ class EnumTest extends \PHPUnit\Framework\TestCase
 	 */
 	public function invalidTypeDataProvider(): Generator
 	{
-		yield 'array' => [[]];
-		yield 'object' => [new DateTimeImmutable()];
-		yield 'Closure' => [static function (): void {
-			return;
-		}];
-		yield 'resource' => [fopen(__DIR__, 'r')];
+		yield 'array' => [
+			[],
+		];
+		yield 'object' => [
+			new DateTimeImmutable(),
+		];
+		yield 'Closure' => [
+			static function (): void {
+				return;
+			},
+		];
+		yield 'resource' => [
+			fopen(__DIR__, 'r'),
+		];
 	}
 
 	/**
@@ -115,11 +123,21 @@ class EnumTest extends \PHPUnit\Framework\TestCase
 	 */
 	public function invalidEnumValueDataProvider(): Generator
 	{
-		yield 'integer, which is not in available values' => [0];
-		yield 'float' => [1.5];
-		yield 'false' => [false];
-		yield 'true' => [true];
-		yield 'null' => [null];
+		yield 'integer, which is not in available values' => [
+			0,
+		];
+		yield 'float' => [
+			1.5,
+		];
+		yield 'false' => [
+			false,
+		];
+		yield 'true' => [
+			true,
+		];
+		yield 'null' => [
+			null,
+		];
 
 		foreach ($this->invalidTypeDataProvider() as $caseName => $caseData) {
 			yield $caseName => $caseData;
@@ -211,11 +229,21 @@ class EnumTest extends \PHPUnit\Framework\TestCase
 	 */
 	public function validTypeDataProvider(): Generator
 	{
-		yield 'integer' => [TypeEnum::INTEGER];
-		yield 'string' => [TypeEnum::STRING];
-		yield 'float' => [TypeEnum::FLOAT];
-		yield 'boolean' => [TypeEnum::BOOLEAN];
-		yield 'null' => [TypeEnum::NULL];
+		yield 'integer' => [
+			TypeEnum::INTEGER,
+		];
+		yield 'string' => [
+			TypeEnum::STRING,
+		];
+		yield 'float' => [
+			TypeEnum::FLOAT,
+		];
+		yield 'boolean' => [
+			TypeEnum::BOOLEAN,
+		];
+		yield 'null' => [
+			TypeEnum::NULL,
+		];
 	}
 
 	/**

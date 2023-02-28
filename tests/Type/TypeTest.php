@@ -28,42 +28,42 @@ class TypeTest extends \PHPUnit\Framework\TestCase
 	public function typeDataProvider(): Generator
 	{
 		yield 'string' => [
-			'foo',
-			'string',
+			'value' => 'foo',
+			'valueType' => 'string',
 		];
 		yield 'integer' => [
-			1,
-			'int',
+			'value' => 1,
+			'valueType' => 'int',
 		];
 		yield 'boolean' => [
-			true,
-			'bool',
+			'value' => true,
+			'valueType' => 'bool',
 		];
 		yield 'float' => [
-			1.5,
-			'float',
+			'value' => 1.5,
+			'valueType' => 'float',
 		];
 		yield 'array' => [
-			[],
-			'array',
+			'value' => [],
+			'valueType' => 'array',
 		];
 		yield 'null' => [
-			null,
-			'null',
+			'value' => null,
+			'valueType' => 'null',
 		];
 		yield 'object' => [
-			new DateTimeImmutable(),
-			DateTimeImmutable::class,
+			'value' => new DateTimeImmutable(),
+			'valueType' => DateTimeImmutable::class,
 		];
 		yield 'Closure' => [
-			static function (): void {
+			'value' => static function (): void {
 				return;
 			},
-			Closure::class,
+			'valueType' => Closure::class,
 		];
 		yield 'resource' => [
-			fopen(__DIR__, 'r'),
-			'resource',
+			'value' => fopen(__DIR__, 'r'),
+			'valueType' => 'resource',
 		];
 	}
 
@@ -73,389 +73,392 @@ class TypeTest extends \PHPUnit\Framework\TestCase
 	public function hasTypeDataProvider(): Generator
 	{
 		foreach ($this->typeDataProvider() as $caseName => $caseData) {
-			yield $caseName => $caseData;
+			yield $caseName => [
+				'value' => $caseData['value'],
+				'expectedTypes' => $caseData['valueType'],
+			];
 		}
 
 		yield 'null uppercase' => [
-			null,
-			'NULL',
+			'value' => null,
+			'expectedTypes' => 'NULL',
 		];
 		yield 'integer is string or int' => [
-			1,
-			'string|int',
+			'value' => 1,
+			'expectedTypes' => 'string|int',
 		];
 		yield 'integer is string or integer' => [
-			1,
-			'string|integer',
+			'value' => 1,
+			'expectedTypes' => 'string|integer',
 		];
 		yield 'string is string or int' => [
-			'foo',
-			'string|int',
+			'value' => 'foo',
+			'expectedTypes' => 'string|int',
 		];
 		yield 'integer is null or int' => [
-			2,
-			'null|int',
+			'value' => 2,
+			'expectedTypes' => 'null|int',
 		];
 		yield 'integer is null or integer' => [
-			2,
-			'null|integer',
+			'value' => 2,
+			'expectedTypes' => 'null|integer',
 		];
 		yield 'boolean is null or bool' => [
-			true,
-			'null|bool',
+			'value' => true,
+			'expectedTypes' => 'null|bool',
 		];
 		yield 'boolean is bool or null' => [
-			false,
-			'bool|null',
+			'value' => false,
+			'expectedTypes' => 'bool|null',
 		];
 		yield 'null is null or int' => [
-			null,
-			'null|int',
+			'value' => null,
+			'expectedTypes' => 'null|int',
 		];
 		yield 'null is null (uppercase) or int' => [
-			null,
-			'NULL|int',
+			'value' => null,
+			'expectedTypes' => 'NULL|int',
 		];
 		yield 'null is null (uppercase) or integer - uppercase' => [
-			null,
-			'NULL|integer',
+			'value' => null,
+			'expectedTypes' => 'NULL|integer',
 		];
 		yield 'string is class or string' => [
-			DateTimeImmutable::class,
-			'DateTimeImmutable|string',
+			'value' => DateTimeImmutable::class,
+			'expectedTypes' => 'DateTimeImmutable|string',
 		];
 		yield 'object is class of object or string' => [
-			new DateTimeImmutable(),
-			'DateTimeImmutable|string',
+			'value' => new DateTimeImmutable(),
+			'expectedTypes' => 'DateTimeImmutable|string',
 		];
 		yield 'object is object' => [
-			new DateTimeImmutable(),
-			'object',
+			'value' => new DateTimeImmutable(),
+			'expectedTypes' => 'object',
 		];
 		yield 'string is not object' => [
-			'foo',
-			'object',
-			false,
+			'value' => 'foo',
+			'expectedTypes' => 'object',
+			'result' => false,
 		];
 		yield 'integer is mixed' => [
-			1,
-			'mixed',
+			'value' => 1,
+			'expectedTypes' => 'mixed',
 		];
 		yield 'string is mixed' => [
-			'foo',
-			'mixed',
+			'value' => 'foo',
+			'expectedTypes' => 'mixed',
 		];
 		yield 'string containing class name is mixed' => [
-			DateTimeImmutable::class,
-			'mixed',
+			'value' => DateTimeImmutable::class,
+			'expectedTypes' => 'mixed',
 		];
 		yield 'integer is string or mixed' => [
-			1,
-			'string|mixed',
+			'value' => 1,
+			'expectedTypes' => 'string|mixed',
 		];
 		yield 'empty array is iterable<string>' => [
-			[],
-			'string[]',
+			'value' => [],
+			'expectedTypes' => 'string[]',
 		];
 		yield 'string is not iterable<string>' => [
-			'foo',
-			'string[]',
-			false,
+			'value' => 'foo',
+			'expectedTypes' => 'string[]',
+			'result' => false,
 		];
 		yield 'array<integer, string> is iterable<string>' => [
-			['foo'],
-			'string[]',
+			'value' => ['foo'],
+			'expectedTypes' => 'string[]',
 		];
 		yield 'array<integer, integer> is not iterable<string>' => [
-			[1],
-			'string[]',
-			false,
+			'value' => [1],
+			'expectedTypes' => 'string[]',
+			'result' => false,
 		];
 		yield 'array<integer, string> with multiple strings is iterable<string>' => [
-			['foo', 'bar'],
-			'string[]',
+			'value' => ['foo', 'bar'],
+			'expectedTypes' => 'string[]',
 		];
 		yield 'empty array is iterable<string> or iterable<int>' => [
-			[],
-			'string[]|int[]',
+			'value' => [],
+			'expectedTypes' => 'string[]|int[]',
 		];
 		yield 'array<integer, string> is iterable<string> or iterable<int>' => [
-			['foo', 'bar'],
-			'string[]|int[]',
+			'value' => ['foo', 'bar'],
+			'expectedTypes' => 'string[]|int[]',
 		];
 		yield 'integer is iterable<string> or int' => [
-			2,
-			'string[]|int',
+			'value' => 2,
+			'expectedTypes' => 'string[]|int',
 		];
 		yield 'array<integer, integer> is iterable<string> or iterable<int>' => [
-			[1, 2],
-			'string[]|int[]',
+			'value' => [1, 2],
+			'expectedTypes' => 'string[]|int[]',
 		];
 		yield 'array<integer, DateTimeImmutable> is iterable<object>' => [
-			[new DateTimeImmutable()],
-			'object[]',
+			'value' => [new DateTimeImmutable()],
+			'expectedTypes' => 'object[]',
 		];
 		yield 'array<integer, object> is iterable<object>' => [
-			[new DateTimeImmutable(), new stdClass()],
-			'object[]',
+			'value' => [new DateTimeImmutable(), new stdClass()],
+			'expectedTypes' => 'object[]',
 		];
 		yield 'array<integer, object|string> is not iterable<object>' => [
-			[new DateTimeImmutable(), 'foo'],
-			'object[]',
-			false,
+			'value' => [new DateTimeImmutable(), 'foo'],
+			'expectedTypes' => 'object[]',
+			'result' => false,
 		];
 		yield 'array<integer, integer|string> is iterable<mixed>' => [
-			[1, 'foo'],
-			'mixed[]',
+			'value' => [1, 'foo'],
+			'expectedTypes' => 'mixed[]',
 		];
 		yield 'integer is not iterable<mixed>' => [
-			1,
-			'mixed[]',
-			false,
+			'value' => 1,
+			'expectedTypes' => 'mixed[]',
+			'result' => false,
 		];
 		yield 'array<integer, integer|string> is mixed' => [
-			[1, 'foo'],
-			'mixed',
+			'value' => [1, 'foo'],
+			'expectedTypes' => 'mixed',
 		];
 		yield 'array<integer, array<integer, integer>> is iterable<iterable<int>>' => [
-			[[1, 2]],
-			'int[][]',
+			'value' => [[1, 2]],
+			'expectedTypes' => 'int[][]',
 		];
 		yield 'array<integer, array<integer, integer>> with multiple array<integer, integer> is iterable<iterable<int>>' => [
-			[[1, 2], [3, 4]],
-			'int[][]',
+			'value' => [[1, 2], [3, 4]],
+			'expectedTypes' => 'int[][]',
 		];
 		yield 'array<integer, array<integer, integer>> with multiple array<integer, integer> is iterable<iterable<integer>>' => [
-			[[1, 2], [3, 4]],
-			'integer[][]',
+			'value' => [[1, 2], [3, 4]],
+			'expectedTypes' => 'integer[][]',
 		];
 		yield 'array<integer, array<integer, integer>|array<integer, string>> is not iterable<iterable<int>>' => [
-			[[1, 2], ['foo']],
-			'int[][]',
-			false,
+			'value' => [[1, 2], ['foo']],
+			'expectedTypes' => 'int[][]',
+			'result' => false,
 		];
 		yield 'array<integer, array<integer, string>> is not iterable<iterable<int>>' => [
-			[['foo']],
-			'int[][]',
-			false,
+			'value' => [['foo']],
+			'expectedTypes' => 'int[][]',
+			'result' => false,
 		];
 		yield 'array<integer, integer> is not iterable<iterable<int>>' => [
-			[1, 2],
-			'int[][]',
-			false,
+			'value' => [1, 2],
+			'expectedTypes' => 'int[][]',
+			'result' => false,
 		];
 		yield 'empty ArrayObject is iterable<string>' => [
-			new ArrayObject([]),
-			'string[]',
+			'value' => new ArrayObject([]),
+			'expectedTypes' => 'string[]',
 		];
 		yield 'ArrayObject<integer, string> is iterable<string>' => [
-			new ArrayObject(['foo']),
-			'string[]',
+			'value' => new ArrayObject(['foo']),
+			'expectedTypes' => 'string[]',
 		];
 		yield 'ArrayObject<integer, integer> is not iterable<string>' => [
-			new ArrayObject([1]),
-			'string[]',
-			false,
+			'value' => new ArrayObject([1]),
+			'expectedTypes' => 'string[]',
+			'result' => false,
 		];
 		yield 'ArrayObject<integer, string> with multiple strings is iterable<string>' => [
-			new ArrayObject(['foo', 'bar']),
-			'string[]',
+			'value' => new ArrayObject(['foo', 'bar']),
+			'expectedTypes' => 'string[]',
 		];
 		yield 'empty ArrayObject is iterable<string> or iterable<int>' => [
-			new ArrayObject([]),
-			'string[]|int[]',
+			'value' => new ArrayObject([]),
+			'expectedTypes' => 'string[]|int[]',
 		];
 		yield 'ArrayObject<integer, string> is iterable<string> or iterable<int>' => [
-			new ArrayObject(['foo', 'bar']),
-			'string[]|int[]',
+			'value' => new ArrayObject(['foo', 'bar']),
+			'expectedTypes' => 'string[]|int[]',
 		];
 		yield 'ArrayObject<integer, integer> is iterable<string> or iterable<int>' => [
-			new ArrayObject([1, 2]),
-			'string[]|int[]',
+			'value' => new ArrayObject([1, 2]),
+			'expectedTypes' => 'string[]|int[]',
 		];
 		yield 'ArrayObject<ArrayObject<integer, integer>> is iterable<iterable<int>>' => [
-			new ArrayObject([new ArrayObject([1, 2])]),
-			'int[][]',
+			'value' => new ArrayObject([new ArrayObject([1, 2])]),
+			'expectedTypes' => 'int[][]',
 		];
 		yield 'ArrayObject<ArrayObject<integer, integer>> with multiple ArrayObject<integer, integer> is iterable<iterable<int>>' => [
-			new ArrayObject([new ArrayObject([1, 2]), new ArrayObject([3, 4])]),
-			'int[][]',
+			'value' => new ArrayObject([new ArrayObject([1, 2]), new ArrayObject([3, 4])]),
+			'expectedTypes' => 'int[][]',
 		];
 		yield 'ArrayObject<integer, ArrayObject<integer, integer>|ArrayObject<integer, string>> is not iterable<iterable<int>>' => [
-			new ArrayObject([new ArrayObject([1, 2]), new ArrayObject(['foo'])]),
-			'int[][]',
-			false,
+			'value' => new ArrayObject([new ArrayObject([1, 2]), new ArrayObject(['foo'])]),
+			'expectedTypes' => 'int[][]',
+			'result' => false,
 		];
 		yield 'ArrayObject<integer, ArrayObject<integer, string>> is not iterable<iterable<int>>' => [
-			new ArrayObject([new ArrayObject(['foo'])]),
-			'int[][]',
-			false,
+			'value' => new ArrayObject([new ArrayObject(['foo'])]),
+			'expectedTypes' => 'int[][]',
+			'result' => false,
 		];
 		yield 'ArrayObject<integer, integer> is not iterable<iterable<int>>' => [
-			new ArrayObject([1, 2]),
-			'int[][]',
-			false,
+			'value' => new ArrayObject([1, 2]),
+			'expectedTypes' => 'int[][]',
+			'result' => false,
 		];
 		yield 'empty array is iterable<int, string>' => [
-			[],
-			'int:string[]',
+			'value' => [],
+			'expectedTypes' => 'int:string[]',
 		];
 		yield 'string is not iterable<int, string>' => [
-			'foo',
-			'int:string[]',
-			false,
+			'value' => 'foo',
+			'expectedTypes' => 'int:string[]',
+			'result' => false,
 		];
 		yield 'array<integer, string> is iterable<int, string>' => [
-			['foo'],
-			'int:string[]',
+			'value' => ['foo'],
+			'expectedTypes' => 'int:string[]',
 		];
 		yield 'array<integer, integer> is not iterable<int, string>' => [
-			[1],
-			'int:string[]',
-			false,
+			'value' => [1],
+			'expectedTypes' => 'int:string[]',
+			'result' => false,
 		];
 		yield 'array<integer, string> with multiple strings is iterable<int, string>' => [
-			['foo', 'bar'],
-			'int:string[]',
+			'value' => ['foo', 'bar'],
+			'expectedTypes' => 'int:string[]',
 		];
 		yield 'empty array is iterable<int, string> or iterable<int, int>' => [
-			[],
-			'int:string[]|int:int[]',
+			'value' => [],
+			'expectedTypes' => 'int:string[]|int:int[]',
 		];
 		yield 'array<integer, string> is iterable<int, string> or iterable<int, int>' => [
-			['foo', 'bar'],
-			'int:string[]|int:int[]',
+			'value' => ['foo', 'bar'],
+			'expectedTypes' => 'int:string[]|int:int[]',
 		];
 		yield 'array<integer, integer> is iterable<int, string> or iterable<int, int>' => [
-			[1, 2],
-			'int:string[]|int:int[]',
+			'value' => [1, 2],
+			'expectedTypes' => 'int:string[]|int:int[]',
 		];
 		yield 'array<integer, integer|string> is iterable<int, mixed>' => [
-			[1, 'foo'],
-			'int:mixed[]',
+			'value' => [1, 'foo'],
+			'expectedTypes' => 'int:mixed[]',
 		];
 		yield 'integer is not iterable<int, mixed>' => [
-			1,
-			'int:mixed[]',
-			false,
+			'value' => 1,
+			'expectedTypes' => 'int:mixed[]',
+			'result' => false,
 		];
 		yield 'array<integer, array<integer, integer>> is iterable<int, iterable<int, int>>' => [
-			[[1, 2]],
-			'int:int:int[][]',
+			'value' => [[1, 2]],
+			'expectedTypes' => 'int:int:int[][]',
 		];
 		yield 'array<integer, array<integer, integer>> with multiple array<integer, integer> is iterable<int, iterable<int, int>>' => [
-			[[1, 2], [3, 4]],
-			'int:int:int[][]',
+			'value' => [[1, 2], [3, 4]],
+			'expectedTypes' => 'int:int:int[][]',
 		];
 		yield 'array<integer, array<integer, integer>|array<integer, string>> is not iterable<int, iterable<int, int>>' => [
-			[[1, 2], ['foo']],
-			'int:int:int[][]',
-			false,
+			'value' => [[1, 2], ['foo']],
+			'expectedTypes' => 'int:int:int[][]',
+			'result' => false,
 		];
 		yield 'empty ArrayObject is iterable<int, string>' => [
-			new ArrayObject([]),
-			'int:string[]',
+			'value' => new ArrayObject([]),
+			'expectedTypes' => 'int:string[]',
 		];
 		yield 'ArrayObject<integer, string> is iterable<int, string>' => [
-			new ArrayObject(['foo']),
-			'int:string[]',
+			'value' => new ArrayObject(['foo']),
+			'expectedTypes' => 'int:string[]',
 		];
 		yield 'ArrayObject<integer, integer> is not iterable<int, string>' => [
-			new ArrayObject([1]),
-			'int:string[]',
-			false,
+			'value' => new ArrayObject([1]),
+			'expectedTypes' => 'int:string[]',
+			'result' => false,
 		];
 		yield 'ArrayObject<integer, string> with multiple strings is iterable<int, string>' => [
-			new ArrayObject(['foo', 'bar']),
-			'int:string[]',
+			'value' => new ArrayObject(['foo', 'bar']),
+			'expectedTypes' => 'int:string[]',
 		];
 		yield 'empty ArrayObject is iterable<int, string> or iterable<int, int>' => [
-			new ArrayObject([]),
-			'int:string[]|int:int[]',
+			'value' => new ArrayObject([]),
+			'expectedTypes' => 'int:string[]|int:int[]',
 		];
 		yield 'ArrayObject<integer, string> is iterable<int, string> or iterable<int, int>' => [
-			new ArrayObject(['foo', 'bar']),
-			'int:string[]|int:int[]',
+			'value' => new ArrayObject(['foo', 'bar']),
+			'expectedTypes' => 'int:string[]|int:int[]',
 		];
 		yield 'ArrayObject<integer, integer> is iterable<int, string> or iterable<int, int>' => [
-			new ArrayObject([1, 2]),
-			'int:string[]|int:int[]',
+			'value' => new ArrayObject([1, 2]),
+			'expectedTypes' => 'int:string[]|int:int[]',
 		];
 		yield 'ArrayObject<integer, ArrayObject<integer, integer>> is iterable<int, iterable<int, int>>' => [
-			new ArrayObject([new ArrayObject([1, 2])]),
-			'int:int:int[][]',
+			'value' => new ArrayObject([new ArrayObject([1, 2])]),
+			'expectedTypes' => 'int:int:int[][]',
 		];
 		yield 'ArrayObject<integer, ArrayObject<integer, integer>> with multiple ArrayObject<integer, integer> is iterable<int, iterable<int, int>>' => [
-			new ArrayObject([new ArrayObject([1, 2]), new ArrayObject([3, 4])]),
-			'int:int:int[][]',
+			'value' => new ArrayObject([new ArrayObject([1, 2]), new ArrayObject([3, 4])]),
+			'expectedTypes' => 'int:int:int[][]',
 		];
 		yield 'ArrayObject<integer, ArrayObject<integer, integer>|ArrayObject<integer, string>> is not iterable<int, iterable<int, int>>' => [
-			new ArrayObject([new ArrayObject([1, 2]), new ArrayObject(['foo'])]),
-			'int:int:int[][]',
-			false,
+			'value' => new ArrayObject([new ArrayObject([1, 2]), new ArrayObject(['foo'])]),
+			'expectedTypes' => 'int:int:int[][]',
+			'result' => false,
 		];
 		yield 'ArrayObject<integer, ArrayObject<integer, string>> is not iterable<int, iterable<int, int>>' => [
-			new ArrayObject([new ArrayObject(['foo'])]),
-			'int:int:int[][]',
-			false,
+			'value' => new ArrayObject([new ArrayObject(['foo'])]),
+			'expectedTypes' => 'int:int:int[][]',
+			'result' => false,
 		];
 		yield 'ArrayObject<integer, integer> is not iterable<int, iterable<int, int>>' => [
-			new ArrayObject([1, 2]),
-			'int:int:int[][]',
-			false,
+			'value' => new ArrayObject([1, 2]),
+			'expectedTypes' => 'int:int:int[][]',
+			'result' => false,
 		];
 		yield 'array<string, string> is iterable<string, string>' => [
-			['foo' => 'bar'],
-			'string:string[]',
+			'value' => ['foo' => 'bar'],
+			'expectedTypes' => 'string:string[]',
 		];
 		yield 'array<integer, string> is not iterable<string, string>' => [
-			['foo', 'bar'],
-			'string:string[]',
-			false,
+			'value' => ['foo', 'bar'],
+			'expectedTypes' => 'string:string[]',
+			'result' => false,
 		];
 		yield 'array<integer, string> is iterable<string, string> or iterable<int, string>' => [
-			['foo', 'bar'],
-			'string:string[]|int:string[]',
+			'value' => ['foo', 'bar'],
+			'expectedTypes' => 'string:string[]|int:string[]',
 		];
 		yield 'array<string, string> is iterable<string, string> or iterable<int, string>' => [
-			['foo' => 'bar'],
-			'string:string[]|int:string[]',
+			'value' => ['foo' => 'bar'],
+			'expectedTypes' => 'string:string[]|int:string[]',
 		];
 		yield 'array<string, array<integer, string>> is iterable<string, iterable<int, string>>' => [
-			['foo' => ['bar']],
-			'string:int:string[][]',
+			'value' => ['foo' => ['bar']],
+			'expectedTypes' => 'string:int:string[][]',
 		];
 		yield 'array<string, array<integer, string>> is not iterable<string, iterable<string, string>>' => [
-			['foo' => ['bar']],
-			'string:string:string[][]',
-			false,
+			'value' => ['foo' => ['bar']],
+			'expectedTypes' => 'string:string:string[][]',
+			'result' => false,
 		];
 		yield 'array<integer, array<string, string>> is iterable<int, iterable<string, string>>' => [
-			[['foo' => 'bar']],
-			'int:string:string[][]',
+			'value' => [['foo' => 'bar']],
+			'expectedTypes' => 'int:string:string[][]',
 		];
 		yield 'array<integer, array<string, string>> is not iterable<int, iterable<int, string>> ' => [
-			[['foo' => 'bar']],
-			'int:int:string[][]',
-			false,
+			'value' => [['foo' => 'bar']],
+			'expectedTypes' => 'int:int:string[][]',
+			'result' => false,
 		];
 		yield 'array<string, array<integer, string>> is iterable<string, iterable<string>>' => [
-			['foo' => ['bar']],
-			'string:string[][]',
+			'value' => ['foo' => ['bar']],
+			'expectedTypes' => 'string:string[][]',
 		];
 		yield 'array<string, array<integer, string>> is not iterable<int, iterable<string>>' => [
-			['foo' => ['bar']],
-			'int:string[][]',
-			false,
+			'value' => ['foo' => ['bar']],
+			'expectedTypes' => 'int:string[][]',
+			'result' => false,
 		];
 		yield 'array<string, array<integer, string>> is iterable<mixed, iterable<int, string>>' => [
-			['foo' => ['bar']],
-			'mixed:int:string[][]',
+			'value' => ['foo' => ['bar']],
+			'expectedTypes' => 'mixed:int:string[][]',
 		];
 		yield 'array<string, array<integer, string>> is not iterable<mixed, iterable<string, string>>' => [
-			['foo' => ['bar']],
-			'mixed:string:string[][]',
-			false,
+			'value' => ['foo' => ['bar']],
+			'expectedTypes' => 'mixed:string:string[][]',
+			'result' => false,
 		];
 	}
 

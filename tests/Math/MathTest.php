@@ -16,19 +16,19 @@ class MathTest extends \PHPUnit\Framework\TestCase
 	public function moduloDataProvider(): Generator
 	{
 		yield 'dividend positive, no remainder after division by modulo' => [
-			4,
-			2,
-			0,
+			'dividend' => 4,
+			'modulo' => 2,
+			'result' => 0,
 		];
 		yield 'dividend positive, remainder after division by modulo' => [
-			5,
-			2,
-			1,
+			'dividend' => 5,
+			'modulo' => 2,
+			'result' => 1,
 		];
 		yield 'dividend negative, remainder after division by modulo' => [
-			-5,
-			2,
-			1,
+			'dividend' => -5,
+			'modulo' => 2,
+			'result' => 1,
 		];
 	}
 
@@ -60,52 +60,52 @@ class MathTest extends \PHPUnit\Framework\TestCase
 	public function powerOfTwoDataProvider(): Generator
 	{
 		yield '-2 - not power of two' => [
-			-2,
-			false,
+			'value' => -2,
+			'result' => false,
 		];
 		yield '-1 - not power of two' => [
-			-1,
-			false,
+			'value' => -1,
+			'result' => false,
 		];
 		yield '0 - not power of two' => [
-			0,
-			false,
+			'value' => 0,
+			'result' => false,
 		];
 		yield '1 - 2^0' => [
-			1,
-			true,
+			'value' => 1,
+			'result' => true,
 		];
 		yield '2 - 2^1' => [
-			2,
-			true,
+			'value' => 2,
+			'result' => true,
 		];
 		yield '3 - not power of two' => [
-			3,
-			false,
+			'value' => 3,
+			'result' => false,
 		];
 		yield '4 - 2^2' => [
-			4,
-			true,
+			'value' => 4,
+			'result' => true,
 		];
 		yield '6 - not power of two' => [
-			6,
-			false,
+			'value' => 6,
+			'result' => false,
 		];
 		yield '8 - 2^3' => [
-			8,
-			true,
+			'value' => 8,
+			'result' => true,
 		];
 		yield '10 - not power of two' => [
-			10,
-			false,
+			'value' => 10,
+			'result' => false,
 		];
 		yield '16 - 2^4' => [
-			16,
-			true,
+			'value' => 16,
+			'result' => true,
 		];
 		yield '32 - 2^5' => [
-			32,
-			true,
+			'value' => 32,
+			'result' => true,
 		];
 	}
 

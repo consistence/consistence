@@ -92,11 +92,6 @@ class EnumTest extends \PHPUnit\Framework\TestCase
 		Assert::assertTrue(StatusEnum::isValidValue(StatusEnum::DRAFT));
 	}
 
-	public function testNotValidValue(): void
-	{
-		Assert::assertFalse(StatusEnum::isValidValue('bar'));
-	}
-
 	/**
 	 * @return mixed[][]|\Generator
 	 */
@@ -138,12 +133,25 @@ class EnumTest extends \PHPUnit\Framework\TestCase
 		yield 'null' => [
 			'value' => null,
 		];
+		yield 'string' => [
+			'value' => 'foo',
+		];
 
 		foreach ($this->invalidTypeDataProvider() as $caseName => $caseData) {
 			yield $caseName => [
 				'value' => $caseData['value'],
 			];
 		}
+	}
+
+	/**
+	 * @dataProvider invalidEnumValueDataProvider
+	 *
+	 * @param mixed $value
+	 */
+	public function testNotValidValue($value): void
+	{
+		Assert::assertFalse(StatusEnum::isValidValue($value));
 	}
 
 	/**
@@ -174,13 +182,18 @@ class EnumTest extends \PHPUnit\Framework\TestCase
 		StatusEnum::checkValue(StatusEnum::DRAFT);
 	}
 
-	public function testCheckInvalidValue(): void
+	/**
+	 * @dataProvider invalidEnumValueDataProvider
+	 *
+	 * @param mixed $value
+	 */
+	public function testCheckInvalidValue($value): void
 	{
 		try {
-			StatusEnum::checkValue('foo');
+			StatusEnum::checkValue($value);
 			Assert::fail('Exception expected');
 		} catch (\Consistence\Enum\InvalidEnumValueException $e) {
-			Assert::assertSame('foo', $e->getValue());
+			Assert::assertSame($value, $e->getValue());
 			Assert::assertEquals([
 				'DRAFT' => StatusEnum::DRAFT,
 				'REVIEW' => StatusEnum::REVIEW,

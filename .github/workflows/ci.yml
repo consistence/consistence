@@ -99,6 +99,33 @@ jobs:
                 name: 'Check coding standard'
                 run: 'bin/phing create-dirs cs || cat build/log/phpcs-checkstyle.xml | cs2pr'
 
+    composer-require-checker:
+        name: 'Composer require check'
+        needs: 'lint'
+        runs-on: 'ubuntu-latest'
+
+        steps:
+            -
+                name: 'Checkout'
+                uses: 'actions/checkout@v3.3.0'
+            -
+                name: 'Setup PHP ${{ env.CONSISTENCE_PHP_VERSION }}'
+                uses: 'shivammathur/setup-php@2.24.0'
+                with:
+                    php-version: '${{ env.CONSISTENCE_PHP_VERSION }}'
+                    coverage: 'none'
+            -
+                name: 'Setup problem matchers for PHP'
+                run: 'echo "::add-matcher::${{ runner.tool_cache }}/php.json"'
+            -
+                name: 'Composer install'
+                uses: 'ramsey/composer-install@2.2.0'
+                with:
+                    dependency-versions: 'highest'
+            -
+                name: 'Check missing Composer requires'
+                run: 'bin/phing composer-require-checker'
+
     tests:
         name: 'Tests - PHP ${{ matrix.php-version }}, ${{ matrix.composer-dependencies }} dependencies'
         needs: 'lint'

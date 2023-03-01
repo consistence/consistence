@@ -11,6 +11,7 @@
 	<property name="path.bin" value="${path.root}/bin"/>
 	<property name="path.build.log" value="${path.build}/log"/>
 	<property name="path.composer.executable" value="composer"/>
+	<property name="path.composer-require-checker.executable" value="${path.bin}/composer-require-checker"/>
 	<property name="path.phpcs.executable" value="${path.bin}/phpcs"/>
 	<property name="path.phpcs.ruleset" value="${path.build}/cs-ruleset.xml"/>
 	<property name="path.phplint.executable" value="${path.bin}/parallel-lint"/>
@@ -27,7 +28,8 @@
 		composer,
 		phplint,
 		cs,
-		tests
+		tests,
+		composer-require-checker
 	"/>
 
 	<target name="composer" depends="composer-validate">
@@ -39,6 +41,15 @@
 		>
 			<arg value="install"/>
 		</exec>
+	</target>
+
+	<target name="composer-require-checker">
+		<exec
+			executable="${path.composer-require-checker.executable}"
+			logoutput="true"
+			passthru="true"
+			checkreturn="true"
+		/>
 	</target>
 
 	<target name="composer-validate">

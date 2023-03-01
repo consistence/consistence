@@ -152,7 +152,6 @@ class EnumTest extends \Consistence\TestCase
 		$this->ok();
 	}
 
-
 	public function testCheckInvalidValue(): void
 	{
 		try {

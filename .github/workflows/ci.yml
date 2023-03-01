@@ -29,7 +29,7 @@ jobs:
                 run: 'echo "::add-matcher::${{ runner.tool_cache }}/php.json"'
             -
                 name: 'Composer install'
-                uses: 'ramsey/composer-install@v1'
+                uses: 'ramsey/composer-install@2.2.0'
                 with:
                     dependency-versions: 'highest'
             -
@@ -64,7 +64,7 @@ jobs:
                 run: 'echo "::add-matcher::${{ runner.tool_cache }}/php.json"'
             -
                 name: 'Composer install'
-                uses: 'ramsey/composer-install@v1'
+                uses: 'ramsey/composer-install@2.2.0'
                 with:
                     dependency-versions: 'highest'
             -
@@ -92,7 +92,7 @@ jobs:
                 run: 'echo "::add-matcher::${{ runner.tool_cache }}/php.json"'
             -
                 name: 'Composer install'
-                uses: 'ramsey/composer-install@v1'
+                uses: 'ramsey/composer-install@2.2.0'
                 with:
                     dependency-versions: 'highest'
             -
@@ -133,7 +133,7 @@ jobs:
                 run: 'echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"'
             -
                 name: 'Composer install'
-                uses: 'ramsey/composer-install@v1'
+                uses: 'ramsey/composer-install@2.2.0'
                 with:
                     dependency-versions: '${{ matrix.composer-dependencies }}'
             -
@@ -157,7 +157,7 @@ jobs:
         steps:
             -
                 name: 'Finish Coveralls upload'
-                uses: 'coverallsapp/github-action@1.1.3'
+                uses: 'coverallsapp/github-action@v1.2.4'
                 with:
                     github-token: '${{ secrets.GITHUB_TOKEN }}'
                     parallel-finished: true

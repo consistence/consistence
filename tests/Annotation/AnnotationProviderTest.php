@@ -33,22 +33,6 @@ class AnnotationProviderTest extends \Consistence\TestCase
 			->with($property, 'test')
 			->will($this->throwException(new \Consistence\Annotation\AnnotationNotFoundException('test', $property)));
 
-		$this->expectException(\Consistence\Annotation\AnnotationNotFoundException::class);
-		$this->expectExceptionMessage('@test not found');
-
-		$annotationProvider->getPropertyAnnotation($property, 'test');
-	}
-
-	public function testGetMissingAnnotationValues(): void
-	{
-		$property = new ReflectionProperty(Foo::class, 'foo');
-		$annotationProvider = $this->createMock(AnnotationProvider::class);
-		$annotationProvider
-			->expects($this->once())
-			->method('getPropertyAnnotation')
-			->with($property, 'test')
-			->will($this->throwException(new \Consistence\Annotation\AnnotationNotFoundException('test', $property)));
-
 		try {
 			$annotationProvider->getPropertyAnnotation($property, 'test');
 

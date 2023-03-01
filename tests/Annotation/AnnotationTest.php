@@ -49,16 +49,6 @@ class AnnotationTest extends \Consistence\TestCase
 
 	public function testGetMissingField(): void
 	{
-		$annotation = Annotation::createAnnotationWithoutParams('lorem');
-
-		$this->expectException(\Consistence\Annotation\AnnotationFieldNotFoundException::class);
-		$this->expectExceptionMessage('\'test\' not found');
-
-		$annotation->getField('test');
-	}
-
-	public function testGetMissingFieldValues(): void
-	{
 		try {
 			$annotation = Annotation::createAnnotationWithoutParams('lorem');
 			$annotation->getField('test');

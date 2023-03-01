@@ -170,21 +170,13 @@ class TypeTest extends \Consistence\TestCase
 		$this->ok();
 	}
 
-	public function testCheckTypeException(): void
-	{
-		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
-		$this->expectExceptionMessage('[string] given');
-
-		Type::checkType('foo', 'int');
-	}
-
 	/**
 	 * @dataProvider typesProvider
 	 *
 	 * @param mixed $value
 	 * @param string $valueType
 	 */
-	public function testCheckTypeExceptionValues($value, string $valueType): void
+	public function testCheckTypeException($value, string $valueType): void
 	{
 		try {
 			Type::checkType($value, 'Foo');

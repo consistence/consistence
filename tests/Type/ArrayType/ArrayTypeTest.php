@@ -9,6 +9,13 @@ use DateTimeImmutable;
 class ArrayTypeTest extends \Consistence\TestCase
 {
 
+	public function testStaticConstruct(): void
+	{
+		$this->expectException(\Consistence\StaticClassException::class);
+
+		new ArrayType();
+	}
+
 	public function testContainsKeyIsNotStrict(): void
 	{
 		$values = [
@@ -32,13 +39,6 @@ class ArrayTypeTest extends \Consistence\TestCase
 		$this->assertTrue(ArrayType::containsKey($values, 1)); // true key
 		$this->assertTrue(ArrayType::containsKey($values, 'nullValue'));
 		$this->assertFalse(ArrayType::containsKey($values, '99'));
-	}
-
-	public function testStaticConstruct(): void
-	{
-		$this->expectException(\Consistence\StaticClassException::class);
-
-		new ArrayType();
 	}
 
 	public function testContainsValueDefault(): void

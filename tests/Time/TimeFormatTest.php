@@ -96,7 +96,7 @@ class TimeFormatTest extends \Consistence\TestCase
 	public function invalidTimesForFormatProvider(): array
 	{
 		return [
-			['', TimeFormat::ISO8601, 'empty string'],
+			[TimeFormat::ISO8601, '', 'empty string'],
 			['H:i', '02;30', 'containing different hour-minute separator'],
 			['H:i', '2:30', 'missing leading zero in hour'],
 			['Y-m-d', '2016-1-2', 'there are missing zeroes at the beginning of day and month'],

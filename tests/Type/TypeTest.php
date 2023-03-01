@@ -158,12 +158,12 @@ class TypeTest extends \Consistence\TestCase
 	/**
 	 * @dataProvider typesProvider
 	 *
-	 * @param mixed $type
-	 * @param string $expected
+	 * @param mixed $value
+	 * @param string $valueType
 	 */
-	public function testTypes($type, string $expected): void
+	public function testTypes($value, string $valueType): void
 	{
-		$this->assertSame($expected, Type::getType($type));
+		$this->assertSame($valueType, Type::getType($value));
 	}
 
 	/**

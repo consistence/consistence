@@ -6,4 +6,6 @@ updates:
         directory: '/'
         schedule:
             interval: 'weekly'
+        labels:
+            - 'maintenance'
         open-pull-requests-limit: 3

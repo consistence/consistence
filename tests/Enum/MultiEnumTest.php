@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Consistence\Enum;
 
+use Generator;
 use PHPUnit\Framework\Assert;
 
 class MultiEnumTest extends \PHPUnit\Framework\TestCase
@@ -188,16 +189,57 @@ class MultiEnumTest extends \PHPUnit\Framework\TestCase
 		Assert::assertEquals([], $empty->getValues());
 	}
 
-	public function testGetCombinations(): void
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function validValueDataProvider(): Generator
 	{
-		RolesEnum::get(0);
-		RolesEnum::get(1);
-		RolesEnum::get(2);
-		RolesEnum::get(3);
-		RolesEnum::get(4);
-		RolesEnum::get(5);
-		RolesEnum::get(6);
-		RolesEnum::get(7);
+		yield 'empty RolesEnum' => [
+			'multiEnumClassName' => RolesEnum::class,
+			'value' => 0,
+		];
+		yield 'RolesEnum, USER' => [
+			'multiEnumClassName' => RolesEnum::class,
+			'value' => 1,
+		];
+		yield 'RolesEnum, EMPLOYEE' => [
+			'multiEnumClassName' => RolesEnum::class,
+			'value' => 2,
+		];
+		yield 'RolesEnum, USER and EMPLOYEE' => [
+			'multiEnumClassName' => RolesEnum::class,
+			'value' => 3,
+		];
+		yield 'RolesEnum, ADMIN' => [
+			'multiEnumClassName' => RolesEnum::class,
+			'value' => 4,
+		];
+		yield 'RolesEnum, USER and ADMIN' => [
+			'multiEnumClassName' => RolesEnum::class,
+			'value' => 5,
+		];
+		yield 'RolesEnum, EMPLOYEE and ADMIN' => [
+			'multiEnumClassName' => RolesEnum::class,
+			'value' => 6,
+		];
+		yield 'RolesEnum, USER and EMPLOYEE and ADMIN' => [
+			'multiEnumClassName' => RolesEnum::class,
+			'value' => 7,
+		];
+	}
+
+	/**
+	 * @dataProvider validValueDataProvider
+	 *
+	 * @param string $multiEnumClassName
+	 * @param mixed $value
+	 */
+	public function testGetCombinations(
+		string $multiEnumClassName,
+		$value
+	): void
+	{
+		$multiEnumClassName::get($value);
 
 		$this->expectNotToPerformAssertions();
 	}
@@ -274,15 +316,52 @@ class MultiEnumTest extends \PHPUnit\Framework\TestCase
 		}
 	}
 
-	public function testContains(): void
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function containsDataProvider(): Generator
 	{
-		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
+		yield 'first of two contained values' => [
+			'existingMultiEnum' => RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN),
+			'operandMultiEnum' => RolesEnum::get(RoleEnum::USER),
+			'contains' => true,
+		];
+		yield 'second of two contained values' => [
+			'existingMultiEnum' => RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN),
+			'operandMultiEnum' => RolesEnum::get(RoleEnum::ADMIN),
+			'contains' => true,
+		];
+		yield 'both of two contained values' => [
+			'existingMultiEnum' => RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN),
+			'operandMultiEnum' => RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN),
+			'contains' => true,
+		];
+		yield 'one different value' => [
+			'existingMultiEnum' => RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN),
+			'operandMultiEnum' => RolesEnum::get(RoleEnum::EMPLOYEE),
+			'contains' => false,
+		];
+		yield 'one different and one contained value' => [
+			'existingMultiEnum' => RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN),
+			'operandMultiEnum' => RolesEnum::getMulti(RoleEnum::USER, RoleEnum::EMPLOYEE),
+			'contains' => false,
+		];
+	}
 
-		Assert::assertTrue($userAndAdmin->contains(RolesEnum::get(RoleEnum::USER)));
-		Assert::assertTrue($userAndAdmin->contains(RolesEnum::get(RoleEnum::ADMIN)));
-		Assert::assertTrue($userAndAdmin->contains(RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN)));
-		Assert::assertFalse($userAndAdmin->contains(RolesEnum::get(RoleEnum::EMPLOYEE)));
-		Assert::assertFalse($userAndAdmin->contains(RolesEnum::getMulti(RoleEnum::USER, RoleEnum::EMPLOYEE)));
+	/**
+	 * @dataProvider containsDataProvider
+	 *
+	 * @param \Consistence\Enum\MultiEnum $existingMultiEnum
+	 * @param \Consistence\Enum\MultiEnum $operandMultiEnum
+	 * @param bool $contains
+	 */
+	public function testContains(
+		MultiEnum $existingMultiEnum,
+		MultiEnum $operandMultiEnum,
+		bool $contains
+	): void
+	{
+		Assert::assertSame($contains, $existingMultiEnum->contains($operandMultiEnum));
 	}
 
 	public function testContainsDifferentEnum(): void
@@ -299,13 +378,42 @@ class MultiEnumTest extends \PHPUnit\Framework\TestCase
 		}
 	}
 
-	public function testContainsEnum(): void
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function containsEnumDataProvider(): Generator
 	{
-		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
+		yield 'first of two contained values' => [
+			'existingMultiEnum' => RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN),
+			'operandEnum' => RoleEnum::get(RoleEnum::USER),
+			'contains' => true,
+		];
+		yield 'second of two contained values' => [
+			'existingMultiEnum' => RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN),
+			'operandEnum' => RoleEnum::get(RoleEnum::ADMIN),
+			'contains' => true,
+		];
+		yield 'different value' => [
+			'existingMultiEnum' => RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN),
+			'operandEnum' => RoleEnum::get(RoleEnum::EMPLOYEE),
+			'contains' => false,
+		];
+	}
 
-		Assert::assertTrue($userAndAdmin->containsEnum(RoleEnum::get(RoleEnum::USER)));
-		Assert::assertTrue($userAndAdmin->containsEnum(RoleEnum::get(RoleEnum::ADMIN)));
-		Assert::assertFalse($userAndAdmin->containsEnum(RoleEnum::get(RoleEnum::EMPLOYEE)));
+	/**
+	 * @dataProvider containsEnumDataProvider
+	 *
+	 * @param \Consistence\Enum\MultiEnum $existingMultiEnum
+	 * @param \Consistence\Enum\Enum $operandEnum
+	 * @param bool $contains
+	 */
+	public function testContainsEnum(
+		MultiEnum $existingMultiEnum,
+		Enum $operandEnum,
+		bool $contains
+	): void
+	{
+		Assert::assertSame($contains, $existingMultiEnum->containsEnum($operandEnum));
 	}
 
 	public function testContainsEnumSingleEnumNotDefined(): void
@@ -332,13 +440,34 @@ class MultiEnumTest extends \PHPUnit\Framework\TestCase
 		}
 	}
 
-	public function testContainsValue(): void
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function containsValueDataProvider(): Generator
 	{
-		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
+		foreach ($this->containsEnumDataProvider() as $caseName => $caseData) {
+			yield $caseName => [
+				'existingMultiEnum' => $caseData['existingMultiEnum'],
+				'value' => $caseData['operandEnum']->getValue(),
+				'contains' => $caseData['contains'],
+			];
+		}
+	}
 
-		Assert::assertTrue($userAndAdmin->containsValue(RoleEnum::USER));
-		Assert::assertTrue($userAndAdmin->containsValue(RoleEnum::ADMIN));
-		Assert::assertFalse($userAndAdmin->containsValue(RoleEnum::EMPLOYEE));
+	/**
+	 * @dataProvider containsValueDataProvider
+	 *
+	 * @param \Consistence\Enum\MultiEnum $existingMultiEnum
+	 * @param int $value
+	 * @param bool $contains
+	 */
+	public function testContainsValue(
+		MultiEnum $existingMultiEnum,
+		int $value,
+		bool $contains
+	): void
+	{
+		Assert::assertSame($contains, $existingMultiEnum->containsValue($value));
 	}
 
 	public function testContainsInvalidValue(): void
@@ -359,12 +488,41 @@ class MultiEnumTest extends \PHPUnit\Framework\TestCase
 		}
 	}
 
-	public function testIsEmpty(): void
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function isEmptyDataProvider(): Generator
 	{
-		Assert::assertTrue(RolesEnum::getMulti()->isEmpty());
-		Assert::assertTrue(RolesEnum::get(0)->isEmpty());
-		Assert::assertTrue(RolesEnum::getMultiByArray([])->isEmpty());
-		Assert::assertFalse(RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN)->isEmpty());
+		yield 'empty RolesEnum created using getMulti()' => [
+			'multiEnum' => RolesEnum::getMulti(),
+			'empty' => true,
+		];
+		yield 'empty RolesEnum created using get(0)' => [
+			'multiEnum' => RolesEnum::get(0),
+			'empty' => true,
+		];
+		yield 'empty RolesEnum created using getMultiByArray([])' => [
+			'multiEnum' => RolesEnum::getMultiByArray([]),
+			'empty' => true,
+		];
+		yield 'non-empty RolesEnum' => [
+			'multiEnum' => RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN),
+			'empty' => false,
+		];
+	}
+
+	/**
+	 * @dataProvider isEmptyDataProvider
+	 *
+	 * @param \Consistence\Enum\RolesEnum $multiEnum
+	 * @param bool $empty
+	 */
+	public function testIsEmpty(
+		MultiEnum $multiEnum,
+		bool $empty
+	): void
+	{
+		Assert::assertSame($empty, $multiEnum->isEmpty());
 	}
 
 	public function testAdd(): void

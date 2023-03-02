@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Consistence\RegExp;
 
+use Generator;
 use PHPUnit\Framework\Assert;
 
 class RegExpTest extends \PHPUnit\Framework\TestCase
@@ -41,10 +42,37 @@ class RegExpTest extends \PHPUnit\Framework\TestCase
 		RegExp::match('foobar foobar foobar', '/(?:\D+|<\d+>)*[!?]/');
 	}
 
-	public function testMatches(): void
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function matchesDataProvider(): Generator
 	{
-		Assert::assertTrue(RegExp::matches('foo', '~o+~'));
-		Assert::assertFalse(RegExp::matches('foo', '~x+~'));
+		yield 'subject matches pattern' => [
+			'subject' => 'foo',
+			'pattern' => '~o+~',
+			'expectedMatches' => true,
+		];
+		yield 'subject does not match pattern' => [
+			'subject' => 'foo',
+			'pattern' => '~x+~',
+			'expectedMatches' => false,
+		];
+	}
+
+	/**
+	 * @dataProvider matchesDataProvider
+	 *
+	 * @param string $subject
+	 * @param string $pattern
+	 * @param bool $expectedMatches
+	 */
+	public function testMatches(
+		string $subject,
+		string $pattern,
+		bool $expectedMatches
+	): void
+	{
+		Assert::assertSame($expectedMatches, RegExp::matches($subject, $pattern));
 	}
 
 }

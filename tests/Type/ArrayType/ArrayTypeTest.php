@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Consistence\Type\ArrayType;
 
 use DateTimeImmutable;
+use Generator;
 use PHPUnit\Framework\Assert;
 
 class ArrayTypeTest extends \PHPUnit\Framework\TestCase
@@ -17,43 +18,142 @@ class ArrayTypeTest extends \PHPUnit\Framework\TestCase
 		new ArrayType();
 	}
 
-	public function testContainsKeyIsNotStrict(): void
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function containsKeyIsNotStrictDataProvider(): Generator
 	{
-		$haystack = [
-			'three' => 'three',
-			'7' => '7',
-			3 => 3,
-			null => null,
-			false => 'false',
-			true => 'true',
-			'nullValue' => null,
+		yield 'existing string key' => [
+			'haystack' => ['three' => 'three'],
+			'key' => 'three',
+			'expectedContainsKey' => true,
 		];
 
-		Assert::assertTrue(ArrayType::containsKey($haystack, 'three'));
-		Assert::assertTrue(ArrayType::containsKey($haystack, '7'));
-		Assert::assertTrue(ArrayType::containsKey($haystack, 7));
-		Assert::assertTrue(ArrayType::containsKey($haystack, null));
-		Assert::assertTrue(ArrayType::containsKey($haystack, 3));
-		Assert::assertTrue(ArrayType::containsKey($haystack, '3'));
-		Assert::assertTrue(ArrayType::containsKey($haystack, '')); // null key
-		Assert::assertTrue(ArrayType::containsKey($haystack, 0)); // false key
-		Assert::assertTrue(ArrayType::containsKey($haystack, 1)); // true key
-		Assert::assertTrue(ArrayType::containsKey($haystack, 'nullValue'));
-		Assert::assertFalse(ArrayType::containsKey($haystack, '99'));
+		yield 'existing numeric string key as string' => [
+			'haystack' => ['7' => '7'],
+			'key' => '7',
+			'expectedContainsKey' => true,
+		];
+
+		yield 'existing numeric string key as integer' => [
+			'haystack' => ['7' => '7'],
+			'key' => 7,
+			'expectedContainsKey' => true,
+		];
+
+		yield 'existing integer key as integer' => [
+			'haystack' => [3 => 3],
+			'key' => 3,
+			'expectedContainsKey' => true,
+		];
+
+		yield 'existing integer key as numeric string' => [
+			'haystack' => [3 => 3],
+			'key' => '3',
+			'expectedContainsKey' => true,
+		];
+
+		yield 'existing null key as null' => [
+			'haystack' => [null => null],
+			'key' => null,
+			'expectedContainsKey' => true,
+		];
+
+		yield 'existing null key as empty string' => [
+			'haystack' => [null => null],
+			'key' => '',
+			'expectedContainsKey' => true,
+		];
+
+		yield 'existing false key as 0' => [
+			'haystack' => [false => 'false'],
+			'key' => 0,
+			'expectedContainsKey' => true,
+		];
+
+		yield 'existing true key as 1' => [
+			'haystack' => [true => 'true'],
+			'key' => 1,
+			'expectedContainsKey' => true,
+		];
+
+		yield 'existing `nullValue` string key as string' => [
+			'haystack' => ['nullValue' => null],
+			'key' => 'nullValue',
+			'expectedContainsKey' => true,
+		];
+
+		yield 'non-existing numeric string key as string' => [
+			'haystack' => [3 => 3],
+			'key' => '99',
+			'expectedContainsKey' => false,
+		];
 	}
 
-	public function testContainsValueDefault(): void
+	/**
+	 * @dataProvider containsKeyIsNotStrictDataProvider
+	 *
+	 * @param mixed[] $haystack
+	 * @param mixed $key
+	 * @param bool $expectedContainsKey
+	 */
+	public function testContainsKeyIsNotStrict(
+		array $haystack,
+		$key,
+		bool $expectedContainsKey
+	): void
 	{
-		$haystack = [1, 2, 3];
-		Assert::assertTrue(ArrayType::containsValue($haystack, 2));
-		Assert::assertFalse(ArrayType::containsValue($haystack, '2'));
+		Assert::assertSame($expectedContainsKey, ArrayType::containsKey($haystack, $key));
 	}
 
-	public function testContainsValueStrict(): void
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function containsValueStrictDataProvider(): Generator
 	{
-		$haystack = [1, 2, 3];
-		Assert::assertTrue(ArrayType::containsValue($haystack, 2, ArrayType::STRICT_TRUE));
-		Assert::assertFalse(ArrayType::containsValue($haystack, '2', ArrayType::STRICT_TRUE));
+		yield 'existing integer value' => [
+			'haystack' => [1, 2, 3],
+			'value' => 2,
+			'expectedContains' => true,
+		];
+
+		yield 'existing integer value as numeric string' => [
+			'haystack' => [1, 2, 3],
+			'value' => '2',
+			'expectedContains' => false,
+		];
+	}
+
+	/**
+	 * @dataProvider containsValueStrictDataProvider
+	 *
+	 * @param mixed[] $haystack
+	 * @param mixed $value
+	 * @param bool $expectedContains
+	 */
+	public function testContainsValueDefault(
+		array $haystack,
+		$value,
+		bool $expectedContains
+	): void
+	{
+		Assert::assertSame($expectedContains, ArrayType::containsValue($haystack, $value));
+	}
+
+	/**
+	 * @dataProvider containsValueStrictDataProvider
+	 *
+	 * @param mixed[] $haystack
+	 * @param mixed $value
+	 * @param bool $expectedContains
+	 */
+	public function testContainsValueStrict(
+		array $haystack,
+		$value,
+		bool $expectedContains
+	): void
+	{
+		Assert::assertSame($expectedContains, ArrayType::containsValue($haystack, $value, ArrayType::STRICT_TRUE));
 	}
 
 	public function testContainsValueLoose(): void
@@ -62,10 +162,38 @@ class ArrayTypeTest extends \PHPUnit\Framework\TestCase
 		Assert::assertTrue(ArrayType::containsValue($haystack, '2', ArrayType::STRICT_FALSE));
 	}
 
-	public function testContainsValueNull(): void
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function containsValueNullDataProvider(): Generator
 	{
-		Assert::assertTrue(ArrayType::containsValue([1, 2, 3, null], null));
-		Assert::assertFalse(ArrayType::containsValue([1, 2, 3], null));
+		yield 'existing null value' => [
+			'haystack' => [1, 2, 3, null],
+			'value' => null,
+			'expectedContains' => true,
+		];
+
+		yield 'nonexistent null value' => [
+			'haystack' => [1, 2, 3],
+			'value' => null,
+			'expectedContains' => false,
+		];
+	}
+
+	/**
+	 * @dataProvider containsValueNullDataProvider
+	 *
+	 * @param mixed[] $haystack
+	 * @param mixed $value
+	 * @param bool $expectedContains
+	 */
+	public function testContainsValueNull(
+		array $haystack,
+		$value,
+		bool $expectedContains
+	): void
+	{
+		Assert::assertSame($expectedContains, ArrayType::containsValue($haystack, $value));
 	}
 
 	public function testContainsByCallback(): void
@@ -124,18 +252,54 @@ class ArrayTypeTest extends \PHPUnit\Framework\TestCase
 		}));
 	}
 
-	public function testFindKeyDefault(): void
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function findKeyStrictDataProvider(): Generator
 	{
-		$haystack = [1, 2, 3];
-		Assert::assertSame(1, ArrayType::findKey($haystack, 2));
-		Assert::assertNull(ArrayType::findKey($haystack, '2'));
+		yield 'existing integer value' => [
+			'haystack' => [1, 2, 3],
+			'value' => 2,
+			'expectedKey' => 1,
+		];
+
+		yield 'existing integer value as numeric string' => [
+			'haystack' => [1, 2, 3],
+			'value' => '2',
+			'expectedKey' => null,
+		];
 	}
 
-	public function testFindKeyStrict(): void
+	/**
+	 * @dataProvider findKeyStrictDataProvider
+	 *
+	 * @param mixed[] $haystack
+	 * @param mixed $value
+	 * @param int|string|null $expectedKey
+	 */
+	public function testFindKeyDefault(
+		array $haystack,
+		$value,
+		$expectedKey
+	): void
 	{
-		$haystack = [1, 2, 3];
-		Assert::assertSame(1, ArrayType::findKey($haystack, 2, ArrayType::STRICT_TRUE));
-		Assert::assertNull(ArrayType::findKey($haystack, '2', ArrayType::STRICT_TRUE));
+		Assert::assertSame($expectedKey, ArrayType::findKey($haystack, $value));
+	}
+
+	/**
+	 * @dataProvider findKeyStrictDataProvider
+	 *
+	 * @param mixed[] $haystack
+	 * @param mixed $value
+	 * @param int|string|null $expectedKey
+	 */
+	public function testFindKeyStrict(
+		array $haystack,
+		$value,
+		$expectedKey
+	): void
+	{
+		Assert::assertSame($expectedKey, ArrayType::findKey($haystack, $value));
 	}
 
 	public function testFindKeyLoose(): void

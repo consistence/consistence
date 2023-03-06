@@ -4,23 +4,25 @@ declare(strict_types = 1);
 
 namespace Consistence\Annotation;
 
-class AnnotationTest extends \Consistence\TestCase
+use PHPUnit\Framework\Assert;
+
+class AnnotationTest extends \PHPUnit\Framework\TestCase
 {
 
 	public function testCreateNoParams(): void
 	{
 		$annotation = Annotation::createAnnotationWithoutParams('lorem');
-		$this->assertSame('lorem', $annotation->getName());
-		$this->assertEmpty($annotation->getFields());
-		$this->assertNull($annotation->getValue());
+		Assert::assertSame('lorem', $annotation->getName());
+		Assert::assertEmpty($annotation->getFields());
+		Assert::assertNull($annotation->getValue());
 	}
 
 	public function testCreateAnnotationWithValue(): void
 	{
 		$annotation = Annotation::createAnnotationWithValue('lorem', 'ipsum');
-		$this->assertSame('lorem', $annotation->getName());
-		$this->assertEmpty($annotation->getFields());
-		$this->assertSame('ipsum', $annotation->getValue());
+		Assert::assertSame('lorem', $annotation->getName());
+		Assert::assertEmpty($annotation->getFields());
+		Assert::assertSame('ipsum', $annotation->getValue());
 	}
 
 	public function testCreateAnnotationWithFields(): void
@@ -28,11 +30,11 @@ class AnnotationTest extends \Consistence\TestCase
 		$annotation = Annotation::createAnnotationWithFields('lorem', [
 			new AnnotationField('foo', 'bar'),
 		]);
-		$this->assertSame('lorem', $annotation->getName());
-		$this->assertCount(1, $annotation->getFields());
-		$this->assertSame('foo', $annotation->getFields()[0]->getName());
-		$this->assertSame('bar', $annotation->getFields()[0]->getValue());
-		$this->assertNull($annotation->getValue());
+		Assert::assertSame('lorem', $annotation->getName());
+		Assert::assertCount(1, $annotation->getFields());
+		Assert::assertSame('foo', $annotation->getFields()[0]->getName());
+		Assert::assertSame('bar', $annotation->getFields()[0]->getValue());
+		Assert::assertNull($annotation->getValue());
 	}
 
 	public function testGetField(): void
@@ -43,8 +45,8 @@ class AnnotationTest extends \Consistence\TestCase
 			new AnnotationField('dolor', 3),
 		]);
 		$field = $annotation->getField('ipsum');
-		$this->assertSame('ipsum', $field->getName());
-		$this->assertSame(2, $field->getValue());
+		Assert::assertSame('ipsum', $field->getName());
+		Assert::assertSame(2, $field->getValue());
 	}
 
 	public function testGetMissingField(): void
@@ -63,9 +65,9 @@ class AnnotationTest extends \Consistence\TestCase
 			$annotation = Annotation::createAnnotationWithoutParams('lorem');
 			$annotation->getField('test');
 
-			$this->fail();
+			Assert::fail();
 		} catch (\Consistence\Annotation\AnnotationFieldNotFoundException $e) {
-			$this->assertSame('test', $e->getFieldName());
+			Assert::assertSame('test', $e->getFieldName());
 		}
 	}
 

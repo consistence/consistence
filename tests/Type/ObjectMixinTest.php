@@ -4,9 +4,10 @@ declare(strict_types = 1);
 
 namespace Consistence\Type;
 
+use PHPUnit\Framework\Assert;
 use stdClass;
 
-class ObjectMixinTest extends \Consistence\TestCase
+class ObjectMixinTest extends \PHPUnit\Framework\TestCase
 {
 
 	public function testStaticConstruct(): void
@@ -28,10 +29,10 @@ class ObjectMixinTest extends \Consistence\TestCase
 	{
 		try {
 			ObjectMixin::magicCall(new stdClass(), 'getFoo');
-			$this->fail();
+			Assert::fail();
 		} catch (\Consistence\UndefinedMethodException $e) {
-			$this->assertSame(stdClass::class, $e->getClassName());
-			$this->assertSame('getFoo', $e->getMethodName());
+			Assert::assertSame(stdClass::class, $e->getClassName());
+			Assert::assertSame('getFoo', $e->getMethodName());
 		}
 	}
 
@@ -47,10 +48,10 @@ class ObjectMixinTest extends \Consistence\TestCase
 	{
 		try {
 			ObjectMixin::magicCallStatic(stdClass::class, 'doStatic');
-			$this->fail();
+			Assert::fail();
 		} catch (\Consistence\UndefinedMethodException $e) {
-			$this->assertSame(stdClass::class, $e->getClassName());
-			$this->assertSame('doStatic', $e->getMethodName());
+			Assert::assertSame(stdClass::class, $e->getClassName());
+			Assert::assertSame('doStatic', $e->getMethodName());
 		}
 	}
 
@@ -66,10 +67,10 @@ class ObjectMixinTest extends \Consistence\TestCase
 	{
 		try {
 			ObjectMixin::magicGet(new stdClass(), 'foo');
-			$this->fail();
+			Assert::fail();
 		} catch (\Consistence\UndefinedPropertyException $e) {
-			$this->assertSame(stdClass::class, $e->getClassName());
-			$this->assertSame('foo', $e->getPropertyName());
+			Assert::assertSame(stdClass::class, $e->getClassName());
+			Assert::assertSame('foo', $e->getPropertyName());
 		}
 	}
 
@@ -85,10 +86,10 @@ class ObjectMixinTest extends \Consistence\TestCase
 	{
 		try {
 			ObjectMixin::magicSet(new stdClass(), 'foo');
-			$this->fail();
+			Assert::fail();
 		} catch (\Consistence\UndefinedPropertyException $e) {
-			$this->assertSame(stdClass::class, $e->getClassName());
-			$this->assertSame('foo', $e->getPropertyName());
+			Assert::assertSame(stdClass::class, $e->getClassName());
+			Assert::assertSame('foo', $e->getPropertyName());
 		}
 	}
 
@@ -104,10 +105,10 @@ class ObjectMixinTest extends \Consistence\TestCase
 	{
 		try {
 			ObjectMixin::magicIsSet(new stdClass(), 'foo');
-			$this->fail();
+			Assert::fail();
 		} catch (\Consistence\UndefinedPropertyException $e) {
-			$this->assertSame(stdClass::class, $e->getClassName());
-			$this->assertSame('foo', $e->getPropertyName());
+			Assert::assertSame(stdClass::class, $e->getClassName());
+			Assert::assertSame('foo', $e->getPropertyName());
 		}
 	}
 
@@ -123,10 +124,10 @@ class ObjectMixinTest extends \Consistence\TestCase
 	{
 		try {
 			ObjectMixin::magicUnset(new stdClass(), 'foo');
-			$this->fail();
+			Assert::fail();
 		} catch (\Consistence\UndefinedPropertyException $e) {
-			$this->assertSame(stdClass::class, $e->getClassName());
-			$this->assertSame('foo', $e->getPropertyName());
+			Assert::assertSame(stdClass::class, $e->getClassName());
+			Assert::assertSame('foo', $e->getPropertyName());
 		}
 	}
 

@@ -123,21 +123,21 @@ class ArrayTypeTest extends \Consistence\TestCase
 		}));
 	}
 
-	public function testArraySearchDefault(): void
+	public function testFindKeyDefault(): void
 	{
 		$values = [1, 2, 3];
 		$this->assertSame(1, ArrayType::findKey($values, 2));
 		$this->assertNull(ArrayType::findKey($values, '2'));
 	}
 
-	public function testArraySearchStrict(): void
+	public function testFindKeyStrict(): void
 	{
 		$values = [1, 2, 3];
 		$this->assertSame(1, ArrayType::findKey($values, 2, ArrayType::STRICT_TRUE));
 		$this->assertNull(ArrayType::findKey($values, '2', ArrayType::STRICT_TRUE));
 	}
 
-	public function testArraySearchLoose(): void
+	public function testFindKeyLoose(): void
 	{
 		$values = [1, 2, 3];
 		$this->assertSame(1, ArrayType::findKey($values, '2', ArrayType::STRICT_FALSE));

@@ -19,10 +19,14 @@ class KeyValuePairTest extends \PHPUnit\Framework\TestCase
 
 	public function testConstructInvalidKey(): void
 	{
-		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
-		$this->expectExceptionMessage('int|string expected');
-
-		new KeyValuePair([], 'foo');
+		try {
+			new KeyValuePair([], 'foo');
+			Assert::fail('Exception expected');
+		} catch (\Consistence\InvalidArgumentTypeException $e) {
+			Assert::assertSame([], $e->getValue());
+			Assert::assertSame('array', $e->getValueType());
+			Assert::assertSame('int|string', $e->getExpectedTypes());
+		}
 	}
 
 }

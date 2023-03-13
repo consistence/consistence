@@ -4,6 +4,8 @@ declare(strict_types = 1);
 
 namespace Consistence;
 
+use PHPUnit\Framework\Assert;
+
 class ObjectPrototypeTest extends \PHPUnit\Framework\TestCase
 {
 
@@ -11,58 +13,76 @@ class ObjectPrototypeTest extends \PHPUnit\Framework\TestCase
 	{
 		$object = new ConsistenceObjectPrototypeMock();
 
-		$this->expectException(\Consistence\UndefinedMethodException::class);
-		$this->expectExceptionMessage('ConsistenceObjectPrototypeMock::getFoo()');
-
-		$object->getFoo();
+		try {
+			$object->getFoo();
+			Assert::fail('Exception expected');
+		} catch (\Consistence\UndefinedMethodException $e) {
+			Assert::assertSame(ConsistenceObjectPrototypeMock::class, $e->getClassName());
+			Assert::assertSame('getFoo', $e->getMethodName());
+		}
 	}
 
 	public function testMagicCallStatic(): void
 	{
-		$this->expectException(\Consistence\UndefinedMethodException::class);
-		$this->expectExceptionMessage('ConsistenceObjectPrototypeMock::doStatic()');
-
-		ConsistenceObjectPrototypeMock::doStatic();
+		try {
+			ConsistenceObjectPrototypeMock::doStatic();
+			Assert::fail('Exception expected');
+		} catch (\Consistence\UndefinedMethodException $e) {
+			Assert::assertSame(ConsistenceObjectPrototypeMock::class, $e->getClassName());
+			Assert::assertSame('doStatic', $e->getMethodName());
+		}
 	}
 
 	public function testMagicGet(): void
 	{
 		$object = new ConsistenceObjectPrototypeMock();
 
-		$this->expectException(\Consistence\UndefinedPropertyException::class);
-		$this->expectExceptionMessage('ConsistenceObjectPrototypeMock::$foo');
-
-		$object->foo;
+		try {
+			$object->foo;
+			Assert::fail('Exception expected');
+		} catch (\Consistence\UndefinedPropertyException $e) {
+			Assert::assertSame(ConsistenceObjectPrototypeMock::class, $e->getClassName());
+			Assert::assertSame('foo', $e->getPropertyName());
+		}
 	}
 
 	public function testMagicSet(): void
 	{
 		$object = new ConsistenceObjectPrototypeMock();
 
-		$this->expectException(\Consistence\UndefinedPropertyException::class);
-		$this->expectExceptionMessage('ConsistenceObjectPrototypeMock::$foo');
-
-		$object->foo = 'bar';
+		try {
+			$object->foo = 'bar';
+			Assert::fail('Exception expected');
+		} catch (\Consistence\UndefinedPropertyException $e) {
+			Assert::assertSame(ConsistenceObjectPrototypeMock::class, $e->getClassName());
+			Assert::assertSame('foo', $e->getPropertyName());
+		}
 	}
 
 	public function testMagicIsset(): void
 	{
 		$object = new ConsistenceObjectPrototypeMock();
 
-		$this->expectException(\Consistence\UndefinedPropertyException::class);
-		$this->expectExceptionMessage('ConsistenceObjectPrototypeMock::$foo');
-
-		isset($object->foo);
+		try {
+			isset($object->foo);
+			Assert::fail('Exception expected');
+		} catch (\Consistence\UndefinedPropertyException $e) {
+			Assert::assertSame(ConsistenceObjectPrototypeMock::class, $e->getClassName());
+			Assert::assertSame('foo', $e->getPropertyName());
+		}
 	}
 
 	public function testMagicUnset(): void
 	{
 		$object = new ConsistenceObjectPrototypeMock();
 
-		$this->expectException(\Consistence\UndefinedPropertyException::class);
-		$this->expectExceptionMessage('ConsistenceObjectPrototypeMock::$foo');
-
-		unset($object->foo);
+		try {
+			unset($object->foo);
+			Assert::fail('Exception expected');
+		} catch (\Consistence\UndefinedPropertyException $e) {
+			Assert::assertSame(ConsistenceObjectPrototypeMock::class, $e->getClassName());
+			Assert::assertSame('foo', $e->getPropertyName());
+		}
 	}
 
 }

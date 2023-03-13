@@ -28,10 +28,14 @@ class KeyValuePairMutableTest extends \PHPUnit\Framework\TestCase
 	{
 		$pair = new KeyValuePairMutable(0, 'foo');
 
-		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
-		$this->expectExceptionMessage('int|string expected');
-
-		$pair->setPair([], 'foo');
+		try {
+			$pair->setPair([], 'foo');
+			Assert::fail('Exception expected');
+		} catch (\Consistence\InvalidArgumentTypeException $e) {
+			Assert::assertSame([], $e->getValue());
+			Assert::assertSame('array', $e->getValueType());
+			Assert::assertSame('int|string', $e->getExpectedTypes());
+		}
 	}
 
 }

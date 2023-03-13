@@ -204,18 +204,34 @@ class MultiEnumTest extends \PHPUnit\Framework\TestCase
 
 	public function testGetNegative(): void
 	{
-		$this->expectException(\Consistence\Enum\InvalidEnumValueException::class);
-		$this->expectExceptionMessage('-1 [int] is not a valid value');
-
-		RolesEnum::get(-1);
+		try {
+			RolesEnum::get(-1);
+			Assert::fail('Exception expected');
+		} catch (\Consistence\Enum\InvalidEnumValueException $e) {
+			Assert::assertSame(-1, $e->getValue());
+			Assert::assertEquals([
+				'USER' => RoleEnum::USER,
+				'EMPLOYEE' => RoleEnum::EMPLOYEE,
+				'ADMIN' => RoleEnum::ADMIN,
+			], $e->getAvailableValues());
+			Assert::assertSame(RolesEnum::class, $e->getEnumClassName());
+		}
 	}
 
 	public function testGetMultiNegative(): void
 	{
-		$this->expectException(\Consistence\Enum\InvalidEnumValueException::class);
-		$this->expectExceptionMessage('-1 [int] is not a valid value');
-
-		RolesEnum::getMulti(-1);
+		try {
+			RolesEnum::getMulti(-1);
+			Assert::fail('Exception expected');
+		} catch (\Consistence\Enum\InvalidEnumValueException $e) {
+			Assert::assertSame(-1, $e->getValue());
+			Assert::assertEquals([
+				'USER' => RoleEnum::USER,
+				'EMPLOYEE' => RoleEnum::EMPLOYEE,
+				'ADMIN' => RoleEnum::ADMIN,
+			], $e->getAvailableValues());
+			Assert::assertSame(RolesEnum::class, $e->getEnumClassName());
+		}
 	}
 
 	public function testInvalidEnumValue(): void
@@ -272,10 +288,15 @@ class MultiEnumTest extends \PHPUnit\Framework\TestCase
 	public function testContainsDifferentEnum(): void
 	{
 		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
+		$foo = FooEnum::get(FooEnum::FOO);
 
-		$this->expectException(\Consistence\Enum\OperationSupportedOnlyForSameEnumException::class);
-
-		$userAndAdmin->contains(FooEnum::get(FooEnum::FOO));
+		try {
+			$userAndAdmin->contains($foo);
+			Assert::fail('Exception expected');
+		} catch (\Consistence\Enum\OperationSupportedOnlyForSameEnumException $e) {
+			Assert::assertSame($userAndAdmin, $e->getExpected());
+			Assert::assertSame($foo, $e->getGiven());
+		}
 	}
 
 	public function testContainsEnum(): void
@@ -289,19 +310,26 @@ class MultiEnumTest extends \PHPUnit\Framework\TestCase
 
 	public function testContainsEnumSingleEnumNotDefined(): void
 	{
-		$this->expectException(\Consistence\Enum\NoSingleEnumSpecifiedException::class);
-
-		FooEnum::getMulti(FooEnum::FOO)->containsEnum(FooEnum::get(FooEnum::FOO));
+		try {
+			FooEnum::getMulti(FooEnum::FOO)->containsEnum(FooEnum::get(FooEnum::FOO));
+			Assert::fail('Exception expected');
+		} catch (\Consistence\Enum\NoSingleEnumSpecifiedException $e) {
+			Assert::assertSame(FooEnum::class, $e->getClass());
+		}
 	}
 
 	public function testContainsEnumDifferentEnum(): void
 	{
 		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
 
-		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
-		$this->expectExceptionMessage('Consistence\Enum\RoleEnum expected');
-
-		$userAndAdmin->containsEnum(FooEnum::get(FooEnum::FOO));
+		try {
+			$userAndAdmin->containsEnum(FooEnum::get(FooEnum::FOO));
+			Assert::fail('Exception expected');
+		} catch (\Consistence\InvalidArgumentTypeException $e) {
+			Assert::assertSame(FooEnum::get(FooEnum::FOO), $e->getValue());
+			Assert::assertSame(FooEnum::class, $e->getValueType());
+			Assert::assertSame(RoleEnum::class, $e->getExpectedTypes());
+		}
 	}
 
 	public function testContainsValue(): void
@@ -317,10 +345,18 @@ class MultiEnumTest extends \PHPUnit\Framework\TestCase
 	{
 		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
 
-		$this->expectException(\Consistence\Enum\InvalidEnumValueException::class);
-		$this->expectExceptionMessage('-1 [int] is not a valid value');
-
-		$userAndAdmin->containsValue(-1);
+		try {
+			$userAndAdmin->containsValue(-1);
+			Assert::fail('Exception expected');
+		} catch (\Consistence\Enum\InvalidEnumValueException $e) {
+			Assert::assertSame(-1, $e->getValue());
+			Assert::assertEquals([
+				'USER' => RoleEnum::USER,
+				'EMPLOYEE' => RoleEnum::EMPLOYEE,
+				'ADMIN' => RoleEnum::ADMIN,
+			], $e->getAvailableValues());
+			Assert::assertSame(RolesEnum::class, $e->getEnumClassName());
+		}
 	}
 
 	public function testIsEmpty(): void
@@ -350,10 +386,15 @@ class MultiEnumTest extends \PHPUnit\Framework\TestCase
 	public function testAddDifferentEnum(): void
 	{
 		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
+		$foo = FooEnum::get(FooEnum::FOO);
 
-		$this->expectException(\Consistence\Enum\OperationSupportedOnlyForSameEnumException::class);
-
-		$userAndAdmin->add(FooEnum::get(FooEnum::FOO));
+		try {
+			$userAndAdmin->add($foo);
+			Assert::fail('Exception expected');
+		} catch (\Consistence\Enum\OperationSupportedOnlyForSameEnumException $e) {
+			Assert::assertSame($userAndAdmin, $e->getExpected());
+			Assert::assertSame($foo, $e->getGiven());
+		}
 	}
 
 	public function testAddEnum(): void
@@ -374,19 +415,27 @@ class MultiEnumTest extends \PHPUnit\Framework\TestCase
 
 	public function testAddEnumSingleEnumNotDefined(): void
 	{
-		$this->expectException(\Consistence\Enum\NoSingleEnumSpecifiedException::class);
-
-		FooEnum::getMulti(FooEnum::FOO)->addEnum(FooEnum::get(FooEnum::FOO));
+		try {
+			FooEnum::getMulti(FooEnum::FOO)->addEnum(FooEnum::get(FooEnum::FOO));
+			Assert::fail('Exception expected');
+		} catch (\Consistence\Enum\NoSingleEnumSpecifiedException $e) {
+			Assert::assertSame(FooEnum::class, $e->getClass());
+		}
 	}
 
 	public function testAddEnumDifferentEnum(): void
 	{
 		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
+		$foo = FooEnum::get(FooEnum::FOO);
 
-		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
-		$this->expectExceptionMessage('Consistence\Enum\RoleEnum expected');
-
-		$userAndAdmin->addEnum(FooEnum::get(FooEnum::FOO));
+		try {
+			$userAndAdmin->addEnum($foo);
+			Assert::fail('Exception expected');
+		} catch (\Consistence\InvalidArgumentTypeException $e) {
+			Assert::assertSame($foo, $e->getValue());
+			Assert::assertSame(FooEnum::class, $e->getValueType());
+			Assert::assertSame(RoleEnum::class, $e->getExpectedTypes());
+		}
 	}
 
 	public function testAddValue(): void
@@ -409,10 +458,18 @@ class MultiEnumTest extends \PHPUnit\Framework\TestCase
 	{
 		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
 
-		$this->expectException(\Consistence\Enum\InvalidEnumValueException::class);
-		$this->expectExceptionMessage('5 [int] is not a valid value');
-
-		$userAndAdmin->addValue(RoleEnum::USER | RoleEnum::ADMIN);
+		try {
+			$userAndAdmin->addValue(RoleEnum::USER | RoleEnum::ADMIN);
+			Assert::fail('Exception expected');
+		} catch (\Consistence\Enum\InvalidEnumValueException $e) {
+			Assert::assertSame(5, $e->getValue());
+			Assert::assertEquals([
+				'USER' => RoleEnum::USER,
+				'EMPLOYEE' => RoleEnum::EMPLOYEE,
+				'ADMIN' => RoleEnum::ADMIN,
+			], $e->getAvailableValues());
+			Assert::assertSame(RolesEnum::class, $e->getEnumClassName());
+		}
 	}
 
 	public function testRemove(): void
@@ -434,10 +491,15 @@ class MultiEnumTest extends \PHPUnit\Framework\TestCase
 	public function testRemoveDifferentEnum(): void
 	{
 		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
+		$foo = FooEnum::get(FooEnum::FOO);
 
-		$this->expectException(\Consistence\Enum\OperationSupportedOnlyForSameEnumException::class);
-
-		$userAndAdmin->remove(FooEnum::get(FooEnum::FOO));
+		try {
+			$userAndAdmin->remove($foo);
+			Assert::fail('Exception expected');
+		} catch (\Consistence\Enum\OperationSupportedOnlyForSameEnumException $e) {
+			Assert::assertSame($userAndAdmin, $e->getExpected());
+			Assert::assertSame($foo, $e->getGiven());
+		}
 	}
 
 	public function testRemoveEnum(): void
@@ -458,19 +520,27 @@ class MultiEnumTest extends \PHPUnit\Framework\TestCase
 
 	public function testRemoveEnumSingleEnumNotDefined(): void
 	{
-		$this->expectException(\Consistence\Enum\NoSingleEnumSpecifiedException::class);
-
-		FooEnum::getMulti(FooEnum::FOO)->removeEnum(FooEnum::get(FooEnum::FOO));
+		try {
+			FooEnum::getMulti(FooEnum::FOO)->removeEnum(FooEnum::get(FooEnum::FOO));
+			Assert::fail('Exception expected');
+		} catch (\Consistence\Enum\NoSingleEnumSpecifiedException $e) {
+			Assert::assertSame(FooEnum::class, $e->getClass());
+		}
 	}
 
 	public function testRemoveEnumDifferentEnum(): void
 	{
 		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
+		$foo = FooEnum::get(FooEnum::FOO);
 
-		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
-		$this->expectExceptionMessage('Consistence\Enum\RoleEnum expected');
-
-		$userAndAdmin->removeEnum(FooEnum::get(FooEnum::FOO));
+		try {
+			$userAndAdmin->removeEnum($foo);
+			Assert::fail('Exception expected');
+		} catch (\Consistence\InvalidArgumentTypeException $e) {
+			Assert::assertSame($foo, $e->getValue());
+			Assert::assertSame(FooEnum::class, $e->getValueType());
+			Assert::assertSame(RoleEnum::class, $e->getExpectedTypes());
+		}
 	}
 
 	public function testRemoveValue(): void
@@ -493,10 +563,18 @@ class MultiEnumTest extends \PHPUnit\Framework\TestCase
 	{
 		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
 
-		$this->expectException(\Consistence\Enum\InvalidEnumValueException::class);
-		$this->expectExceptionMessage('5 [int] is not a valid value');
-
-		$userAndAdmin->removeValue(RoleEnum::USER | RoleEnum::ADMIN);
+		try {
+			$userAndAdmin->removeValue(RoleEnum::USER | RoleEnum::ADMIN);
+			Assert::fail('Exception expected');
+		} catch (\Consistence\Enum\InvalidEnumValueException $e) {
+			Assert::assertSame(5, $e->getValue());
+			Assert::assertEquals([
+				'USER' => RoleEnum::USER,
+				'EMPLOYEE' => RoleEnum::EMPLOYEE,
+				'ADMIN' => RoleEnum::ADMIN,
+			], $e->getAvailableValues());
+			Assert::assertSame(RolesEnum::class, $e->getEnumClassName());
+		}
 	}
 
 	public function testIntersect(): void
@@ -534,10 +612,15 @@ class MultiEnumTest extends \PHPUnit\Framework\TestCase
 	public function testIntersectDifferentEnum(): void
 	{
 		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
+		$foo = FooEnum::get(FooEnum::FOO);
 
-		$this->expectException(\Consistence\Enum\OperationSupportedOnlyForSameEnumException::class);
-
-		$userAndAdmin->intersect(FooEnum::get(FooEnum::FOO));
+		try {
+			$userAndAdmin->intersect($foo);
+			Assert::fail('Exception expected');
+		} catch (\Consistence\Enum\OperationSupportedOnlyForSameEnumException $e) {
+			Assert::assertSame($userAndAdmin, $e->getExpected());
+			Assert::assertSame($foo, $e->getGiven());
+		}
 	}
 
 	public function testIntersectEnum(): void
@@ -558,19 +641,27 @@ class MultiEnumTest extends \PHPUnit\Framework\TestCase
 
 	public function testIntersectEnumSingleEnumNotDefined(): void
 	{
-		$this->expectException(\Consistence\Enum\NoSingleEnumSpecifiedException::class);
-
-		FooEnum::getMulti(FooEnum::FOO)->intersectEnum(FooEnum::get(FooEnum::FOO));
+		try {
+			FooEnum::getMulti(FooEnum::FOO)->intersectEnum(FooEnum::get(FooEnum::FOO));
+			Assert::fail('Exception expected');
+		} catch (\Consistence\Enum\NoSingleEnumSpecifiedException $e) {
+			Assert::assertSame(FooEnum::class, $e->getClass());
+		}
 	}
 
 	public function testIntersectEnumDifferentEnum(): void
 	{
 		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
+		$foo = FooEnum::get(FooEnum::FOO);
 
-		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
-		$this->expectExceptionMessage('Consistence\Enum\RoleEnum expected');
-
-		$userAndAdmin->intersectEnum(FooEnum::get(FooEnum::FOO));
+		try {
+			$userAndAdmin->intersectEnum($foo);
+			Assert::fail('Exception expected');
+		} catch (\Consistence\InvalidArgumentTypeException $e) {
+			Assert::assertSame($foo, $e->getValue());
+			Assert::assertSame(FooEnum::class, $e->getValueType());
+			Assert::assertSame(RoleEnum::class, $e->getExpectedTypes());
+		}
 	}
 
 	public function testIntersectValue(): void
@@ -593,10 +684,18 @@ class MultiEnumTest extends \PHPUnit\Framework\TestCase
 	{
 		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
 
-		$this->expectException(\Consistence\Enum\InvalidEnumValueException::class);
-		$this->expectExceptionMessage('5 [int] is not a valid value');
-
-		$userAndAdmin->intersectValue(RoleEnum::USER | RoleEnum::ADMIN);
+		try {
+			$userAndAdmin->intersectValue(RoleEnum::USER | RoleEnum::ADMIN);
+			Assert::fail('Exception expected');
+		} catch (\Consistence\Enum\InvalidEnumValueException $e) {
+			Assert::assertSame(5, $e->getValue());
+			Assert::assertEquals([
+				'USER' => RoleEnum::USER,
+				'EMPLOYEE' => RoleEnum::EMPLOYEE,
+				'ADMIN' => RoleEnum::ADMIN,
+			], $e->getAvailableValues());
+			Assert::assertSame(RolesEnum::class, $e->getEnumClassName());
+		}
 	}
 
 	public function testFilter(): void

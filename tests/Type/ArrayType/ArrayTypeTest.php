@@ -705,35 +705,36 @@ class ArrayTypeTest extends \PHPUnit\Framework\TestCase
 		ArrayType::getKey($haystack, $value);
 	}
 
-	public function testGetKeyByCallback(): void
+	/**
+	 * @dataProvider getKeyByCallbackDataProvider
+	 *
+	 * @param mixed[] $haystack
+	 * @param \Closure $callback
+	 * @param int|string $expectedKey
+	 */
+	public function testGetKeyByCallback(
+		array $haystack,
+		Closure $callback,
+		$expectedKey
+	): void
 	{
-		$haystack = [1, 2, 3];
-		Assert::assertSame(1, ArrayType::getKeyByCallback($haystack, function (KeyValuePair $pair): bool {
-			return ($pair->getValue() % 2) === 0;
-		}));
+		Assert::assertSame($expectedKey, ArrayType::getKeyByCallback($haystack, $callback));
 	}
 
-	public function testGetKeyByCallbackNotFound(): void
+	/**
+	 * @dataProvider getKeyByCallbackNotFoundDataProvider
+	 *
+	 * @param mixed[] $haystack
+	 * @param \Closure $callback
+	 */
+	public function testGetKeyByCallbackNotFound(
+		array $haystack,
+		Closure $callback
+	): void
 	{
-		$haystack = [1, 2, 3];
-
 		$this->expectException(\Consistence\Type\ArrayType\ElementDoesNotExistException::class);
 
-		ArrayType::getKeyByCallback($haystack, function (KeyValuePair $pair): bool {
-			return $pair->getValue() === 0;
-		});
-	}
-
-	public function testGetKeyByCallbackCustomKeys(): void
-	{
-		$haystack = [
-			'one' => 1,
-			'two' => 2,
-			'three' => 3,
-		];
-		Assert::assertSame('two', ArrayType::getKeyByCallback($haystack, function (KeyValuePair $pair): bool {
-			return ($pair->getValue() % 2) === 0;
-		}));
+		ArrayType::getKeyByCallback($haystack, $callback);
 	}
 
 	public function testGetKeyByValueCallback(): void

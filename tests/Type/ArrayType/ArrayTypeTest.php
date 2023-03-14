@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Consistence\Type\ArrayType;
 
+use Closure;
 use DateTimeImmutable;
 use Generator;
 use PHPUnit\Framework\Assert;
@@ -257,60 +258,192 @@ class ArrayTypeTest extends \PHPUnit\Framework\TestCase
 		Assert::assertSame($expectedContainsValue, ArrayType::containsValue($haystack, $value, $strict));
 	}
 
-	public function testContainsByCallback(): void
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function keyValueCallbackDataProvider(): Generator
 	{
-		$haystack = [1, 2, 3];
-		Assert::assertTrue(ArrayType::containsByCallback($haystack, function (KeyValuePair $pair): bool {
-			return ($pair->getValue() % 2) === 0;
-		}));
+		yield 'value found by strict comparison' => [
+			'haystack' => [1, 2, 3],
+			'callback' => function (KeyValuePair $pair): bool {
+				return ($pair->getValue() % 2) === 0;
+			},
+			'valueCallback' => function (int $value): bool {
+				return ($value % 2) === 0;
+			},
+			'expectedKey' => 1,
+			'expectedValue' => 2,
+		];
+
+		yield 'value found by loose comparison' => [
+			'haystack' => [1, 2, 3],
+			'callback' => static function (KeyValuePair $pair): bool {
+				return $pair->getValue() == '2';
+			},
+			'valueCallback' => static function (int $value): bool {
+				return $value == '2';
+			},
+			'expectedKey' => 1,
+			'expectedValue' => 2,
+		];
+
+		yield 'null value found' => [
+			'haystack' => [1, 2, 3, null],
+			'callback' => static function (KeyValuePair $pair): bool {
+				return $pair->getValue() === null;
+			},
+			'valueCallback' => static function ($value): bool {
+				return $value === null;
+			},
+			'expectedKey' => 3,
+			'expectedValue' => null,
+		];
 	}
 
-	public function testContainsByCallbackLoose(): void
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function keyValueCallbackNotFoundDataProvider(): Generator
 	{
-		$haystack = [1, 2, 3];
-		Assert::assertTrue(ArrayType::containsByCallback($haystack, function (KeyValuePair $pair): bool {
-			return $pair->getValue() == '2';
-		}));
+		yield 'same value not found' => [
+			'haystack' => [1, 2, 3],
+			'callback' => function (KeyValuePair $pair): bool {
+				return $pair->getValue() === 0;
+			},
+			'valueCallback' => function (int $value): bool {
+				return $value === 0;
+			},
+		];
 	}
 
-	public function testContainsByCallbackNotFound(): void
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function getKeyByCallbackDataProvider(): Generator
 	{
-		$haystack = [1, 2, 3];
-		Assert::assertFalse(ArrayType::containsByCallback($haystack, function (KeyValuePair $pair): bool {
-			return $pair->getValue() === 0;
-		}));
+		foreach ($this->keyValueCallbackDataProvider() as $caseName => $caseData) {
+			yield $caseName => [
+				'haystack' => $caseData['haystack'],
+				'callback' => $caseData['callback'],
+				'expectedKey' => $caseData['expectedKey'],
+			];
+		}
 	}
 
-	public function testContainsValueByValueCallback(): void
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function getKeyByCallbackNotFoundDataProvider(): Generator
 	{
-		$haystack = [1, 2, 3];
-		Assert::assertTrue(ArrayType::containsValueByValueCallback($haystack, function (int $value): bool {
-			return ($value % 2) === 0;
-		}));
+		foreach ($this->keyValueCallbackNotFoundDataProvider() as $caseName => $caseData) {
+			yield $caseName => [
+				'haystack' => $caseData['haystack'],
+				'callback' => $caseData['callback'],
+			];
+		}
 	}
 
-	public function testContainsValueByValueCallbackLoose(): void
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function containsByCallbackDataProvider(): Generator
 	{
-		$haystack = [1, 2, 3];
-		Assert::assertTrue(ArrayType::containsValueByValueCallback($haystack, function (int $value): bool {
-			return $value == '2';
-		}));
+		foreach ($this->getKeyByCallbackDataProvider() as $caseName => $caseData) {
+			yield $caseName => [
+				'haystack' => $caseData['haystack'],
+				'callback' => $caseData['callback'],
+				'expectedContainsByCallback' => true,
+			];
+		}
+
+		foreach ($this->getKeyByCallbackNotFoundDataProvider() as $caseName => $caseData) {
+			yield $caseName => [
+				'haystack' => $caseData['haystack'],
+				'callback' => $caseData['callback'],
+				'expectedContainsByCallback' => false,
+			];
+		}
 	}
 
-	public function testContainsValueByValueCallbackNotFound(): void
+	/**
+	 * @dataProvider containsByCallbackDataProvider
+	 *
+	 * @param mixed[] $haystack
+	 * @param \Closure $callback
+	 * @param bool $expectedContainsByCallback
+	 */
+	public function testContainsByCallback(
+		array $haystack,
+		Closure $callback,
+		bool $expectedContainsByCallback
+	): void
 	{
-		$haystack = [1, 2, 3];
-		Assert::assertFalse(ArrayType::containsValueByValueCallback($haystack, function (int $value): bool {
-			return $value === 0;
-		}));
+		Assert::assertSame($expectedContainsByCallback, ArrayType::containsByCallback($haystack, $callback));
 	}
 
-	public function testContainsValueByValueCallbackNull(): void
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function getKeyByValueCallbackDataProvider(): Generator
 	{
-		$haystack = [1, 2, 3, null];
-		Assert::assertTrue(ArrayType::containsValueByValueCallback($haystack, function ($value): bool {
-			return $value === null;
-		}));
+		foreach ($this->keyValueCallbackDataProvider() as $caseName => $caseData) {
+			yield $caseName => [
+				'haystack' => $caseData['haystack'],
+				'valueCallback' => $caseData['valueCallback'],
+				'expectedKey' => $caseData['expectedKey'],
+			];
+		}
+	}
+
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function getKeyByValueCallbackNotFoundDataProvider(): Generator
+	{
+		foreach ($this->keyValueCallbackNotFoundDataProvider() as $caseName => $caseData) {
+			yield $caseName => [
+				'haystack' => $caseData['haystack'],
+				'valueCallback' => $caseData['valueCallback'],
+			];
+		}
+	}
+
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function containsValueByValueCallbackDataProvider(): Generator
+	{
+		foreach ($this->getKeyByValueCallbackDataProvider() as $caseName => $caseData) {
+			yield $caseName => [
+				'haystack' => $caseData['haystack'],
+				'valueCallback' => $caseData['valueCallback'],
+				'expectedContainsValueByValueCallback' => true,
+			];
+		}
+
+		foreach ($this->getKeyByValueCallbackNotFoundDataProvider() as $caseName => $caseData) {
+			yield $caseName => [
+				'haystack' => $caseData['haystack'],
+				'valueCallback' => $caseData['valueCallback'],
+				'expectedContainsValueByValueCallback' => false,
+			];
+		}
+	}
+
+	/**
+	 * @dataProvider containsValueByValueCallbackDataProvider
+	 *
+	 * @param mixed[] $haystack
+	 * @param \Closure $valueCallback
+	 * @param bool $expectedContainsValueByValueCallback
+	 */
+	public function testContainsValueByValueCallback(
+		array $haystack,
+		Closure $valueCallback,
+		bool $expectedContainsValueByValueCallback
+	): void
+	{
+		Assert::assertSame($expectedContainsValueByValueCallback, ArrayType::containsValueByValueCallback($haystack, $valueCallback));
 	}
 
 	/**

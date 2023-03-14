@@ -72,50 +72,83 @@ class EnumTest extends \PHPUnit\Framework\TestCase
 		Assert::assertSame($value, $enum->getValue());
 	}
 
-	public function testSameInstances(): void
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function compareDataProvider(): Generator
 	{
-		$review1 = StatusEnum::get(StatusEnum::REVIEW);
-		$review2 = StatusEnum::get(StatusEnum::REVIEW);
-
-		Assert::assertSame($review1, $review2);
+		yield 'StatusEnum equal' => [
+			'enum1' => StatusEnum::get(StatusEnum::REVIEW),
+			'enum2' => StatusEnum::get(StatusEnum::REVIEW),
+			'equals' => true,
+		];
+		yield 'StatusEnum not equal' => [
+			'enum1' => StatusEnum::get(StatusEnum::REVIEW),
+			'enum2' => StatusEnum::get(StatusEnum::DRAFT),
+			'equals' => false,
+		];
 	}
 
-	public function testDifferentInstances(): void
+	/**
+	 * @dataProvider compareDataProvider
+	 *
+	 * @param \Consistence\Enum\Enum $enum1
+	 * @param \Consistence\Enum\Enum $enum2
+	 * @param bool $equals
+	 */
+	public function testSameInstances(
+		Enum $enum1,
+		Enum $enum2,
+		bool $equals
+	): void
 	{
-		$review = StatusEnum::get(StatusEnum::REVIEW);
-		$draft = StatusEnum::get(StatusEnum::DRAFT);
-
-		Assert::assertNotSame($review, $draft);
+		Assert::assertSame($equals, $enum1 === $enum2);
 	}
 
-	public function testEquals(): void
+	/**
+	 * @dataProvider compareDataProvider
+	 *
+	 * @param \Consistence\Enum\Enum $enum1
+	 * @param \Consistence\Enum\Enum $enum2
+	 * @param bool $expectedEquals
+	 */
+	public function testEquals(
+		Enum $enum1,
+		Enum $enum2,
+		bool $expectedEquals
+	): void
 	{
-		$review1 = StatusEnum::get(StatusEnum::REVIEW);
-		$review2 = StatusEnum::get(StatusEnum::REVIEW);
-
-		Assert::assertTrue($review1->equals($review2));
+		Assert::assertSame($expectedEquals, $enum1->equals($enum2));
 	}
 
-	public function testNotEquals(): void
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function equalsValueDataProvider(): Generator
 	{
-		$review = StatusEnum::get(StatusEnum::REVIEW);
-		$draft = StatusEnum::get(StatusEnum::DRAFT);
-
-		Assert::assertFalse($review->equals($draft));
+		foreach ($this->compareDataProvider() as $caseName => $caseData) {
+			yield $caseName => [
+				'enum' => $caseData['enum1'],
+				'value' => $caseData['enum2']->getValue(),
+				'expectedEqualsValue' => $caseData['equals'],
+			];
+		}
 	}
 
-	public function testEqualsValue(): void
+	/**
+	 * @dataProvider equalsValueDataProvider
+	 *
+	 * @param \Consistence\Enum\Enum $enum
+	 * @param mixed $value
+	 * @param bool $expectedEqualsValue
+	 */
+	public function testEqualsValue(
+		Enum $enum,
+		$value,
+		bool $expectedEqualsValue
+	): void
 	{
-		$review = StatusEnum::get(StatusEnum::REVIEW);
-
-		Assert::assertTrue($review->equalsValue(StatusEnum::REVIEW));
-	}
-
-	public function testNotEqualsValue(): void
-	{
-		$review = StatusEnum::get(StatusEnum::REVIEW);
-
-		Assert::assertFalse($review->equalsValue(StatusEnum::DRAFT));
+		Assert::assertSame($expectedEqualsValue, $enum->equalsValue($value));
 	}
 
 	public function testGetAvailableValues(): void

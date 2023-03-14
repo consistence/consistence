@@ -163,11 +163,19 @@ class EnumTest extends \PHPUnit\Framework\TestCase
 				'REVIEW' => StatusEnum::REVIEW,
 				'PUBLISHED' => StatusEnum::PUBLISHED,
 			],
+			'availableEnums' => [
+				'DRAFT' => StatusEnum::get(StatusEnum::DRAFT),
+				'REVIEW' => StatusEnum::get(StatusEnum::REVIEW),
+				'PUBLISHED' => StatusEnum::get(StatusEnum::PUBLISHED),
+			],
 		];
 		yield 'FooEnum' => [
 			'enumClassName' => FooEnum::class,
 			'availableValues' => [
 				'FOO' => FooEnum::FOO,
+			],
+			'availableEnums' => [
+				'FOO' => FooEnum::get(FooEnum::FOO),
 			],
 		];
 	}
@@ -199,13 +207,31 @@ class EnumTest extends \PHPUnit\Framework\TestCase
 		Assert::assertEquals($expectedAvailableValues, $enumClassName::getAvailableValues());
 	}
 
-	public function testGetAvailableEnums(): void
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function getAvailableEnumsDataProvider(): Generator
 	{
-		Assert::assertEquals([
-			'DRAFT' => StatusEnum::get(StatusEnum::DRAFT),
-			'REVIEW' => StatusEnum::get(StatusEnum::REVIEW),
-			'PUBLISHED' => StatusEnum::get(StatusEnum::PUBLISHED),
-		], StatusEnum::getAvailableEnums());
+		foreach ($this->enumAvailableValuesDataProvider() as $caseName => $caseData) {
+			yield $caseName => [
+				'enumClassName' => $caseData['enumClassName'],
+				'expectedAvailableEnums' => $caseData['availableEnums'],
+			];
+		}
+	}
+
+	/**
+	 * @dataProvider getAvailableEnumsDataProvider
+	 *
+	 * @param string $enumClassName
+	 * @param \Consistence\Enum\Enum[] $expectedAvailableEnums
+	 */
+	public function testGetAvailableEnums(
+		string $enumClassName,
+		array $expectedAvailableEnums
+	): void
+	{
+		Assert::assertEquals($expectedAvailableEnums, $enumClassName::getAvailableEnums());
 	}
 
 	public function testIsValidValue(): void

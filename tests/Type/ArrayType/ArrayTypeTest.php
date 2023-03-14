@@ -639,19 +639,70 @@ class ArrayTypeTest extends \PHPUnit\Framework\TestCase
 		Assert::assertSame($expectedKey, ArrayType::findKeyByValueCallback($haystack, $valueCallback));
 	}
 
-	public function testGetKey(): void
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function getKeyDataProvider(): Generator
 	{
-		$haystack = [1, 2, 3];
-		Assert::assertSame(1, ArrayType::getKey($haystack, 2));
+		foreach ($this->keyValueStrictDataProvider() as $caseName => $caseData) {
+			yield $caseName => [
+				'haystack' => $caseData['haystack'],
+				'value' => $caseData['value'],
+				'expectedKey' => $caseData['key'],
+			];
+		}
 	}
 
-	public function testGetKeyNotFound(): void
+	/**
+	 * @dataProvider getKeyDataProvider
+	 *
+	 * @param mixed[] $haystack
+	 * @param mixed $value
+	 * @param int|string $expectedKey
+	 */
+	public function testGetKey(
+		array $haystack,
+		$value,
+		$expectedKey
+	): void
 	{
-		$haystack = [1, 2, 3];
+		Assert::assertSame($expectedKey, ArrayType::getKey($haystack, $value));
+	}
 
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function getKeyNotFoundDataProvider(): Generator
+	{
+		foreach ($this->keyValueLooseDataProvider() as $caseName => $caseData) {
+			yield $caseName => [
+				'haystack' => $caseData['haystack'],
+				'value' => $caseData['value'],
+			];
+		}
+
+		foreach ($this->valueNotFoundDataProvider() as $caseName => $caseData) {
+			yield $caseName => [
+				'haystack' => $caseData['haystack'],
+				'value' => $caseData['value'],
+			];
+		}
+	}
+
+	/**
+	 * @dataProvider getKeyNotFoundDataProvider
+	 *
+	 * @param mixed[] $haystack
+	 * @param mixed $value
+	 */
+	public function testGetKeyNotFound(
+		array $haystack,
+		$value
+	): void
+	{
 		$this->expectException(\Consistence\Type\ArrayType\ElementDoesNotExistException::class);
 
-		ArrayType::getKey($haystack, '2');
+		ArrayType::getKey($haystack, $value);
 	}
 
 	public function testGetKeyByCallback(): void

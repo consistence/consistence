@@ -16,6 +16,10 @@ class EnumTest extends \PHPUnit\Framework\TestCase
 	 */
 	public function validEnumValueDataProvider(): Generator
 	{
+		yield 'StatusEnum::DRAFT' => [
+			'enumClassName' => StatusEnum::class,
+			'value' => StatusEnum::DRAFT,
+		];
 		yield 'StatusEnum::REVIEW' => [
 			'enumClassName' => StatusEnum::class,
 			'value' => StatusEnum::REVIEW,
@@ -234,11 +238,6 @@ class EnumTest extends \PHPUnit\Framework\TestCase
 		Assert::assertEquals($expectedAvailableEnums, $enumClassName::getAvailableEnums());
 	}
 
-	public function testIsValidValue(): void
-	{
-		Assert::assertTrue(StatusEnum::isValidValue(StatusEnum::DRAFT));
-	}
-
 	/**
 	 * @return mixed[][]|\Generator
 	 */
@@ -292,13 +291,41 @@ class EnumTest extends \PHPUnit\Framework\TestCase
 	}
 
 	/**
-	 * @dataProvider invalidEnumValueDataProvider
-	 *
-	 * @param mixed $value
+	 * @return mixed[][]|\Generator
 	 */
-	public function testNotValidValue($value): void
+	public function isValidValueDataProvider(): Generator
 	{
-		Assert::assertFalse(StatusEnum::isValidValue($value));
+		foreach ($this->validEnumValueDataProvider() as $caseName => $caseData) {
+			yield $caseName => [
+				'enumClassName' => $caseData['enumClassName'],
+				'value' => $caseData['value'],
+				'expectedIsValidValue' => true,
+			];
+		}
+
+		foreach ($this->invalidEnumValueDataProvider() as $caseName => $caseData) {
+			yield $caseName => [
+				'enumClassName' => StatusEnum::class,
+				'value' => $caseData['value'],
+				'expectedIsValidValue' => false,
+			];
+		}
+	}
+
+	/**
+	 * @dataProvider isValidValueDataProvider
+	 *
+	 * @param string $enumClassName
+	 * @param mixed $value
+	 * @param bool $expectedIsValidValue
+	 */
+	public function testIsValidValue(
+		string $enumClassName,
+		$value,
+		bool $expectedIsValidValue
+	): void
+	{
+		Assert::assertSame($expectedIsValidValue, $enumClassName::isValidValue($value));
 	}
 
 	/**

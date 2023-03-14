@@ -10,16 +10,66 @@ use PHPUnit\Framework\Assert;
 class MultiEnumTest extends \PHPUnit\Framework\TestCase
 {
 
-	public function testGet(): void
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function validValueDataProvider(): Generator
 	{
-		$userAndAdmin = RolesEnum::get(RoleEnum::USER | RoleEnum::ADMIN);
-		Assert::assertInstanceOf(RolesEnum::class, $userAndAdmin);
+		yield 'empty RolesEnum' => [
+			'multiEnumClassName' => RolesEnum::class,
+			'value' => 0,
+		];
+		yield 'RolesEnum, USER' => [
+			'multiEnumClassName' => RolesEnum::class,
+			'value' => 1,
+		];
+		yield 'RolesEnum, EMPLOYEE' => [
+			'multiEnumClassName' => RolesEnum::class,
+			'value' => 2,
+		];
+		yield 'RolesEnum, USER and EMPLOYEE' => [
+			'multiEnumClassName' => RolesEnum::class,
+			'value' => 3,
+		];
+		yield 'RolesEnum, ADMIN' => [
+			'multiEnumClassName' => RolesEnum::class,
+			'value' => 4,
+		];
+		yield 'RolesEnum, USER and ADMIN' => [
+			'multiEnumClassName' => RolesEnum::class,
+			'value' => 5,
+		];
+		yield 'RolesEnum, EMPLOYEE and ADMIN' => [
+			'multiEnumClassName' => RolesEnum::class,
+			'value' => 6,
+		];
+		yield 'RolesEnum, USER and EMPLOYEE and ADMIN' => [
+			'multiEnumClassName' => RolesEnum::class,
+			'value' => 7,
+		];
+		yield 'RolesEnum, EMPLOYEE as Enum constant' => [
+			'multiEnumClassName' => RolesEnum::class,
+			'value' => RoleEnum::EMPLOYEE,
+		];
+		yield 'RolesEnum, USER and ADMIN as bitwise OR of Enum constants' => [
+			'multiEnumClassName' => RolesEnum::class,
+			'value' => RoleEnum::USER | RoleEnum::ADMIN,
+		];
 	}
 
-	public function testGetSingle(): void
+	/**
+	 * @dataProvider validValueDataProvider
+	 *
+	 * @param string $multiEnumClassName
+	 * @param mixed $value
+	 */
+	public function testGet(
+		string $multiEnumClassName,
+		$value
+	): void
 	{
-		$employee = RolesEnum::get(RoleEnum::EMPLOYEE);
-		Assert::assertInstanceOf(RolesEnum::class, $employee);
+		$multiEnum = $multiEnumClassName::get($value);
+		Assert::assertInstanceOf($multiEnumClassName, $multiEnum);
 	}
 
 	public function testGetMulti(): void
@@ -187,61 +237,6 @@ class MultiEnumTest extends \PHPUnit\Framework\TestCase
 		$empty = RolesEnum::getMultiByArray([]);
 		Assert::assertSame(0, $empty->getValue());
 		Assert::assertEquals([], $empty->getValues());
-	}
-
-	/**
-	 * @return mixed[][]|\Generator
-	 */
-	public function validValueDataProvider(): Generator
-	{
-		yield 'empty RolesEnum' => [
-			'multiEnumClassName' => RolesEnum::class,
-			'value' => 0,
-		];
-		yield 'RolesEnum, USER' => [
-			'multiEnumClassName' => RolesEnum::class,
-			'value' => 1,
-		];
-		yield 'RolesEnum, EMPLOYEE' => [
-			'multiEnumClassName' => RolesEnum::class,
-			'value' => 2,
-		];
-		yield 'RolesEnum, USER and EMPLOYEE' => [
-			'multiEnumClassName' => RolesEnum::class,
-			'value' => 3,
-		];
-		yield 'RolesEnum, ADMIN' => [
-			'multiEnumClassName' => RolesEnum::class,
-			'value' => 4,
-		];
-		yield 'RolesEnum, USER and ADMIN' => [
-			'multiEnumClassName' => RolesEnum::class,
-			'value' => 5,
-		];
-		yield 'RolesEnum, EMPLOYEE and ADMIN' => [
-			'multiEnumClassName' => RolesEnum::class,
-			'value' => 6,
-		];
-		yield 'RolesEnum, USER and EMPLOYEE and ADMIN' => [
-			'multiEnumClassName' => RolesEnum::class,
-			'value' => 7,
-		];
-	}
-
-	/**
-	 * @dataProvider validValueDataProvider
-	 *
-	 * @param string $multiEnumClassName
-	 * @param mixed $value
-	 */
-	public function testGetCombinations(
-		string $multiEnumClassName,
-		$value
-	): void
-	{
-		$multiEnumClassName::get($value);
-
-		$this->expectNotToPerformAssertions();
 	}
 
 	public function testGetNegative(): void

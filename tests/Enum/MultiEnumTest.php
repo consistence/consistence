@@ -891,20 +891,98 @@ class MultiEnumTest extends \PHPUnit\Framework\TestCase
 		Assert::assertSame($empty, $multiEnum->isEmpty());
 	}
 
-	public function testAdd(): void
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function enumOperationsDataProvider(): Generator
 	{
-		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
-		$newRoles = $userAndAdmin->add(RolesEnum::get(RoleEnum::EMPLOYEE));
+		yield 'operand MultiEnum with one contained Enum' => [
+			'existingMultiEnum' => RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN),
+			'operandMultiEnum' => RolesEnum::get(RoleEnum::USER),
+			'operandEnum' => RoleEnum::get(RoleEnum::USER),
+			'expectedAddResult' => RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN),
+			'expectedRemoveResult' => RolesEnum::getMulti(RoleEnum::ADMIN),
+			'expectedIntersectResult' => RolesEnum::getMulti(RoleEnum::USER),
+		];
 
-		Assert::assertSame(RolesEnum::getMulti(RoleEnum::USER, RoleEnum::EMPLOYEE, RoleEnum::ADMIN), $newRoles);
+		yield 'operand MultiEnum with not contained Enum' => [
+			'existingMultiEnum' => RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN),
+			'operandMultiEnum' => RolesEnum::get(RoleEnum::EMPLOYEE),
+			'operandEnum' => RoleEnum::get(RoleEnum::EMPLOYEE),
+			'expectedAddResult' => RolesEnum::getMulti(RoleEnum::USER, RoleEnum::EMPLOYEE, RoleEnum::ADMIN),
+			'expectedRemoveResult' => RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN),
+			'expectedIntersectResult' => RolesEnum::getMulti(),
+		];
 	}
 
-	public function testAddExisting(): void
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function multiEnumOperationsDataProvider(): Generator
 	{
-		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
-		$newRoles = $userAndAdmin->add(RolesEnum::get(RoleEnum::USER));
+		foreach ($this->enumOperationsDataProvider() as $caseName => $caseData) {
+			yield $caseName => [
+				'existingMultiEnum' => $caseData['existingMultiEnum'],
+				'operandMultiEnum' => $caseData['operandMultiEnum'],
+				'expectedAddResult' => $caseData['expectedAddResult'],
+				'expectedRemoveResult' => $caseData['expectedRemoveResult'],
+				'expectedIntersectResult' => $caseData['expectedIntersectResult'],
+			];
+		}
 
-		Assert::assertSame($userAndAdmin, $newRoles);
+		yield 'operand MultiEnum with both of contained Enums' => [
+			'existingMultiEnum' => RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN),
+			'operandMultiEnum' => RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN),
+			'expectedAddResult' => RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN),
+			'expectedRemoveResult' => RolesEnum::getMulti(),
+			'expectedIntersectResult' => RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN),
+		];
+
+		yield 'operand MultiEnum with one contained Enum and one not contained Enum' => [
+			'existingMultiEnum' => RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN),
+			'operandMultiEnum' => RolesEnum::getMulti(RoleEnum::USER, RoleEnum::EMPLOYEE),
+			'expectedAddResult' => RolesEnum::getMulti(RoleEnum::USER, RoleEnum::EMPLOYEE, RoleEnum::ADMIN),
+			'expectedRemoveResult' => RolesEnum::getMulti(RoleEnum::ADMIN),
+			'expectedIntersectResult' => RolesEnum::getMulti(RoleEnum::USER),
+		];
+
+		yield 'empty operand MultiEnum' => [
+			'existingMultiEnum' => RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN),
+			'operandMultiEnum' => RolesEnum::getMulti(),
+			'expectedAddResult' => RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN),
+			'expectedRemoveResult' => RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN),
+			'expectedIntersectResult' => RolesEnum::getMulti(),
+		];
+	}
+
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function addDataProvider(): Generator
+	{
+		foreach ($this->multiEnumOperationsDataProvider() as $caseName => $caseData) {
+			yield $caseName => [
+				'existingMultiEnum' => $caseData['existingMultiEnum'],
+				'operandMultiEnum' => $caseData['operandMultiEnum'],
+				'expectedMultiEnum' => $caseData['expectedAddResult'],
+			];
+		}
+	}
+
+	/**
+	 * @dataProvider addDataProvider
+	 *
+	 * @param \Consistence\Enum\MultiEnum $existingMultiEnum
+	 * @param \Consistence\Enum\MultiEnum $operandMultiEnum
+	 * @param \Consistence\Enum\MultiEnum $expectedMultiEnum
+	 */
+	public function testAdd(
+		MultiEnum $existingMultiEnum,
+		MultiEnum $operandMultiEnum,
+		MultiEnum $expectedMultiEnum
+	): void
+	{
+		Assert::assertSame($expectedMultiEnum, $existingMultiEnum->add($operandMultiEnum));
 	}
 
 	public function testAddDifferentEnum(): void
@@ -921,20 +999,34 @@ class MultiEnumTest extends \PHPUnit\Framework\TestCase
 		}
 	}
 
-	public function testAddEnum(): void
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function addEnumDataProvider(): Generator
 	{
-		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
-		$newRoles = $userAndAdmin->addEnum(RoleEnum::get(RoleEnum::EMPLOYEE));
-
-		Assert::assertSame(RolesEnum::getMulti(RoleEnum::USER, RoleEnum::EMPLOYEE, RoleEnum::ADMIN), $newRoles);
+		foreach ($this->enumOperationsDataProvider() as $caseName => $caseData) {
+			yield $caseName => [
+				'existingMultiEnum' => $caseData['existingMultiEnum'],
+				'operandEnum' => $caseData['operandEnum'],
+				'expectedMultiEnum' => $caseData['expectedAddResult'],
+			];
+		}
 	}
 
-	public function testAddEnumExisting(): void
+	/**
+	 * @dataProvider addEnumDataProvider
+	 *
+	 * @param \Consistence\Enum\MultiEnum $existingMultiEnum
+	 * @param \Consistence\Enum\Enum $operandEnum
+	 * @param \Consistence\Enum\MultiEnum $expectedMultiEnum
+	 */
+	public function testAddEnum(
+		MultiEnum $existingMultiEnum,
+		Enum $operandEnum,
+		MultiEnum $expectedMultiEnum
+	): void
 	{
-		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
-		$newRoles = $userAndAdmin->addEnum(RoleEnum::get(RoleEnum::USER));
-
-		Assert::assertSame($userAndAdmin, $newRoles);
+		Assert::assertSame($expectedMultiEnum, $existingMultiEnum->addEnum($operandEnum));
 	}
 
 	public function testAddEnumSingleEnumNotDefined(): void
@@ -962,20 +1054,34 @@ class MultiEnumTest extends \PHPUnit\Framework\TestCase
 		}
 	}
 
-	public function testAddValue(): void
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function addValueDataProvider(): Generator
 	{
-		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
-		$newRoles = $userAndAdmin->addValue(RoleEnum::EMPLOYEE);
-
-		Assert::assertSame(RolesEnum::getMulti(RoleEnum::USER, RoleEnum::EMPLOYEE, RoleEnum::ADMIN), $newRoles);
+		foreach ($this->enumOperationsDataProvider() as $caseName => $caseData) {
+			yield $caseName => [
+				'existingMultiEnum' => $caseData['existingMultiEnum'],
+				'operandValue' => $caseData['operandEnum']->getValue(),
+				'expectedMultiEnum' => $caseData['expectedAddResult'],
+			];
+		}
 	}
 
-	public function testAddValueExisting(): void
+	/**
+	 * @dataProvider addValueDataProvider
+	 *
+	 * @param \Consistence\Enum\MultiEnum $existingMultiEnum
+	 * @param int $operandValue
+	 * @param \Consistence\Enum\MultiEnum $expectedMultiEnum
+	 */
+	public function testAddValue(
+		MultiEnum $existingMultiEnum,
+		int $operandValue,
+		MultiEnum $expectedMultiEnum
+	): void
 	{
-		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
-		$newRoles = $userAndAdmin->addValue(RoleEnum::USER);
-
-		Assert::assertSame($userAndAdmin, $newRoles);
+		Assert::assertSame($expectedMultiEnum, $existingMultiEnum->addValue($operandValue));
 	}
 
 	public function testAddInvalidValue(): void
@@ -996,20 +1102,34 @@ class MultiEnumTest extends \PHPUnit\Framework\TestCase
 		}
 	}
 
-	public function testRemove(): void
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function removeDataProvider(): Generator
 	{
-		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
-		$newRoles = $userAndAdmin->remove(RolesEnum::get(RoleEnum::USER));
-
-		Assert::assertSame(RolesEnum::get(RoleEnum::ADMIN), $newRoles);
+		foreach ($this->multiEnumOperationsDataProvider() as $caseName => $caseData) {
+			yield $caseName => [
+				'existingMultiEnum' => $caseData['existingMultiEnum'],
+				'operandMultiEnum' => $caseData['operandMultiEnum'],
+				'expectedMultiEnum' => $caseData['expectedRemoveResult'],
+			];
+		}
 	}
 
-	public function testRemoveDisabled(): void
+	/**
+	 * @dataProvider removeDataProvider
+	 *
+	 * @param \Consistence\Enum\MultiEnum $existingMultiEnum
+	 * @param \Consistence\Enum\MultiEnum $operandMultiEnum
+	 * @param \Consistence\Enum\MultiEnum $expectedMultiEnum
+	 */
+	public function testRemove(
+		MultiEnum $existingMultiEnum,
+		MultiEnum $operandMultiEnum,
+		MultiEnum $expectedMultiEnum
+	): void
 	{
-		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
-		$newRoles = $userAndAdmin->remove(RolesEnum::get(RoleEnum::EMPLOYEE));
-
-		Assert::assertSame($userAndAdmin, $newRoles);
+		Assert::assertSame($expectedMultiEnum, $existingMultiEnum->remove($operandMultiEnum));
 	}
 
 	public function testRemoveDifferentEnum(): void
@@ -1026,20 +1146,34 @@ class MultiEnumTest extends \PHPUnit\Framework\TestCase
 		}
 	}
 
-	public function testRemoveEnum(): void
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function removeEnumDataProvider(): Generator
 	{
-		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
-		$newRoles = $userAndAdmin->removeEnum(RoleEnum::get(RoleEnum::USER));
-
-		Assert::assertSame(RolesEnum::get(RoleEnum::ADMIN), $newRoles);
+		foreach ($this->enumOperationsDataProvider() as $caseName => $caseData) {
+			yield $caseName => [
+				'existingMultiEnum' => $caseData['existingMultiEnum'],
+				'operandEnum' => $caseData['operandEnum'],
+				'expectedMultiEnum' => $caseData['expectedRemoveResult'],
+			];
+		}
 	}
 
-	public function testRemoveEnumDisabled(): void
+	/**
+	 * @dataProvider removeEnumDataProvider
+	 *
+	 * @param \Consistence\Enum\MultiEnum $existingMultiEnum
+	 * @param \Consistence\Enum\Enum $operandEnum
+	 * @param \Consistence\Enum\MultiEnum $expectedMultiEnum
+	 */
+	public function testRemoveEnum(
+		MultiEnum $existingMultiEnum,
+		Enum $operandEnum,
+		MultiEnum $expectedMultiEnum
+	): void
 	{
-		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
-		$newRoles = $userAndAdmin->removeEnum(RoleEnum::get(RoleEnum::EMPLOYEE));
-
-		Assert::assertSame($userAndAdmin, $newRoles);
+		Assert::assertSame($expectedMultiEnum, $existingMultiEnum->removeEnum($operandEnum));
 	}
 
 	public function testRemoveEnumSingleEnumNotDefined(): void
@@ -1067,20 +1201,34 @@ class MultiEnumTest extends \PHPUnit\Framework\TestCase
 		}
 	}
 
-	public function testRemoveValue(): void
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function removeValueDataProvider(): Generator
 	{
-		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
-		$newRoles = $userAndAdmin->removeValue(RoleEnum::USER);
-
-		Assert::assertSame(RolesEnum::get(RoleEnum::ADMIN), $newRoles);
+		foreach ($this->enumOperationsDataProvider() as $caseName => $caseData) {
+			yield $caseName => [
+				'existingMultiEnum' => $caseData['existingMultiEnum'],
+				'operandValue' => $caseData['operandEnum']->getValue(),
+				'expectedMultiEnum' => $caseData['expectedRemoveResult'],
+			];
+		}
 	}
 
-	public function testRemoveValueDisabled(): void
+	/**
+	 * @dataProvider removeValueDataProvider
+	 *
+	 * @param \Consistence\Enum\MultiEnum $existingMultiEnum
+	 * @param int $operandValue
+	 * @param \Consistence\Enum\MultiEnum $expectedMultiEnum
+	 */
+	public function testRemoveValue(
+		MultiEnum $existingMultiEnum,
+		int $operandValue,
+		MultiEnum $expectedMultiEnum
+	): void
 	{
-		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
-		$newRoles = $userAndAdmin->removeValue(RoleEnum::EMPLOYEE);
-
-		Assert::assertSame($userAndAdmin, $newRoles);
+		Assert::assertSame($expectedMultiEnum, $existingMultiEnum->removeValue($operandValue));
 	}
 
 	public function testRemoveInvalidValue(): void
@@ -1101,36 +1249,34 @@ class MultiEnumTest extends \PHPUnit\Framework\TestCase
 		}
 	}
 
-	public function testIntersect(): void
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function intersectDataProvider(): Generator
 	{
-		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
-		$newRoles = $userAndAdmin->intersect(RolesEnum::get(RoleEnum::USER));
-
-		Assert::assertSame(RolesEnum::get(RoleEnum::USER), $newRoles);
+		foreach ($this->multiEnumOperationsDataProvider() as $caseName => $caseData) {
+			yield $caseName => [
+				'existingMultiEnum' => $caseData['existingMultiEnum'],
+				'operandMultiEnum' => $caseData['operandMultiEnum'],
+				'expectedMultiEnum' => $caseData['expectedIntersectResult'],
+			];
+		}
 	}
 
-	public function testIntersectEmptyResult(): void
+	/**
+	 * @dataProvider intersectDataProvider
+	 *
+	 * @param \Consistence\Enum\MultiEnum $existingMultiEnum
+	 * @param \Consistence\Enum\MultiEnum $operandMultiEnum
+	 * @param \Consistence\Enum\MultiEnum $expectedMultiEnum
+	 */
+	public function testIntersect(
+		MultiEnum $existingMultiEnum,
+		MultiEnum $operandMultiEnum,
+		MultiEnum $expectedMultiEnum
+	): void
 	{
-		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
-		$newRoles = $userAndAdmin->intersect(RolesEnum::get(RoleEnum::EMPLOYEE));
-
-		Assert::assertSame(RolesEnum::getMulti(), $newRoles);
-	}
-
-	public function testIntersectWithEmpty(): void
-	{
-		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
-		$newRoles = $userAndAdmin->intersect(RolesEnum::getMulti());
-
-		Assert::assertSame(RolesEnum::getMulti(), $newRoles);
-	}
-
-	public function testIntersectWithSame(): void
-	{
-		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
-		$newRoles = $userAndAdmin->intersect(RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN));
-
-		Assert::assertSame($userAndAdmin, $newRoles);
+		Assert::assertSame($expectedMultiEnum, $existingMultiEnum->intersect($operandMultiEnum));
 	}
 
 	public function testIntersectDifferentEnum(): void
@@ -1147,20 +1293,34 @@ class MultiEnumTest extends \PHPUnit\Framework\TestCase
 		}
 	}
 
-	public function testIntersectEnum(): void
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function intersectEnumDataProvider(): Generator
 	{
-		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
-		$newRoles = $userAndAdmin->intersectEnum(RoleEnum::get(RoleEnum::USER));
-
-		Assert::assertSame(RolesEnum::get(RoleEnum::USER), $newRoles);
+		foreach ($this->enumOperationsDataProvider() as $caseName => $caseData) {
+			yield $caseName => [
+				'existingMultiEnum' => $caseData['existingMultiEnum'],
+				'operandEnum' => $caseData['operandEnum'],
+				'expectedMultiEnum' => $caseData['expectedIntersectResult'],
+			];
+		}
 	}
 
-	public function testIntersectEnumEmptyResult(): void
+	/**
+	 * @dataProvider intersectEnumDataProvider
+	 *
+	 * @param \Consistence\Enum\MultiEnum $existingMultiEnum
+	 * @param \Consistence\Enum\Enum $operandEnum
+	 * @param \Consistence\Enum\MultiEnum $expectedMultiEnum
+	 */
+	public function testIntersectEnum(
+		MultiEnum $existingMultiEnum,
+		Enum $operandEnum,
+		MultiEnum $expectedMultiEnum
+	): void
 	{
-		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
-		$newRoles = $userAndAdmin->intersectEnum(RoleEnum::get(RoleEnum::EMPLOYEE));
-
-		Assert::assertSame(RolesEnum::getMulti(), $newRoles);
+		Assert::assertSame($expectedMultiEnum, $existingMultiEnum->intersectEnum($operandEnum));
 	}
 
 	public function testIntersectEnumSingleEnumNotDefined(): void
@@ -1188,20 +1348,34 @@ class MultiEnumTest extends \PHPUnit\Framework\TestCase
 		}
 	}
 
-	public function testIntersectValue(): void
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function intersectValueDataProvider(): Generator
 	{
-		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
-		$newRoles = $userAndAdmin->intersectValue(RoleEnum::USER);
-
-		Assert::assertSame(RolesEnum::get(RoleEnum::USER), $newRoles);
+		foreach ($this->enumOperationsDataProvider() as $caseName => $caseData) {
+			yield $caseName => [
+				'existingMultiEnum' => $caseData['existingMultiEnum'],
+				'operandValue' => $caseData['operandEnum']->getValue(),
+				'expectedMultiEnum' => $caseData['expectedIntersectResult'],
+			];
+		}
 	}
 
-	public function testIntersectValueEmptyResult(): void
+	/**
+	 * @dataProvider intersectValueDataProvider
+	 *
+	 * @param \Consistence\Enum\MultiEnum $existingMultiEnum
+	 * @param int $operandValue
+	 * @param \Consistence\Enum\MultiEnum $expectedMultiEnum
+	 */
+	public function testIntersectValue(
+		MultiEnum $existingMultiEnum,
+		int $operandValue,
+		MultiEnum $expectedMultiEnum
+	): void
 	{
-		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
-		$newRoles = $userAndAdmin->intersectValue(RoleEnum::EMPLOYEE);
-
-		Assert::assertSame(RolesEnum::getMulti(), $newRoles);
+		Assert::assertSame($expectedMultiEnum, $existingMultiEnum->intersectValue($operandValue));
 	}
 
 	public function testIntersectInvalidValue(): void

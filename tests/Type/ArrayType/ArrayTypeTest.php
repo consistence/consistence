@@ -769,22 +769,56 @@ class ArrayTypeTest extends \PHPUnit\Framework\TestCase
 		ArrayType::getKeyByValueCallback($haystack, $valueCallback);
 	}
 
-	public function testFindValue(): void
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function keyNotFoundDataProvider(): Generator
 	{
-		$haystack = [
-			'foo',
-			'bar',
+		yield 'key not found' => [
+			'haystack' => [
+				'foo',
+				'bar',
+			],
+			'key' => 2,
 		];
-		Assert::assertSame('bar', ArrayType::findValue($haystack, 1));
 	}
 
-	public function testFindValueNotFound(): void
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function findValueDataProvider(): Generator
 	{
-		$haystack = [
-			'foo',
-			'bar',
-		];
-		Assert::assertNull(ArrayType::findValue($haystack, 2));
+		foreach ($this->keyValueStrictDataProvider() as $caseName => $caseData) {
+			yield $caseName => [
+				'haystack' => $caseData['haystack'],
+				'key' => $caseData['key'],
+				'expectedValue' => $caseData['value'],
+			];
+		}
+
+		foreach ($this->keyNotFoundDataProvider() as $caseName => $caseData) {
+			yield $caseName => [
+				'haystack' => $caseData['haystack'],
+				'key' => $caseData['key'],
+				'expectedValue' => null,
+			];
+		}
+	}
+
+	/**
+	 * @dataProvider findValueDataProvider
+	 *
+	 * @param mixed[] $haystack
+	 * @param int|string $key
+	 * @param mixed $expectedValue
+	 */
+	public function testFindValue(
+		array $haystack,
+		$key,
+		$expectedValue
+	): void
+	{
+		Assert::assertSame($expectedValue, ArrayType::findValue($haystack, $key));
 	}
 
 	public function testGetValue(): void

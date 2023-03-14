@@ -601,32 +601,42 @@ class ArrayTypeTest extends \PHPUnit\Framework\TestCase
 		Assert::assertSame($expectedKey, ArrayType::findKeyByCallback($haystack, $callback));
 	}
 
-	public function testFindKeyByValueCallback(): void
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function findKeyByValueCallbackDataProvider(): Generator
 	{
-		$haystack = [1, 2, 3];
-		Assert::assertSame(1, ArrayType::findKeyByValueCallback($haystack, function (int $value): bool {
-			return ($value % 2) === 0;
-		}));
+		foreach ($this->getKeyByValueCallbackDataProvider() as $caseName => $caseData) {
+			yield $caseName => [
+				'haystack' => $caseData['haystack'],
+				'valueCallback' => $caseData['valueCallback'],
+				'expectedKey' => $caseData['expectedKey'],
+			];
+		}
+
+		foreach ($this->getKeyByValueCallbackNotFoundDataProvider() as $caseName => $caseData) {
+			yield $caseName => [
+				'haystack' => $caseData['haystack'],
+				'valueCallback' => $caseData['valueCallback'],
+				'expectedKey' => null,
+			];
+		}
 	}
 
-	public function testFindKeyByValueCallbackNotFound(): void
+	/**
+	 * @dataProvider findKeyByValueCallbackDataProvider
+	 *
+	 * @param mixed[] $haystack
+	 * @param \Closure $valueCallback
+	 * @param int|null|string $expectedKey
+	 */
+	public function testFindKeyByValueCallback(
+		array $haystack,
+		Closure $valueCallback,
+		$expectedKey
+	): void
 	{
-		$haystack = [1, 2, 3];
-		Assert::assertNull(ArrayType::findKeyByValueCallback($haystack, function (int $value): bool {
-			return $value === 0;
-		}));
-	}
-
-	public function testFindKeyByValueCallbackCustomKeys(): void
-	{
-		$haystack = [
-			'one' => 1,
-			'two' => 2,
-			'three' => 3,
-		];
-		Assert::assertSame('two', ArrayType::findKeyByValueCallback($haystack, function (int $value): bool {
-			return ($value % 2) === 0;
-		}));
+		Assert::assertSame($expectedKey, ArrayType::findKeyByValueCallback($haystack, $valueCallback));
 	}
 
 	public function testGetKey(): void

@@ -449,27 +449,76 @@ class ArrayTypeTest extends \PHPUnit\Framework\TestCase
 	/**
 	 * @return mixed[][]|\Generator
 	 */
-	public function findKeyStrictDataProvider(): Generator
+	public function findKeyWithStrictParameterDataProvider(): Generator
 	{
-		yield 'existing integer value' => [
-			'haystack' => [1, 2, 3],
-			'value' => 2,
-			'expectedKey' => 1,
-		];
+		foreach ($this->keyValueStrictDataProvider() as $caseName => $caseData) {
+			yield $caseName . ' - STRICT_TRUE' => [
+				'haystack' => $caseData['haystack'],
+				'value' => $caseData['value'],
+				'strict' => ArrayType::STRICT_TRUE,
+				'expectedKey' => $caseData['key'],
+			];
+			yield $caseName . ' - STRICT_FALSE' => [
+				'haystack' => $caseData['haystack'],
+				'value' => $caseData['value'],
+				'strict' => ArrayType::STRICT_FALSE,
+				'expectedKey' => $caseData['key'],
+			];
+		}
 
-		yield 'existing integer value as numeric string' => [
-			'haystack' => [1, 2, 3],
-			'value' => '2',
-			'expectedKey' => null,
-		];
+		foreach ($this->keyValueLooseDataProvider() as $caseName => $caseData) {
+			yield $caseName . ' - STRICT_TRUE' => [
+				'haystack' => $caseData['haystack'],
+				'value' => $caseData['value'],
+				'strict' => ArrayType::STRICT_TRUE,
+				'expectedKey' => null,
+			];
+			yield $caseName . ' - STRICT_FALSE' => [
+				'haystack' => $caseData['haystack'],
+				'value' => $caseData['value'],
+				'strict' => ArrayType::STRICT_FALSE,
+				'expectedKey' => $caseData['key'],
+			];
+		}
+
+		foreach ($this->valueNotFoundDataProvider() as $caseName => $caseData) {
+			yield $caseName . ' - STRICT_TRUE' => [
+				'haystack' => $caseData['haystack'],
+				'value' => $caseData['value'],
+				'strict' => ArrayType::STRICT_TRUE,
+				'expectedKey' => null,
+			];
+			yield $caseName . ' - STRICT_FALSE' => [
+				'haystack' => $caseData['haystack'],
+				'value' => $caseData['value'],
+				'strict' => ArrayType::STRICT_FALSE,
+				'expectedKey' => null,
+			];
+		}
 	}
 
 	/**
-	 * @dataProvider findKeyStrictDataProvider
+	 * @return mixed[][]|\Generator
+	 */
+	public function findKeyDefaultDataProvider(): Generator
+	{
+		foreach ($this->findKeyWithStrictParameterDataProvider() as $caseName => $caseData) {
+			if ($caseData['strict'] === ArrayType::STRICT_TRUE) {
+				yield $caseName => [
+					'haystack' => $caseData['haystack'],
+					'value' => $caseData['value'],
+					'expectedKey' => $caseData['expectedKey'],
+				];
+			}
+		}
+	}
+
+	/**
+	 * @dataProvider findKeyDefaultDataProvider
 	 *
 	 * @param mixed[] $haystack
 	 * @param mixed $value
-	 * @param int|string|null $expectedKey
+	 * @param int|null|string $expectedKey
 	 */
 	public function testFindKeyDefault(
 		array $haystack,
@@ -481,25 +530,21 @@ class ArrayTypeTest extends \PHPUnit\Framework\TestCase
 	}
 
 	/**
-	 * @dataProvider findKeyStrictDataProvider
+	 * @dataProvider findKeyWithStrictParameterDataProvider
 	 *
 	 * @param mixed[] $haystack
 	 * @param mixed $value
-	 * @param int|string|null $expectedKey
+	 * @param bool $strict
+	 * @param int|null|string $expectedKey
 	 */
-	public function testFindKeyStrict(
+	public function testFindKeyWithStrictParameter(
 		array $haystack,
 		$value,
+		bool $strict,
 		$expectedKey
 	): void
 	{
-		Assert::assertSame($expectedKey, ArrayType::findKey($haystack, $value));
-	}
-
-	public function testFindKeyLoose(): void
-	{
-		$haystack = [1, 2, 3];
-		Assert::assertSame(1, ArrayType::findKey($haystack, '2', ArrayType::STRICT_FALSE));
+		Assert::assertSame($expectedKey, ArrayType::findKey($haystack, $value, $strict));
 	}
 
 	public function testFindKeyByCallback(): void

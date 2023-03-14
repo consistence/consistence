@@ -536,51 +536,103 @@ class MultiEnumTest extends \PHPUnit\Framework\TestCase
 		Assert::assertEquals([], $empty->getValues());
 	}
 
-	public function testGetNegative(): void
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function invalidValueSingleDataProvider(): Generator
 	{
-		try {
-			RolesEnum::get(-1);
-			Assert::fail('Exception expected');
-		} catch (\Consistence\Enum\InvalidEnumValueException $e) {
-			Assert::assertSame(-1, $e->getValue());
-			Assert::assertEquals([
+		yield 'negative value' => [
+			'multiEnumClassName' => RolesEnum::class,
+			'value' => -1,
+			'expectedAvailableValues' => [
 				'USER' => RoleEnum::USER,
 				'EMPLOYEE' => RoleEnum::EMPLOYEE,
 				'ADMIN' => RoleEnum::ADMIN,
-			], $e->getAvailableValues());
-			Assert::assertSame(RolesEnum::class, $e->getEnumClassName());
+			],
+		];
+		yield 'nonexistent Enum value' => [
+			'multiEnumClassName' => RolesEnum::class,
+			'value' => 8,
+			'expectedAvailableValues' => [
+				'USER' => RoleEnum::USER,
+				'EMPLOYEE' => RoleEnum::EMPLOYEE,
+				'ADMIN' => RoleEnum::ADMIN,
+			],
+		];
+	}
+
+	/**
+	 * @dataProvider invalidValueSingleDataProvider
+	 *
+	 * @param string $multiEnumClassName
+	 * @param mixed $value
+	 * @param mixed[] $expectedAvailableValues
+	 */
+	public function testGetInvalidValue(
+		string $multiEnumClassName,
+		$value,
+		array $expectedAvailableValues
+	): void
+	{
+		try {
+			$multiEnumClassName::get($value);
+			Assert::fail('Exception expected');
+		} catch (\Consistence\Enum\InvalidEnumValueException $e) {
+			Assert::assertSame($value, $e->getValue());
+			Assert::assertEquals($expectedAvailableValues, $e->getAvailableValues());
+			Assert::assertSame($multiEnumClassName, $e->getEnumClassName());
 		}
 	}
 
-	public function testGetMultiNegative(): void
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function invalidValueMultiDataProvider(): Generator
 	{
-		try {
-			RolesEnum::getMulti(-1);
-			Assert::fail('Exception expected');
-		} catch (\Consistence\Enum\InvalidEnumValueException $e) {
-			Assert::assertSame(-1, $e->getValue());
-			Assert::assertEquals([
+		yield 'single negative value' => [
+			'multiEnumClassName' => RolesEnum::class,
+			'values' => [-1],
+			'expectedInvalidValue' => -1,
+			'expectedAvailableValues' => [
 				'USER' => RoleEnum::USER,
 				'EMPLOYEE' => RoleEnum::EMPLOYEE,
 				'ADMIN' => RoleEnum::ADMIN,
-			], $e->getAvailableValues());
-			Assert::assertSame(RolesEnum::class, $e->getEnumClassName());
-		}
+			],
+		];
+		yield 'single nonexistent Enum value' => [
+			'multiEnumClassName' => RolesEnum::class,
+			'values' => [8],
+			'expectedInvalidValue' => 8,
+			'expectedAvailableValues' => [
+				'USER' => RoleEnum::USER,
+				'EMPLOYEE' => RoleEnum::EMPLOYEE,
+				'ADMIN' => RoleEnum::ADMIN,
+			],
+		];
 	}
 
-	public function testInvalidEnumValue(): void
+	/**
+	 * @dataProvider invalidValueMultiDataProvider
+	 *
+	 * @param string $multiEnumClassName
+	 * @param mixed[] $values
+	 * @param mixed $expectedInvalidValue
+	 * @param mixed[] $expectedAvailableValues
+	 */
+	public function testGetMultiInvalidValue(
+		string $multiEnumClassName,
+		array $values,
+		$expectedInvalidValue,
+		array $expectedAvailableValues
+	): void
 	{
 		try {
-			RolesEnum::get(8);
+			$multiEnumClassName::getMulti(...$values);
 			Assert::fail('Exception expected');
 		} catch (\Consistence\Enum\InvalidEnumValueException $e) {
-			Assert::assertSame(8, $e->getValue());
-			Assert::assertEquals([
-				'USER' => RoleEnum::USER,
-				'EMPLOYEE' => RoleEnum::EMPLOYEE,
-				'ADMIN' => RoleEnum::ADMIN,
-			], $e->getAvailableValues());
-			Assert::assertSame(RolesEnum::class, $e->getEnumClassName());
+			Assert::assertSame($expectedInvalidValue, $e->getValue());
+			Assert::assertEquals($expectedAvailableValues, $e->getAvailableValues());
+			Assert::assertSame($multiEnumClassName, $e->getEnumClassName());
 		}
 	}
 

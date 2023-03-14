@@ -956,21 +956,62 @@ class ArrayTypeTest extends \PHPUnit\Framework\TestCase
 		Assert::assertNull($result);
 	}
 
-	public function testFindValueByCallback(): void
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function expectedValueForValueCallbackDataProvider(): Generator
 	{
-		$haystack = [1, 2, 3];
-		$result = ArrayType::findValueByCallback($haystack, function (int $value): bool {
-			return ($value % 2) === 0;
-		});
-		Assert::assertSame(2, $result);
+		foreach ($this->keyValueCallbackDataProvider() as $caseName => $caseData) {
+			yield $caseName => [
+				'haystack' => $caseData['haystack'],
+				'valueCallback' => $caseData['valueCallback'],
+				'expectedValue' => $caseData['expectedValue'],
+			];
+		}
 	}
 
-	public function testFindValueByCallbackNothingFound(): void
+	/**
+	 * @dataProvider expectedValueForValueCallbackDataProvider
+	 *
+	 * @param mixed[] $haystack
+	 * @param \Closure $valueCallback
+	 * @param mixed $expectedValue
+	 */
+	public function testFindValueByCallback(
+		array $haystack,
+		Closure $valueCallback,
+		$expectedValue
+	): void
 	{
-		$haystack = [1, 2, 3];
-		$result = ArrayType::findValueByCallback($haystack, function (int $value): bool {
-			return $value > 3;
-		});
+		$result = ArrayType::findValueByCallback($haystack, $valueCallback);
+		Assert::assertSame($expectedValue, $result);
+	}
+
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function nothingFoundForValueCallbackDataProvider(): Generator
+	{
+		foreach ($this->keyValueCallbackNotFoundDataProvider() as $caseName => $caseData) {
+			yield $caseName => [
+				'haystack' => $caseData['haystack'],
+				'valueCallback' => $caseData['valueCallback'],
+			];
+		}
+	}
+
+	/**
+	 * @dataProvider nothingFoundForValueCallbackDataProvider
+	 *
+	 * @param mixed[] $haystack
+	 * @param \Closure $valueCallback
+	 */
+	public function testFindValueByCallbackNothingFound(
+		array $haystack,
+		Closure $valueCallback
+	): void
+	{
+		$result = ArrayType::findValueByCallback($haystack, $valueCallback);
 		Assert::assertNull($result);
 	}
 

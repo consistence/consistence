@@ -737,35 +737,36 @@ class ArrayTypeTest extends \PHPUnit\Framework\TestCase
 		ArrayType::getKeyByCallback($haystack, $callback);
 	}
 
-	public function testGetKeyByValueCallback(): void
+	/**
+	 * @dataProvider getKeyByValueCallbackDataProvider
+	 *
+	 * @param mixed[] $haystack
+	 * @param \Closure $valueCallback
+	 * @param int|string $expectedKey
+	 */
+	public function testGetKeyByValueCallback(
+		array $haystack,
+		Closure $valueCallback,
+		$expectedKey
+	): void
 	{
-		$haystack = [1, 2, 3];
-		Assert::assertSame(1, ArrayType::getKeyByValueCallback($haystack, function (int $value): bool {
-			return ($value % 2) === 0;
-		}));
+		Assert::assertSame($expectedKey, ArrayType::getKeyByValueCallback($haystack, $valueCallback));
 	}
 
-	public function testGetKeyByValueCallbackNotFound(): void
+	/**
+	 * @dataProvider getKeyByValueCallbackNotFoundDataProvider
+	 *
+	 * @param mixed[] $haystack
+	 * @param \Closure $valueCallback
+	 */
+	public function testGetKeyByValueCallbackNotFound(
+		array $haystack,
+		Closure $valueCallback
+	): void
 	{
-		$haystack = [1, 2, 3];
-
 		$this->expectException(\Consistence\Type\ArrayType\ElementDoesNotExistException::class);
 
-		ArrayType::getKeyByValueCallback($haystack, function (int $value): bool {
-			return $value === 0;
-		});
-	}
-
-	public function testGetKeyByValueCallbackCustomKeys(): void
-	{
-		$haystack = [
-			'one' => 1,
-			'two' => 2,
-			'three' => 3,
-		];
-		Assert::assertSame('two', ArrayType::getKeyByValueCallback($haystack, function (int $value): bool {
-			return ($value % 2) === 0;
-		}));
+		ArrayType::getKeyByValueCallback($haystack, $valueCallback);
 	}
 
 	public function testFindValue(): void

@@ -1124,56 +1124,125 @@ class ArrayTypeTest extends \PHPUnit\Framework\TestCase
 		Assert::assertSame([2, 4, 6], $result);
 	}
 
-	public function testRemoveValue(): void
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function removeValueDataProvider(): Generator
 	{
-		$haystack = [1, 2, 3];
-		Assert::assertTrue(ArrayType::removeValue($haystack, 2));
-		Assert::assertCount(2, $haystack);
-		Assert::assertSame(1, $haystack[0]);
-		Assert::assertSame(3, $haystack[2]);
+		yield 'existing value' => [
+			'haystack' => [1, 2, 3],
+			'valueToRemove' => 2,
+			'expectedReturnValue' => true,
+			'expectedValues' => [
+				0 => 1,
+				2 => 3,
+			],
+		];
+		yield 'nonexistent value' => [
+			'haystack' => [1, 2, 3],
+			'valueToRemove' => 4,
+			'expectedReturnValue' => false,
+			'expectedValues' => [1, 2, 3],
+		];
 	}
 
-	public function testRemoveValueNoChange(): void
+	/**
+	 * @dataProvider removeValueDataProvider
+	 *
+	 * @param mixed[] $haystack
+	 * @param mixed $valueToRemove
+	 * @param bool $expectedReturnValue
+	 * @param mixed[] $expectedValues
+	 */
+	public function testRemoveValue(
+		array $haystack,
+		$valueToRemove,
+		bool $expectedReturnValue,
+		array $expectedValues
+	): void
 	{
-		$haystack = [1, 2, 3];
-		Assert::assertFalse(ArrayType::removeValue($haystack, 4));
-		Assert::assertCount(3, $haystack);
+		Assert::assertSame($expectedReturnValue, ArrayType::removeValue($haystack, $valueToRemove));
+		Assert::assertSame($expectedValues, $haystack);
 	}
 
-	public function testRemoveKeys(): void
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function removeKeysByArrayKeysDataProvider(): Generator
 	{
-		$haystack = [1, 2, 3];
-		Assert::assertTrue(ArrayType::removeKeys($haystack, [0, 2]));
-		Assert::assertCount(1, $haystack);
-		Assert::assertSame(2, $haystack[1]);
+		yield 'existing keys' => [
+			'haystack' => [1, 2, 3],
+			'arrayWithKeysToRemove' => [
+				0 => 'foo',
+				2 => 'bar',
+			],
+			'expectedReturnValue' => true,
+			'expectedValues' => [
+				1 => 2,
+			],
+		];
+		yield 'nonexistent keys' => [
+			'haystack' => [1, 2, 3],
+			'arrayWithKeysToRemove' => [
+				4 => 'foo',
+				5 => 'bar',
+			],
+			'expectedReturnValue' => false,
+			'expectedValues' => [1, 2, 3],
+		];
 	}
 
-	public function testRemoveKeysNoChange(): void
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function removeKeysDataProvider(): Generator
 	{
-		$haystack = [1, 2, 3];
-		Assert::assertFalse(ArrayType::removeKeys($haystack, [4, 5]));
-		Assert::assertCount(3, $haystack);
+		foreach ($this->removeKeysByArrayKeysDataProvider() as $caseName => $caseData) {
+			yield $caseName => [
+				'haystack' => $caseData['haystack'],
+				'keysToRemove' => array_keys($caseData['arrayWithKeysToRemove']),
+				'expectedReturnValue' => $caseData['expectedReturnValue'],
+				'expectedValues' => $caseData['expectedValues'],
+			];
+		}
 	}
 
-	public function testRemoveKeysByArrayKeys(): void
+	/**
+	 * @dataProvider removeKeysDataProvider
+	 *
+	 * @param mixed[] $haystack
+	 * @param mixed[] $keysToRemove
+	 * @param bool $expectedReturnValue
+	 * @param mixed[] $expectedValues
+	 */
+	public function testRemoveKeys(
+		array $haystack,
+		array $keysToRemove,
+		bool $expectedReturnValue,
+		array $expectedValues
+	): void
 	{
-		$haystack = [1, 2, 3];
-		Assert::assertTrue(ArrayType::removeKeysByArrayKeys($haystack, [
-			0 => 'foo',
-			2 => 'bar',
-		]));
-		Assert::assertCount(1, $haystack);
-		Assert::assertSame(2, $haystack[1]);
+		Assert::assertSame($expectedReturnValue, ArrayType::removeKeys($haystack, $keysToRemove));
+		Assert::assertSame($expectedValues, $haystack);
 	}
 
-	public function testRemoveKeysByArrayKeysNoChange(): void
+	/**
+	 * @dataProvider removeKeysByArrayKeysDataProvider
+	 *
+	 * @param mixed[] $haystack
+	 * @param mixed[] $arrayWithKeysToRemove
+	 * @param bool $expectedReturnValue
+	 * @param mixed[] $expectedValues
+	 */
+	public function testRemoveKeysByArrayKeys(
+		array $haystack,
+		array $arrayWithKeysToRemove,
+		bool $expectedReturnValue,
+		array $expectedValues
+	): void
 	{
-		$haystack = [1, 2, 3];
-		Assert::assertFalse(ArrayType::removeKeysByArrayKeys($haystack, [
-			4 => 'foo',
-			5 => 'bar',
-		]));
-		Assert::assertCount(3, $haystack);
+		Assert::assertSame($expectedReturnValue, ArrayType::removeKeysByArrayKeys($haystack, $arrayWithKeysToRemove));
+		Assert::assertSame($expectedValues, $haystack);
 	}
 
 	public function testUniqueValuesStrict(): void

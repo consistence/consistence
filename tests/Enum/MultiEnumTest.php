@@ -426,58 +426,75 @@ class MultiEnumTest extends \PHPUnit\Framework\TestCase
 		Assert::assertEquals($expectedValues, $userAndAdmin->getValues());
 	}
 
-	public function testSameInstances(): void
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function compareDataProvider(): Generator
 	{
-		$userAndAdmin1 = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
-		$userAndAdmin2 = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
+		yield 'equal multiEnums, values in same order' => [
+			'multiEnum1' => RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN),
+			'multiEnum2' => RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN),
+			'equals' => true,
+		];
 
-		Assert::assertSame($userAndAdmin1, $userAndAdmin2);
+		yield 'equal multiEnums, values in different order' => [
+			'multiEnum1' => RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN),
+			'multiEnum2' => RolesEnum::getMulti(RoleEnum::ADMIN, RoleEnum::USER),
+			'equals' => true,
+		];
+		yield 'not equal multiEnums' => [
+			'multiEnum1' => RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN),
+			'multiEnum2' => RolesEnum::getMulti(RoleEnum::USER),
+			'equals' => false,
+		];
 	}
 
-	public function testSameInstancesIndependentOrder(): void
+	/**
+	 * @dataProvider compareDataProvider
+	 *
+	 * @param \Consistence\Enum\MultiEnum $multiEnum1
+	 * @param \Consistence\Enum\MultiEnum $multiEnum2
+	 * @param bool $equals
+	 */
+	public function testSameInstances(
+		MultiEnum $multiEnum1,
+		MultiEnum $multiEnum2,
+		bool $equals
+	): void
 	{
-		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
-		$adminAndUser = RolesEnum::getMulti(RoleEnum::ADMIN, RoleEnum::USER);
-
-		Assert::assertSame($userAndAdmin, $adminAndUser);
+		Assert::assertSame($equals, $multiEnum1 === $multiEnum2);
 	}
 
-	public function testDifferentInstances(): void
+	/**
+	 * @dataProvider compareDataProvider
+	 *
+	 * @param \Consistence\Enum\MultiEnum $multiEnum1
+	 * @param \Consistence\Enum\MultiEnum $multiEnum2
+	 * @param bool $equals
+	 */
+	public function testEquals(
+		MultiEnum $multiEnum1,
+		MultiEnum $multiEnum2,
+		bool $equals
+	): void
 	{
-		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
-		$user = RolesEnum::getMulti(RoleEnum::USER);
-
-		Assert::assertNotSame($userAndAdmin, $user);
+		Assert::assertSame($equals, $multiEnum1->equals($multiEnum2));
 	}
 
-	public function testEquals(): void
+	/**
+	 * @dataProvider compareDataProvider
+	 *
+	 * @param \Consistence\Enum\MultiEnum $multiEnum1
+	 * @param \Consistence\Enum\MultiEnum $multiEnum2
+	 * @param bool $equals
+	 */
+	public function testEqualsValue(
+		MultiEnum $multiEnum1,
+		MultiEnum $multiEnum2,
+		bool $equals
+	): void
 	{
-		$userAndAdmin1 = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
-		$userAndAdmin2 = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
-
-		Assert::assertTrue($userAndAdmin1->equals($userAndAdmin2));
-	}
-
-	public function testNotEquals(): void
-	{
-		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
-		$user = RolesEnum::getMulti(RoleEnum::USER);
-
-		Assert::assertFalse($userAndAdmin->equals($user));
-	}
-
-	public function testEqualsValue(): void
-	{
-		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
-
-		Assert::assertTrue($userAndAdmin->equalsValue(RoleEnum::USER | RoleEnum::ADMIN));
-	}
-
-	public function testNotEqualsValue(): void
-	{
-		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
-
-		Assert::assertFalse($userAndAdmin->equalsValue(RoleEnum::USER));
+		Assert::assertSame($equals, $multiEnum1->equalsValue($multiEnum2->getValue()));
 	}
 
 	public function testGetAvailableValues(): void

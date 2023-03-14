@@ -336,6 +336,15 @@ class ArrayTypeTest extends \PHPUnit\Framework\TestCase
 				return $value === 0;
 			},
 		];
+		yield 'greater value not found' => [
+			'haystack' => [1, 2, 3],
+			'callback' => function (KeyValuePair $pair): bool {
+				return $pair->getValue() > 3;
+			},
+			'valueCallback' => function (int $value): bool {
+				return $value > 3;
+			},
+		];
 	}
 
 	/**
@@ -886,23 +895,64 @@ class ArrayTypeTest extends \PHPUnit\Framework\TestCase
 		ArrayType::getValue($haystack, $key);
 	}
 
-	public function testFindByCallback(): void
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function expectedKeyValuePairForCallbackDataProvider(): Generator
 	{
-		$haystack = [1, 2, 3];
-		$result = ArrayType::findByCallback($haystack, function (KeyValuePair $pair): bool {
-			return ($pair->getValue() % 2) === 0;
-		});
-		Assert::assertInstanceOf(KeyValuePair::class, $result);
-		Assert::assertSame(2, $result->getValue());
-		Assert::assertSame(1, $result->getKey());
+		foreach ($this->keyValueCallbackDataProvider() as $caseName => $caseData) {
+			yield $caseName => [
+				'haystack' => $caseData['haystack'],
+				'callback' => $caseData['callback'],
+				'expectedKeyValuePair' => new KeyValuePair($caseData['expectedKey'], $caseData['expectedValue']),
+			];
+		}
 	}
 
-	public function testFindByCallbackNothingFound(): void
+	/**
+	 * @dataProvider expectedKeyValuePairForCallbackDataProvider
+	 *
+	 * @param mixed[] $haystack
+	 * @param \Closure $callback
+	 * @param \Consistence\Type\ArrayType\KeyValuePair $expectedKeyValuePair
+	 */
+	public function testFindByCallback(
+		array $haystack,
+		Closure $callback,
+		KeyValuePair $expectedKeyValuePair
+	): void
 	{
-		$haystack = [1, 2, 3];
-		$result = ArrayType::findByCallback($haystack, function (KeyValuePair $pair): bool {
-			return $pair->getValue() > 3;
-		});
+		$result = ArrayType::findByCallback($haystack, $callback);
+		Assert::assertInstanceOf(KeyValuePair::class, $result);
+		Assert::assertSame($expectedKeyValuePair->getValue(), $result->getValue());
+		Assert::assertSame($expectedKeyValuePair->getKey(), $result->getKey());
+	}
+
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function nothingFoundForCallbackDataProvider(): Generator
+	{
+		foreach ($this->keyValueCallbackNotFoundDataProvider() as $caseName => $caseData) {
+			yield $caseName => [
+				'haystack' => $caseData['haystack'],
+				'callback' => $caseData['callback'],
+			];
+		}
+	}
+
+	/**
+	 * @dataProvider nothingFoundForCallbackDataProvider
+	 *
+	 * @param mixed[] $haystack
+	 * @param \Closure $callback
+	 */
+	public function testFindByCallbackNothingFound(
+		array $haystack,
+		Closure $callback
+	): void
+	{
+		$result = ArrayType::findByCallback($haystack, $callback);
 		Assert::assertNull($result);
 	}
 

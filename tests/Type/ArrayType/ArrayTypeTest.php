@@ -1245,114 +1245,186 @@ class ArrayTypeTest extends \PHPUnit\Framework\TestCase
 		Assert::assertSame($expectedValues, $haystack);
 	}
 
-	public function testUniqueValuesStrict(): void
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function uniqueValuesWithStrictnessDataProvider(): Generator
 	{
-		$haystack = ['1', 1];
-		$expected = ['1', 1];
+		yield 'same numeric value as integer and string' => (function (): array {
+			$haystack = ['1', 1];
 
-		$actual = ArrayType::uniqueValues($haystack);
+			return [
+				'haystack' => $haystack,
+				'expectedUniqueValuesStrict' => $haystack,
+				'expectedUniqueValuesNonStrict' => [$haystack[0]],
+			];
+		})();
 
-		Assert::assertSame($expected, $actual);
+		yield 'two DateTimeImmutable objects with same value' => (function (): array {
+			$haystack = [
+				new DateTimeImmutable('2017-01-01T12:00:00.000000'),
+				new DateTimeImmutable('2017-01-01T12:00:00.000000'),
+			];
+
+			return [
+				'haystack' => $haystack,
+				'expectedUniqueValuesStrict' => $haystack,
+				'expectedUniqueValuesNonStrict' => [$haystack[0]],
+			];
+		})();
+
+		yield 'combination of string and numeric keys' => (function (): array {
+			$haystack = [
+				'a' => 'green',
+				0 => 'red',
+				1 => 'blue',
+			];
+
+			return [
+				'haystack' => $haystack,
+				'expectedUniqueValuesStrict' => $haystack,
+				'expectedUniqueValuesNonStrict' => $haystack,
+			];
+		})();
 	}
 
-	public function testUniqueValuesStrictWithObjects(): void
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function uniqueValuesDataProvider(): Generator
 	{
-		$haystack = [
-			new DateTimeImmutable('2017-01-01T12:00:00.000000'),
-			new DateTimeImmutable('2017-01-01T12:00:00.000000'),
-		];
-
-		$actual = ArrayType::uniqueValues($haystack);
-
-		Assert::assertSame($haystack, $actual);
+		foreach ($this->uniqueValuesWithStrictnessDataProvider() as $caseName => $caseData) {
+			yield $caseName => [
+				'haystack' => $caseData['haystack'],
+				'expectedUniqueValues' => $caseData['expectedUniqueValuesStrict'],
+			];
+		}
 	}
 
-	public function testUniqueValuesNonStrictBehavesAsArrayUniqueWithRegularComparison(): void
+	/**
+	 * @dataProvider uniqueValuesDataProvider
+	 *
+	 * @param mixed[] $haystack
+	 * @param mixed[] $expectedUniqueValues
+	 */
+	public function testUniqueValues(
+		array $haystack,
+		array $expectedUniqueValues
+	): void
 	{
-		$haystack = ['1', 1];
-
-		$actual = ArrayType::uniqueValues($haystack, ArrayType::STRICT_FALSE);
-
-		Assert::assertContains(1, $actual);
-		Assert::assertCount(1, $actual);
+		Assert::assertSame($expectedUniqueValues, ArrayType::uniqueValues($haystack));
 	}
 
-	public function testUniqueValuesNonStrictWithObjects(): void
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function uniqueValuesWithStrictParameterDataProvider(): Generator
 	{
-		$haystack = [
-			new DateTimeImmutable('2017-01-01T12:00:00.000000'),
-			new DateTimeImmutable('2017-01-01T12:00:00.000000'),
-		];
+		foreach ($this->uniqueValuesWithStrictnessDataProvider() as $caseName => $caseData) {
+			yield $caseName . '- STRICT_TRUE' => [
+				'haystack' => $caseData['haystack'],
+				'strict' => ArrayType::STRICT_TRUE,
+				'expectedUniqueValues' => $caseData['expectedUniqueValuesStrict'],
+			];
 
-		$actual = ArrayType::uniqueValues($haystack, ArrayType::STRICT_FALSE);
-
-		Assert::assertContainsEquals(new DateTimeImmutable('2017-01-01T12:00:00.000000'), $actual);
-		Assert::assertCount(1, $actual);
+			yield $caseName . '- STRICT_FALSE' => [
+				'haystack' => $caseData['haystack'],
+				'strict' => ArrayType::STRICT_FALSE,
+				'expectedUniqueValues' => $caseData['expectedUniqueValuesNonStrict'],
+			];
+		}
 	}
 
-	public function testUniqueValuesKeepsKeys(): void
+	/**
+	 * @dataProvider uniqueValuesWithStrictParameterDataProvider
+	 *
+	 * @param mixed[] $haystack
+	 * @param bool $strict
+	 * @param mixed[] $expectedUniqueValues
+	 */
+	public function testUniqueValuesWithStrictParameter(
+		array $haystack,
+		bool $strict,
+		array $expectedUniqueValues
+	): void
 	{
-		$haystack = [
-			'a' => 'green',
-			0 => 'red',
-			1 => 'blue',
-		];
-
-		$actual = ArrayType::uniqueValues($haystack);
-
-		Assert::assertSame($haystack, $actual);
+		Assert::assertSame($expectedUniqueValues, ArrayType::uniqueValues($haystack, $strict));
 	}
 
-	public function testUniqueValuesByCallbackWithStrictComparison(): void
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function uniqueValuesByCallbackDataProvider(): Generator
 	{
-		$haystack = ['1', 1];
+		yield 'same numeric value as integer and string, strict comparison in callback' => (function (): array {
+			$haystack = ['1', 1];
 
-		$actual = ArrayType::uniqueValuesByCallback($haystack, function ($a, $b): bool {
-			return $a === $b;
-		});
+			return [
+				'haystack' => $haystack,
+				'callback' => function ($a, $b): bool {
+					return $a === $b;
+				},
+				'expectedUniqueValues' => $haystack,
+			];
+		})();
 
-		Assert::assertSame($haystack, $actual);
+		yield 'two DateTimeImmutable objects with same value, strict comparison in callback' => (function (): array {
+			$haystack = [
+				new DateTimeImmutable('2017-01-01T12:00:00.000000'),
+				new DateTimeImmutable('2017-01-01T12:00:00.000000'),
+			];
+
+			return [
+				'haystack' => $haystack,
+				'callback' => function (DateTimeImmutable $a, DateTimeImmutable $b): bool {
+					return $a === $b;
+				},
+				'expectedUniqueValues' => $haystack,
+			];
+		})();
+
+		yield 'same numeric value as integer and string, non-strict comparison in callback' => (function (): array {
+			$haystack = ['1', 1];
+
+			return [
+				'haystack' => $haystack,
+				'callback' => function ($a, $b): bool {
+					return $a == $b;
+				},
+				'expectedUniqueValues' => [$haystack[0]],
+			];
+		})();
+
+		yield 'two DateTimeImmutable objects with same value, non-strict comparison in callback' => (function (): array {
+			$haystack = [
+				new DateTimeImmutable('2017-01-01T12:00:00.000000'),
+				new DateTimeImmutable('2017-01-01T12:00:00.000000'),
+			];
+
+			return [
+				'haystack' => $haystack,
+				'callback' => function (DateTimeImmutable $a, DateTimeImmutable $b): bool {
+					return $a == $b;
+				},
+				'expectedUniqueValues' => [$haystack[0]],
+			];
+		})();
 	}
 
-	public function testUniqueValuesByCallbackWithStrictComparisonWithObjects(): void
+	/**
+	 * @dataProvider uniqueValuesByCallbackDataProvider
+	 *
+	 * @param mixed[] $haystack
+	 * @param \Closure $callback
+	 * @param mixed[] $expectedUniqueValues
+	 */
+	public function testUniqueValuesByCallback(
+		array $haystack,
+		Closure $callback,
+		array $expectedUniqueValues
+	): void
 	{
-		$haystack = [
-			new DateTimeImmutable('2017-01-01T12:00:00.000000'),
-			new DateTimeImmutable('2017-01-01T12:00:00.000000'),
-		];
-
-		$actual = ArrayType::uniqueValuesByCallback($haystack, function (DateTimeImmutable $a, DateTimeImmutable $b): bool {
-			return $a === $b;
-		});
-
-		Assert::assertSame($haystack, $actual);
-	}
-
-	public function testUniqueValuesByCallbackWithNonStrictComparison(): void
-	{
-		$haystack = ['1', 1];
-
-		$actual = ArrayType::uniqueValuesByCallback($haystack, function ($a, $b): bool {
-			return $a == $b;
-		});
-
-		Assert::assertContains(1, $actual);
-		Assert::assertCount(1, $actual);
-	}
-
-	public function testUniqueValuesByCallbackWithNonStrictComparisonWithObjects(): void
-	{
-		$haystack = [
-			new DateTimeImmutable('2017-01-01T12:00:00.000000'),
-			new DateTimeImmutable('2017-01-01T12:00:00.000000'),
-		];
-
-		$actual = ArrayType::uniqueValuesByCallback($haystack, function (DateTimeImmutable $a, DateTimeImmutable $b): bool {
-			return $a == $b;
-		});
-
-		Assert::assertContainsEquals(new DateTimeImmutable('2017-01-01T12:00:00.000000'), $actual);
-		Assert::assertCount(1, $actual);
+		Assert::assertSame($expectedUniqueValues, ArrayType::uniqueValuesByCallback($haystack, $callback));
 	}
 
 }

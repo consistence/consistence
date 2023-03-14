@@ -1050,32 +1050,36 @@ class ArrayTypeTest extends \PHPUnit\Framework\TestCase
 		ArrayType::getByCallback($haystack, $callback);
 	}
 
-	public function testGetValueByCallback(): void
+	/**
+	 * @dataProvider expectedValueForValueCallbackDataProvider
+	 *
+	 * @param mixed[] $haystack
+	 * @param \Closure $valueCallback
+	 * @param mixed $expectedValue
+	 */
+	public function testGetValueByCallback(
+		array $haystack,
+		Closure $valueCallback,
+		$expectedValue
+	): void
 	{
-		$haystack = [1, 2, 3];
-		$result = ArrayType::getValueByCallback($haystack, function (int $value): bool {
-			return ($value % 2) === 0;
-		});
-		Assert::assertSame(2, $result);
+		Assert::assertSame($expectedValue, ArrayType::getValueByCallback($haystack, $valueCallback));
 	}
 
-	public function testGetValueByCallbackNothingFound(): void
+	/**
+	 * @dataProvider nothingFoundForValueCallbackDataProvider
+	 *
+	 * @param mixed[] $haystack
+	 * @param \Closure $valueCallback
+	 */
+	public function testGetValueByCallbackNothingFound(
+		array $haystack,
+		Closure $valueCallback
+	): void
 	{
-		$haystack = [1, 2, 3];
-
 		$this->expectException(\Consistence\Type\ArrayType\ElementDoesNotExistException::class);
 
-		ArrayType::getValueByCallback($haystack, function (int $value): bool {
-			return $value > 3;
-		});
-	}
-
-	public function testGetValueByCallbackNull(): void
-	{
-		$haystack = [1, 2, 3, null];
-		Assert::assertSame(null, ArrayType::getValueByCallback($haystack, function ($value): bool {
-			return $value === null;
-		}));
+		ArrayType::getValueByCallback($haystack, $valueCallback);
 	}
 
 	public function testFilterByCallback(): void

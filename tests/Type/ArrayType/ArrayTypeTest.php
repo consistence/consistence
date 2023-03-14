@@ -132,6 +132,12 @@ class ArrayTypeTest extends \PHPUnit\Framework\TestCase
 			'key' => 3,
 			'value' => null,
 		];
+
+		yield 'existing null value with string index' => [
+			'haystack' => ['null' => null],
+			'key' => 'null',
+			'value' => null,
+		];
 	}
 
 	/**
@@ -821,33 +827,63 @@ class ArrayTypeTest extends \PHPUnit\Framework\TestCase
 		Assert::assertSame($expectedValue, ArrayType::findValue($haystack, $key));
 	}
 
-	public function testGetValue(): void
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function getValueDataProvider(): Generator
 	{
-		$haystack = [
-			'foo',
-			'bar',
-		];
-		Assert::assertSame('bar', ArrayType::getValue($haystack, 1));
+		foreach ($this->keyValueStrictDataProvider() as $caseName => $caseData) {
+			yield $caseName => [
+				'haystack' => $caseData['haystack'],
+				'key' => $caseData['key'],
+				'expectedValue' => $caseData['value'],
+			];
+		}
 	}
 
-	public function testGetValueNotFound(): void
+	/**
+	 * @dataProvider getValueDataProvider
+	 *
+	 * @param mixed[] $haystack
+	 * @param int|string $key
+	 * @param mixed $expectedValue
+	 */
+	public function testGetValue(
+		array $haystack,
+		$key,
+		$expectedValue
+	): void
 	{
-		$haystack = [
-			'foo',
-			'bar',
-		];
+		Assert::assertSame($expectedValue, ArrayType::getValue($haystack, $key));
+	}
 
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function getValueNotFoundDataProvider(): Generator
+	{
+		foreach ($this->keyNotFoundDataProvider() as $caseName => $caseData) {
+			yield $caseName => [
+				'haystack' => $caseData['haystack'],
+				'key' => $caseData['key'],
+			];
+		}
+	}
+
+	/**
+	 * @dataProvider getValueNotFoundDataProvider
+	 *
+	 * @param mixed[] $haystack
+	 * @param int|string $key
+	 */
+	public function testGetValueNotFound(
+		array $haystack,
+		$key
+	): void
+	{
 		$this->expectException(\Consistence\Type\ArrayType\ElementDoesNotExistException::class);
 
-		ArrayType::getValue($haystack, 2);
-	}
-
-	public function testGetValueNull(): void
-	{
-		$haystack = [
-			'null' => null,
-		];
-		Assert::assertSame(null, ArrayType::getValue($haystack, 'null'));
+		ArrayType::getValue($haystack, $key);
 	}
 
 	public function testFindByCallback(): void

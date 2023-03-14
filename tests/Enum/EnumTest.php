@@ -151,13 +151,52 @@ class EnumTest extends \PHPUnit\Framework\TestCase
 		Assert::assertSame($expectedEqualsValue, $enum->equalsValue($value));
 	}
 
-	public function testGetAvailableValues(): void
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function enumAvailableValuesDataProvider(): Generator
 	{
-		Assert::assertEquals([
-			'DRAFT' => StatusEnum::DRAFT,
-			'REVIEW' => StatusEnum::REVIEW,
-			'PUBLISHED' => StatusEnum::PUBLISHED,
-		], StatusEnum::getAvailableValues());
+		yield 'StatusEnum' => [
+			'enumClassName' => StatusEnum::class,
+			'availableValues' => [
+				'DRAFT' => StatusEnum::DRAFT,
+				'REVIEW' => StatusEnum::REVIEW,
+				'PUBLISHED' => StatusEnum::PUBLISHED,
+			],
+		];
+		yield 'FooEnum' => [
+			'enumClassName' => FooEnum::class,
+			'availableValues' => [
+				'FOO' => FooEnum::FOO,
+			],
+		];
+	}
+
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function getAvailableValuesDataProvider(): Generator
+	{
+		foreach ($this->enumAvailableValuesDataProvider() as $caseName => $caseData) {
+			yield $caseName => [
+				'enumClassName' => $caseData['enumClassName'],
+				'expectedAvailableValues' => $caseData['availableValues'],
+			];
+		}
+	}
+
+	/**
+	 * @dataProvider getAvailableValuesDataProvider
+	 *
+	 * @param string $enumClassName
+	 * @param mixed[] $expectedAvailableValues
+	 */
+	public function testGetAvailableValues(
+		string $enumClassName,
+		array $expectedAvailableValues
+	): void
+	{
+		Assert::assertEquals($expectedAvailableValues, $enumClassName::getAvailableValues());
 	}
 
 	public function testGetAvailableEnums(): void
@@ -297,13 +336,6 @@ class EnumTest extends \PHPUnit\Framework\TestCase
 			Assert::assertSame($review, $e->getExpected());
 			Assert::assertSame($foo, $e->getGiven());
 		}
-	}
-
-	public function testAvailableValuesFooEnum(): void
-	{
-		Assert::assertEquals([
-			'FOO' => FooEnum::FOO,
-		], FooEnum::getAvailableValues());
 	}
 
 	public function testIgnoredConstant(): void

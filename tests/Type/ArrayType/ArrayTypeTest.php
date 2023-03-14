@@ -109,91 +109,152 @@ class ArrayTypeTest extends \PHPUnit\Framework\TestCase
 	/**
 	 * @return mixed[][]|\Generator
 	 */
-	public function containsValueStrictDataProvider(): Generator
+	public function keyValueStrictDataProvider(): Generator
 	{
 		yield 'existing integer value' => [
 			'haystack' => [1, 2, 3],
+			'key' => 1,
 			'value' => 2,
-			'expectedContains' => true,
 		];
 
-		yield 'existing integer value as numeric string' => [
-			'haystack' => [1, 2, 3],
-			'value' => '2',
-			'expectedContains' => false,
+		yield 'existing string value' => [
+			'haystack' => [
+				'foo',
+				'bar',
+			],
+			'key' => 1,
+			'value' => 'bar',
 		];
-	}
 
-	/**
-	 * @dataProvider containsValueStrictDataProvider
-	 *
-	 * @param mixed[] $haystack
-	 * @param mixed $value
-	 * @param bool $expectedContains
-	 */
-	public function testContainsValueDefault(
-		array $haystack,
-		$value,
-		bool $expectedContains
-	): void
-	{
-		Assert::assertSame($expectedContains, ArrayType::containsValue($haystack, $value));
-	}
-
-	/**
-	 * @dataProvider containsValueStrictDataProvider
-	 *
-	 * @param mixed[] $haystack
-	 * @param mixed $value
-	 * @param bool $expectedContains
-	 */
-	public function testContainsValueStrict(
-		array $haystack,
-		$value,
-		bool $expectedContains
-	): void
-	{
-		Assert::assertSame($expectedContains, ArrayType::containsValue($haystack, $value, ArrayType::STRICT_TRUE));
-	}
-
-	public function testContainsValueLoose(): void
-	{
-		$haystack = [1, 2, 3];
-		Assert::assertTrue(ArrayType::containsValue($haystack, '2', ArrayType::STRICT_FALSE));
+		yield 'existing null value with integer index' => [
+			'haystack' => [1, 2, 3, null],
+			'key' => 3,
+			'value' => null,
+		];
 	}
 
 	/**
 	 * @return mixed[][]|\Generator
 	 */
-	public function containsValueNullDataProvider(): Generator
+	public function keyValueLooseDataProvider(): Generator
 	{
-		yield 'existing null value' => [
-			'haystack' => [1, 2, 3, null],
-			'value' => null,
-			'expectedContains' => true,
-		];
-
-		yield 'nonexistent null value' => [
+		yield 'existing integer value as numeric string' => [
 			'haystack' => [1, 2, 3],
-			'value' => null,
-			'expectedContains' => false,
+			'key' => 1,
+			'value' => '2',
 		];
 	}
 
 	/**
-	 * @dataProvider containsValueNullDataProvider
+	 * @return mixed[][]|\Generator
+	 */
+	public function valueNotFoundDataProvider(): Generator
+	{
+		yield 'nonexistent null value' => [
+			'haystack' => [1, 2, 3],
+			'value' => null,
+		];
+	}
+
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function containsValueWithStrictParameterDataProvider(): Generator
+	{
+		foreach ($this->keyValueStrictDataProvider() as $caseName => $caseData) {
+			yield $caseName . ' - STRICT_TRUE' => [
+				'haystack' => $caseData['haystack'],
+				'value' => $caseData['value'],
+				'strict' => ArrayType::STRICT_TRUE,
+				'expectedContainsValue' => true,
+			];
+			yield $caseName . ' - STRICT_FALSE' => [
+				'haystack' => $caseData['haystack'],
+				'value' => $caseData['value'],
+				'strict' => ArrayType::STRICT_FALSE,
+				'expectedContainsValue' => true,
+			];
+		}
+
+		foreach ($this->keyValueLooseDataProvider() as $caseName => $caseData) {
+			yield $caseName . ' - STRICT_TRUE' => [
+				'haystack' => $caseData['haystack'],
+				'value' => $caseData['value'],
+				'strict' => ArrayType::STRICT_TRUE,
+				'expectedContainsValue' => false,
+			];
+			yield $caseName . ' - STRICT_FALSE' => [
+				'haystack' => $caseData['haystack'],
+				'value' => $caseData['value'],
+				'strict' => ArrayType::STRICT_FALSE,
+				'expectedContainsValue' => true,
+			];
+		}
+
+		foreach ($this->valueNotFoundDataProvider() as $caseName => $caseData) {
+			yield $caseName . ' - STRICT_TRUE' => [
+				'haystack' => $caseData['haystack'],
+				'value' => $caseData['value'],
+				'strict' => ArrayType::STRICT_TRUE,
+				'expectedContainsValue' => false,
+			];
+			yield $caseName . ' - STRICT_FALSE' => [
+				'haystack' => $caseData['haystack'],
+				'value' => $caseData['value'],
+				'strict' => ArrayType::STRICT_FALSE,
+				'expectedContainsValue' => false,
+			];
+		}
+	}
+
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function containsValueDefaultDataProvider(): Generator
+	{
+		foreach ($this->containsValueWithStrictParameterDataProvider() as $caseName => $caseData) {
+			if ($caseData['strict'] === ArrayType::STRICT_TRUE) {
+				yield $caseName => [
+					'haystack' => $caseData['haystack'],
+					'value' => $caseData['value'],
+					'expectedContainsValue' => $caseData['expectedContainsValue'],
+				];
+			}
+		}
+	}
+
+	/**
+	 * @dataProvider containsValueDefaultDataProvider
 	 *
 	 * @param mixed[] $haystack
 	 * @param mixed $value
-	 * @param bool $expectedContains
+	 * @param bool $expectedContainsValue
 	 */
-	public function testContainsValueNull(
+	public function testContainsValueDefault(
 		array $haystack,
 		$value,
-		bool $expectedContains
+		bool $expectedContainsValue
 	): void
 	{
-		Assert::assertSame($expectedContains, ArrayType::containsValue($haystack, $value));
+		Assert::assertSame($expectedContainsValue, ArrayType::containsValue($haystack, $value));
+	}
+
+	/**
+	 * @dataProvider containsValueWithStrictParameterDataProvider
+	 *
+	 * @param mixed[] $haystack
+	 * @param mixed $value
+	 * @param bool $strict
+	 * @param bool $expectedContainsValue
+	 */
+	public function testContainsValueWithStrictParameter(
+		array $haystack,
+		$value,
+		bool $strict,
+		bool $expectedContainsValue
+	): void
+	{
+		Assert::assertSame($expectedContainsValue, ArrayType::containsValue($haystack, $value, $strict));
 	}
 
 	public function testContainsByCallback(): void

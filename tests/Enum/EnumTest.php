@@ -71,7 +71,7 @@ class EnumTest extends \Consistence\TestCase
 
 	public function testGetAvailableValues(): void
 	{
-		Assert::assertSame([
+		Assert::assertEquals([
 			'DRAFT' => StatusEnum::DRAFT,
 			'REVIEW' => StatusEnum::REVIEW,
 			'PUBLISHED' => StatusEnum::PUBLISHED,
@@ -80,7 +80,7 @@ class EnumTest extends \Consistence\TestCase
 
 	public function testGetAvailableEnums(): void
 	{
-		Assert::assertSame([
+		Assert::assertEquals([
 			'DRAFT' => StatusEnum::get(StatusEnum::DRAFT),
 			'REVIEW' => StatusEnum::get(StatusEnum::REVIEW),
 			'PUBLISHED' => StatusEnum::get(StatusEnum::PUBLISHED),

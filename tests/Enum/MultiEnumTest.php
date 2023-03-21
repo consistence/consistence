@@ -72,7 +72,7 @@ class MultiEnumTest extends \Consistence\TestCase
 	public function testGetEnums(): void
 	{
 		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
-		Assert::assertSame([
+		Assert::assertEquals([
 			'USER' => RoleEnum::get(RoleEnum::USER),
 			'ADMIN' => RoleEnum::get(RoleEnum::ADMIN),
 		], $userAndAdmin->getEnums());

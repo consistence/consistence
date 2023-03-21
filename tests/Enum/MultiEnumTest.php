@@ -584,17 +584,39 @@ class MultiEnumTest extends \PHPUnit\Framework\TestCase
 		}
 	}
 
-	public function testComparingDifferentEnums(): void
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function comparingDifferentEnumsDataProvider(): Generator
 	{
-		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
-		$foo = FooEnum::get(FooEnum::FOO);
+		yield 'two different MultiEnum classes' => [
+			'enum1' => RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN),
+			'enum2' => FooEnum::get(FooEnum::FOO),
+		];
+		yield 'MultiEnum class and Enum class' => [
+			'enum1' => RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN),
+			'enum2' => RoleEnum::get(RoleEnum::USER),
+		];
+	}
+
+	/**
+	 * @dataProvider comparingDifferentEnumsDataProvider
+	 *
+	 * @param \Consistence\Enum\Enum $enum1
+	 * @param \Consistence\Enum\Enum $enum2
+	 */
+	public function testComparingDifferentEnums(
+		Enum $enum1,
+		Enum $enum2
+	): void
+	{
 		try {
-			$userAndAdmin->equals($foo);
+			$enum1->equals($enum2);
 
 			Assert::fail('Exception expected');
 		} catch (\Consistence\Enum\OperationSupportedOnlyForSameEnumException $e) {
-			Assert::assertSame($userAndAdmin, $e->getExpected());
-			Assert::assertSame($foo, $e->getGiven());
+			Assert::assertSame($enum1, $e->getExpected());
+			Assert::assertSame($enum2, $e->getGiven());
 		}
 	}
 

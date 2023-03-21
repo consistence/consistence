@@ -13,48 +13,141 @@ class MultiEnumTest extends \PHPUnit\Framework\TestCase
 	/**
 	 * @return mixed[][]|\Generator
 	 */
-	public function validValueDataProvider(): Generator
+	public function validCaseDataProvider(): Generator
 	{
 		yield 'empty RolesEnum' => [
 			'multiEnumClassName' => RolesEnum::class,
 			'value' => 0,
+			'values' => [],
+			'singleEnumClassName' => RoleEnum::class,
+			'enums' => [],
 		];
 		yield 'RolesEnum, USER' => [
 			'multiEnumClassName' => RolesEnum::class,
 			'value' => 1,
+			'values' => [
+				'USER' => RoleEnum::USER,
+			],
+			'singleEnumClassName' => RoleEnum::class,
+			'enums' => [
+				'USER' => RoleEnum::get(RoleEnum::USER),
+			],
 		];
 		yield 'RolesEnum, EMPLOYEE' => [
 			'multiEnumClassName' => RolesEnum::class,
 			'value' => 2,
+			'values' => [
+				'EMPLOYEE' => RoleEnum::EMPLOYEE,
+			],
+			'singleEnumClassName' => RoleEnum::class,
+			'enums' => [
+				'EMPLOYEE' => RoleEnum::get(RoleEnum::EMPLOYEE),
+			],
 		];
 		yield 'RolesEnum, USER and EMPLOYEE' => [
 			'multiEnumClassName' => RolesEnum::class,
 			'value' => 3,
+			'values' => [
+				'USER' => RoleEnum::USER,
+				'EMPLOYEE' => RoleEnum::EMPLOYEE,
+			],
+			'singleEnumClassName' => RoleEnum::class,
+			'enums' => [
+				'USER' => RoleEnum::get(RoleEnum::USER),
+				'EMPLOYEE' => RoleEnum::get(RoleEnum::EMPLOYEE),
+			],
 		];
 		yield 'RolesEnum, ADMIN' => [
 			'multiEnumClassName' => RolesEnum::class,
 			'value' => 4,
+			'values' => [
+				'ADMIN' => RoleEnum::ADMIN,
+			],
+			'singleEnumClassName' => RoleEnum::class,
+			'enums' => [
+				'ADMIN' => RoleEnum::get(RoleEnum::ADMIN),
+			],
 		];
 		yield 'RolesEnum, USER and ADMIN' => [
 			'multiEnumClassName' => RolesEnum::class,
 			'value' => 5,
+			'values' => [
+				'USER' => RoleEnum::USER,
+				'ADMIN' => RoleEnum::ADMIN,
+			],
+			'singleEnumClassName' => RoleEnum::class,
+			'enums' => [
+				'USER' => RoleEnum::get(RoleEnum::USER),
+				'ADMIN' => RoleEnum::get(RoleEnum::ADMIN),
+			],
 		];
 		yield 'RolesEnum, EMPLOYEE and ADMIN' => [
 			'multiEnumClassName' => RolesEnum::class,
 			'value' => 6,
+			'values' => [
+				'EMPLOYEE' => RoleEnum::EMPLOYEE,
+				'ADMIN' => RoleEnum::ADMIN,
+			],
+			'singleEnumClassName' => RoleEnum::class,
+			'enums' => [
+				'EMPLOYEE' => RoleEnum::get(RoleEnum::EMPLOYEE),
+				'ADMIN' => RoleEnum::get(RoleEnum::ADMIN),
+			],
 		];
 		yield 'RolesEnum, USER and EMPLOYEE and ADMIN' => [
 			'multiEnumClassName' => RolesEnum::class,
 			'value' => 7,
+			'values' => [
+				'USER' => RoleEnum::USER,
+				'EMPLOYEE' => RoleEnum::EMPLOYEE,
+				'ADMIN' => RoleEnum::ADMIN,
+			],
+			'singleEnumClassName' => RoleEnum::class,
+			'enums' => [
+				'USER' => RoleEnum::get(RoleEnum::USER),
+				'EMPLOYEE' => RoleEnum::get(RoleEnum::EMPLOYEE),
+				'ADMIN' => RoleEnum::get(RoleEnum::ADMIN),
+			],
 		];
 		yield 'RolesEnum, EMPLOYEE as Enum constant' => [
 			'multiEnumClassName' => RolesEnum::class,
 			'value' => RoleEnum::EMPLOYEE,
+			'values' => [
+				'EMPLOYEE' => RoleEnum::EMPLOYEE,
+			],
+			'singleEnumClassName' => RoleEnum::class,
+			'enums' => [
+				'EMPLOYEE' => RoleEnum::get(RoleEnum::EMPLOYEE),
+			],
 		];
 		yield 'RolesEnum, USER and ADMIN as bitwise OR of Enum constants' => [
 			'multiEnumClassName' => RolesEnum::class,
 			'value' => RoleEnum::USER | RoleEnum::ADMIN,
+			'values' => [
+				'USER' => RoleEnum::USER,
+				'ADMIN' => RoleEnum::ADMIN,
+			],
+			'singleEnumClassName' => RoleEnum::class,
+			'enums' => [
+				'USER' => RoleEnum::get(RoleEnum::USER),
+				'ADMIN' => RoleEnum::get(RoleEnum::ADMIN),
+			],
 		];
+	}
+
+	/**
+	 * @dataProvider validCaseDataProvider
+	 *
+	 * @return mixed[][]|\Generator
+	 */
+	public function validValueDataProvider(): Generator
+	{
+		foreach ($this->validCaseDataProvider() as $caseName => $caseData) {
+			yield $caseName => [
+				'multiEnumClassName' => $caseData['multiEnumClassName'],
+				'value' => $caseData['value'],
+			];
+		}
 	}
 
 	/**
@@ -72,28 +165,105 @@ class MultiEnumTest extends \PHPUnit\Framework\TestCase
 		Assert::assertInstanceOf($multiEnumClassName, $multiEnum);
 	}
 
-	public function testGetMulti(): void
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function validValuesDataProvider(): Generator
 	{
-		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
-		Assert::assertInstanceOf(RolesEnum::class, $userAndAdmin);
+		foreach ($this->validCaseDataProvider() as $caseName => $caseData) {
+			yield $caseName => [
+				'multiEnumClassName' => $caseData['multiEnumClassName'],
+				'values' => array_values($caseData['values']),
+			];
+		}
 	}
 
-	public function testGetMultiByArray(): void
+	/**
+	 * @dataProvider validValuesDataProvider
+	 *
+	 * @param string $multiEnumClassName
+	 * @param mixed[] $values
+	 */
+	public function testGetMulti(
+		string $multiEnumClassName,
+		array $values
+	): void
 	{
-		$userAndAdmin = RolesEnum::getMultiByArray([RoleEnum::USER, RoleEnum::ADMIN]);
-		Assert::assertInstanceOf(RolesEnum::class, $userAndAdmin);
+		$multiEnum = $multiEnumClassName::getMulti(...$values);
+		Assert::assertInstanceOf($multiEnumClassName, $multiEnum);
 	}
 
-	public function testGetMultiByEnum(): void
+	/**
+	 * @dataProvider validValuesDataProvider
+	 *
+	 * @param string $multiEnumClassName
+	 * @param mixed[] $values
+	 */
+	public function testGetMultiByArray(
+		string $multiEnumClassName,
+		array $values
+	): void
 	{
-		$user = RolesEnum::getMultiByEnum(RoleEnum::get(RoleEnum::USER));
-		Assert::assertInstanceOf(RolesEnum::class, $user);
+		$multiEnum = $multiEnumClassName::getMultiByArray($values);
+		Assert::assertInstanceOf($multiEnumClassName, $multiEnum);
 	}
 
-	public function testGetMultiByEnums(): void
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function getMultiByEnumDataProvider(): Generator
 	{
-		$userAndAdmin = RolesEnum::getMultiByEnums([RoleEnum::get(RoleEnum::USER), RoleEnum::get(RoleEnum::ADMIN)]);
-		Assert::assertInstanceOf(RolesEnum::class, $userAndAdmin);
+		foreach ($this->validCaseDataProvider() as $caseName => $caseData) {
+			if (count($caseData['enums']) === 1) {
+				yield $caseName => [
+					'multiEnumClassName' => $caseData['multiEnumClassName'],
+					'enum' => array_values($caseData['enums'])[0],
+				];
+			}
+		}
+	}
+
+	/**
+	 * @dataProvider getMultiByEnumDataProvider
+	 *
+	 * @param string $multiEnumClassName
+	 * @param \Consistence\Enum\Enum $enum
+	 */
+	public function testGetMultiByEnum(
+		string $multiEnumClassName,
+		Enum $enum
+	): void
+	{
+		$multiEnum = $multiEnumClassName::getMultiByEnum($enum);
+		Assert::assertInstanceOf($multiEnumClassName, $multiEnum);
+	}
+
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function getMultiByEnumsDataProvider(): Generator
+	{
+		foreach ($this->validCaseDataProvider() as $caseName => $caseData) {
+			yield $caseName => [
+				'multiEnumClassName' => $caseData['multiEnumClassName'],
+				'enums' => $caseData['enums'],
+			];
+		}
+	}
+
+	/**
+	 * @dataProvider getMultiByEnumsDataProvider
+	 *
+	 * @param string $multiEnumClassName
+	 * @param \Consistence\Enum\Enum[] $enums
+	 */
+	public function testGetMultiByEnums(
+		string $multiEnumClassName,
+		array $enums
+	): void
+	{
+		$multiEnum = $multiEnumClassName::getMultiByEnums($enums);
+		Assert::assertInstanceOf($multiEnumClassName, $multiEnum);
 	}
 
 	/**
@@ -111,42 +281,149 @@ class MultiEnumTest extends \PHPUnit\Framework\TestCase
 		Assert::assertSame($value, $multiEnum->getValue());
 	}
 
-	public function testGetMultiValue(): void
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function getMultiValueDataProvider(): Generator
 	{
-		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
-		Assert::assertSame(RoleEnum::USER | RoleEnum::ADMIN, $userAndAdmin->getValue());
-	}
-
-	public function testGetMultiByArrayValue(): void
-	{
-		$userAndAdmin = RolesEnum::getMultiByArray([RoleEnum::USER, RoleEnum::ADMIN]);
-		Assert::assertSame(RoleEnum::USER | RoleEnum::ADMIN, $userAndAdmin->getValue());
-	}
-
-	public function testGetEnums(): void
-	{
-		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
-		Assert::assertEquals([
-			'USER' => RoleEnum::get(RoleEnum::USER),
-			'ADMIN' => RoleEnum::get(RoleEnum::ADMIN),
-		], $userAndAdmin->getEnums());
-	}
-
-	public function testIterateTroughEnums(): void
-	{
-		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
-		foreach ($userAndAdmin as $role) {
-			Assert::assertInstanceOf(RoleEnum::class, $role);
+		foreach ($this->validCaseDataProvider() as $caseName => $caseData) {
+			yield $caseName => [
+				'multiEnumClassName' => $caseData['multiEnumClassName'],
+				'values' => array_values($caseData['values']),
+				'expectedValue' => $caseData['value'],
+			];
 		}
 	}
 
-	public function testGetValues(): void
+	/**
+	 * @dataProvider getMultiValueDataProvider
+	 *
+	 * @param string $multiEnumClassName
+	 * @param mixed[] $values
+	 * @param mixed $expectedValue
+	 */
+	public function testGetMultiValue(
+		string $multiEnumClassName,
+		array $values,
+		$expectedValue
+	): void
 	{
-		$userAndAdmin = RolesEnum::getMulti(RoleEnum::USER, RoleEnum::ADMIN);
-		Assert::assertEquals([
-			'USER' => RoleEnum::USER,
-			'ADMIN' => RoleEnum::ADMIN,
-		], $userAndAdmin->getValues());
+		$multiEnum = $multiEnumClassName::getMulti(...$values);
+		Assert::assertSame($expectedValue, $multiEnum->getValue());
+	}
+
+	/**
+	 * @dataProvider getMultiValueDataProvider
+	 *
+	 * @param string $multiEnumClassName
+	 * @param mixed[] $values
+	 * @param mixed $expectedValue
+	 */
+	public function testGetMultiByArrayValue(
+		string $multiEnumClassName,
+		array $values,
+		$expectedValue
+	): void
+	{
+		$multiEnum = $multiEnumClassName::getMultiByArray($values);
+		Assert::assertSame($expectedValue, $multiEnum->getValue());
+	}
+
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function getEnumsDataProvider(): Generator
+	{
+		foreach ($this->validCaseDataProvider() as $caseName => $caseData) {
+			yield $caseName => [
+				'multiEnumClassName' => $caseData['multiEnumClassName'],
+				'values' => array_values($caseData['values']),
+				'expectedEnums' => $caseData['enums'],
+			];
+		}
+	}
+
+	/**
+	 * @dataProvider getEnumsDataProvider
+	 *
+	 * @param string $multiEnumClassName
+	 * @param mixed[] $values
+	 * @param \Consistence\Enum\Enum[] $expectedEnums
+	 */
+	public function testGetEnums(
+		string $multiEnumClassName,
+		array $values,
+		array $expectedEnums
+	): void
+	{
+		$multiEnum = $multiEnumClassName::getMulti(...$values);
+		Assert::assertEquals($expectedEnums, $multiEnum->getEnums());
+	}
+
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function iterateThroughEnumsDataProvider(): Generator
+	{
+		foreach ($this->validCaseDataProvider() as $caseName => $caseData) {
+			if (count($caseData['values']) > 0) {
+				yield $caseName => [
+					'multiEnumClassName' => $caseData['multiEnumClassName'],
+					'singleEnumClassName' => $caseData['singleEnumClassName'],
+					'values' => array_values($caseData['values']),
+				];
+			}
+		}
+	}
+
+	/**
+	 * @dataProvider iterateThroughEnumsDataProvider
+	 *
+	 * @param string $multiEnumClassName
+	 * @param string $enumClassName
+	 * @param mixed[] $values
+	 */
+	public function testIterateTroughEnums(
+		string $multiEnumClassName,
+		string $enumClassName,
+		array $values
+	): void
+	{
+		$multiEnum = $multiEnumClassName::getMulti(...$values);
+		foreach ($multiEnum as $enum) {
+			Assert::assertInstanceOf($enumClassName, $enum);
+		}
+	}
+
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function getValuesDataProvider(): Generator
+	{
+		foreach ($this->validCaseDataProvider() as $caseName => $caseData) {
+			yield $caseName => [
+				'multiEnumClassName' => $caseData['multiEnumClassName'],
+				'values' => array_values($caseData['values']),
+				'expectedValues' => $caseData['values'],
+			];
+		}
+	}
+
+	/**
+	 * @dataProvider getValuesDataProvider
+	 *
+	 * @param string $multiEnumClassName
+	 * @param mixed[] $values
+	 * @param mixed[] $expectedValues
+	 */
+	public function testGetValues(
+		string $multiEnumClassName,
+		array $values,
+		array $expectedValues
+	): void
+	{
+		$userAndAdmin = $multiEnumClassName::getMulti(...$values);
+		Assert::assertEquals($expectedValues, $userAndAdmin->getValues());
 	}
 
 	public function testSameInstances(): void

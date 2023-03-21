@@ -729,4 +729,31 @@ class MultiEnumTest extends \PHPUnit\Framework\TestCase
 		}
 	}
 
+	/**
+	 * This test is here only because code executed in data providers is not counted as covered and since Enum
+	 * is implemented using flyweight pattern, each enum type's initialization can be done only once. Also, data
+	 * providers are executed before all tests, so the initialization of every enum used in data providers will always
+	 * be done there.
+	 *
+	 * This test ensures that there is at least one enum type constructed outside of data provider and therefore covered.
+	 * The enum type used here should not be used for any other test.
+	 */
+	public function testGetWithoutDataProvider(): void
+	{
+		$enum = CoverageMultiEnum::get(CoverageMultiEnum::COVERAGE);
+		Assert::assertInstanceOf(CoverageMultiEnum::class, $enum);
+	}
+
+	/**
+	 * @see self::testGetWithoutDataProvider()
+	 *
+	 * For MultiEnum there is implementation difference in construction of mapped and unmapped, so this test covers
+	 * mapped variant.
+	 */
+	public function testGetMappedWithoutDataProvider(): void
+	{
+		$enum = CoverageMappedMultiEnum::get(CoverageEnum::COVERAGE);
+		Assert::assertInstanceOf(CoverageMappedMultiEnum::class, $enum);
+	}
+
 }

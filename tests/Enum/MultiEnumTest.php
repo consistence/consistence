@@ -96,16 +96,19 @@ class MultiEnumTest extends \PHPUnit\Framework\TestCase
 		Assert::assertInstanceOf(RolesEnum::class, $userAndAdmin);
 	}
 
-	public function testGetValue(): void
+	/**
+	 * @dataProvider validValueDataProvider
+	 *
+	 * @param string $multiEnumClassName
+	 * @param mixed $value
+	 */
+	public function testGetValue(
+		string $multiEnumClassName,
+		$value
+	): void
 	{
-		$userAndAdmin = RolesEnum::get(RoleEnum::USER | RoleEnum::ADMIN);
-		Assert::assertSame(RoleEnum::USER | RoleEnum::ADMIN, $userAndAdmin->getValue());
-	}
-
-	public function testGetValueSingle(): void
-	{
-		$employee = RolesEnum::get(RoleEnum::EMPLOYEE);
-		Assert::assertSame(RoleEnum::EMPLOYEE, $employee->getValue());
+		$multiEnum = $multiEnumClassName::get($value);
+		Assert::assertSame($value, $multiEnum->getValue());
 	}
 
 	public function testGetMultiValue(): void

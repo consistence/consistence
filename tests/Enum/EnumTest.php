@@ -349,11 +349,20 @@ class EnumTest extends \PHPUnit\Framework\TestCase
 		}
 	}
 
-	public function testCheckValue(): void
+	/**
+	 * @dataProvider validEnumValueDataProvider
+	 *
+	 * @param string $enumClassName
+	 * @param mixed $value
+	 */
+	public function testCheckValue(
+		string $enumClassName,
+		$value
+	): void
 	{
 		$this->expectNotToPerformAssertions();
 
-		StatusEnum::checkValue(StatusEnum::DRAFT);
+		$enumClassName::checkValue($value);
 	}
 
 	/**

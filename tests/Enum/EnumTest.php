@@ -265,27 +265,69 @@ class EnumTest extends \PHPUnit\Framework\TestCase
 	public function invalidEnumValueDataProvider(): Generator
 	{
 		yield 'integer, which is not in available values' => [
+			'enumClassName' => StatusEnum::class,
 			'value' => 0,
+			'expectedAvailableValues' => [
+				'DRAFT' => StatusEnum::DRAFT,
+				'REVIEW' => StatusEnum::REVIEW,
+				'PUBLISHED' => StatusEnum::PUBLISHED,
+			],
 		];
-		yield 'float' => [
+		yield 'float, which is not in available values' => [
+			'enumClassName' => StatusEnum::class,
 			'value' => 1.5,
+			'expectedAvailableValues' => [
+				'DRAFT' => StatusEnum::DRAFT,
+				'REVIEW' => StatusEnum::REVIEW,
+				'PUBLISHED' => StatusEnum::PUBLISHED,
+			],
 		];
-		yield 'false' => [
+		yield 'false, which is not in available values' => [
+			'enumClassName' => StatusEnum::class,
 			'value' => false,
+			'expectedAvailableValues' => [
+				'DRAFT' => StatusEnum::DRAFT,
+				'REVIEW' => StatusEnum::REVIEW,
+				'PUBLISHED' => StatusEnum::PUBLISHED,
+			],
 		];
-		yield 'true' => [
+		yield 'true, which is not in available values' => [
+			'enumClassName' => StatusEnum::class,
 			'value' => true,
+			'expectedAvailableValues' => [
+				'DRAFT' => StatusEnum::DRAFT,
+				'REVIEW' => StatusEnum::REVIEW,
+				'PUBLISHED' => StatusEnum::PUBLISHED,
+			],
 		];
-		yield 'null' => [
+		yield 'null, which is not in available values' => [
+			'enumClassName' => StatusEnum::class,
 			'value' => null,
+			'expectedAvailableValues' => [
+				'DRAFT' => StatusEnum::DRAFT,
+				'REVIEW' => StatusEnum::REVIEW,
+				'PUBLISHED' => StatusEnum::PUBLISHED,
+			],
 		];
-		yield 'string' => [
+		yield 'string, which is not in available values' => [
+			'enumClassName' => StatusEnum::class,
 			'value' => 'foo',
+			'expectedAvailableValues' => [
+				'DRAFT' => StatusEnum::DRAFT,
+				'REVIEW' => StatusEnum::REVIEW,
+				'PUBLISHED' => StatusEnum::PUBLISHED,
+			],
 		];
 
 		foreach ($this->invalidTypeDataProvider() as $caseName => $caseData) {
 			yield $caseName => [
+				'enumClassName' => StatusEnum::class,
 				'value' => $caseData['value'],
+				'expectedAvailableValues' => [
+					'DRAFT' => StatusEnum::DRAFT,
+					'REVIEW' => StatusEnum::REVIEW,
+					'PUBLISHED' => StatusEnum::PUBLISHED,
+				],
 			];
 		}
 	}
@@ -305,7 +347,7 @@ class EnumTest extends \PHPUnit\Framework\TestCase
 
 		foreach ($this->invalidEnumValueDataProvider() as $caseName => $caseData) {
 			yield $caseName => [
-				'enumClassName' => StatusEnum::class,
+				'enumClassName' => $caseData['enumClassName'],
 				'value' => $caseData['value'],
 				'expectedIsValidValue' => false,
 			];
@@ -331,21 +373,23 @@ class EnumTest extends \PHPUnit\Framework\TestCase
 	/**
 	 * @dataProvider invalidEnumValueDataProvider
 	 *
+	 * @param string $enumClassName
 	 * @param mixed $value
+	 * @param mixed[] $expectedAvailableValues
 	 */
-	public function testInvalidEnumValue($value): void
+	public function testInvalidEnumValue(
+		string $enumClassName,
+		$value,
+		array $expectedAvailableValues
+	): void
 	{
 		try {
-			StatusEnum::get($value);
+			$enumClassName::get($value);
 			Assert::fail('Exception expected');
 		} catch (\Consistence\Enum\InvalidEnumValueException $e) {
 			Assert::assertSame($value, $e->getValue());
-			Assert::assertEquals([
-				'DRAFT' => StatusEnum::DRAFT,
-				'REVIEW' => StatusEnum::REVIEW,
-				'PUBLISHED' => StatusEnum::PUBLISHED,
-			], $e->getAvailableValues());
-			Assert::assertSame(StatusEnum::class, $e->getEnumClassName());
+			Assert::assertEquals($expectedAvailableValues, $e->getAvailableValues());
+			Assert::assertSame($enumClassName, $e->getEnumClassName());
 		}
 	}
 
@@ -368,21 +412,23 @@ class EnumTest extends \PHPUnit\Framework\TestCase
 	/**
 	 * @dataProvider invalidEnumValueDataProvider
 	 *
+	 * @param string $enumClassName
 	 * @param mixed $value
+	 * @param mixed[] $expectedAvailableValues
 	 */
-	public function testCheckInvalidValue($value): void
+	public function testCheckInvalidValue(
+		string $enumClassName,
+		$value,
+		array $expectedAvailableValues
+	): void
 	{
 		try {
-			StatusEnum::checkValue($value);
+			$enumClassName::checkValue($value);
 			Assert::fail('Exception expected');
 		} catch (\Consistence\Enum\InvalidEnumValueException $e) {
 			Assert::assertSame($value, $e->getValue());
-			Assert::assertEquals([
-				'DRAFT' => StatusEnum::DRAFT,
-				'REVIEW' => StatusEnum::REVIEW,
-				'PUBLISHED' => StatusEnum::PUBLISHED,
-			], $e->getAvailableValues());
-			Assert::assertSame(StatusEnum::class, $e->getEnumClassName());
+			Assert::assertEquals($expectedAvailableValues, $e->getAvailableValues());
+			Assert::assertSame($enumClassName, $e->getEnumClassName());
 		}
 	}
 

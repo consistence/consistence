@@ -44,7 +44,7 @@ class MathTest extends \Consistence\TestCase
 	/**
 	 * @return mixed[][]
 	 */
-	public function powersOfTwoProvider(): array
+	public function powerOfTwoProvider(): array
 	{
 		return [
 			[-2, false],
@@ -63,7 +63,7 @@ class MathTest extends \Consistence\TestCase
 	}
 
 	/**
-	 * @dataProvider powersOfTwoProvider
+	 * @dataProvider powerOfTwoProvider
 	 *
 	 * @param int $value
 	 * @param bool $result

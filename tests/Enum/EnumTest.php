@@ -99,7 +99,7 @@ class EnumTest extends \Consistence\TestCase
 	/**
 	 * @return mixed[][]
 	 */
-	public function invalidTypesProvider(): array
+	public function invalidTypeProvider(): array
 	{
 		return [
 			[[]],
@@ -114,7 +114,7 @@ class EnumTest extends \Consistence\TestCase
 	/**
 	 * @return mixed[][]
 	 */
-	public function invalidEnumValuesProvider(): array
+	public function invalidEnumValueProvider(): array
 	{
 		return array_merge([
 			[0],
@@ -122,11 +122,11 @@ class EnumTest extends \Consistence\TestCase
 			[false],
 			[true],
 			[null],
-		], array_values($this->invalidTypesProvider()));
+		], array_values($this->invalidTypeProvider()));
 	}
 
 	/**
-	 * @dataProvider invalidEnumValuesProvider
+	 * @dataProvider invalidEnumValueProvider
 	 *
 	 * @param mixed $value
 	 */
@@ -207,7 +207,7 @@ class EnumTest extends \Consistence\TestCase
 	/**
 	 * @return mixed[][]
 	 */
-	public function validTypesProvider(): array
+	public function validTypeProvider(): array
 	{
 		return ArrayType::mapValuesByCallback(TypeEnum::getAvailableValues(), function ($value): array {
 			return [$value];
@@ -215,7 +215,7 @@ class EnumTest extends \Consistence\TestCase
 	}
 
 	/**
-	 * @dataProvider validTypesProvider
+	 * @dataProvider validTypeProvider
 	 *
 	 * @param mixed $value
 	 */

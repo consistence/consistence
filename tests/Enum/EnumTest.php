@@ -11,16 +11,65 @@ use PHPUnit\Framework\Assert;
 class EnumTest extends \PHPUnit\Framework\TestCase
 {
 
-	public function testGet(): void
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function validEnumValueDataProvider(): Generator
 	{
-		$review = StatusEnum::get(StatusEnum::REVIEW);
-		Assert::assertInstanceOf(StatusEnum::class, $review);
+		yield 'StatusEnum::REVIEW' => [
+			'enumClassName' => StatusEnum::class,
+			'value' => StatusEnum::REVIEW,
+		];
+		yield 'TypeEnum::INTEGER' => [
+			'enumClassName' => TypeEnum::class,
+			'value' => TypeEnum::INTEGER,
+		];
+		yield 'TypeEnum::STRING' => [
+			'enumClassName' => TypeEnum::class,
+			'value' => TypeEnum::STRING,
+		];
+		yield 'TypeEnum::FLOAT' => [
+			'enumClassName' => TypeEnum::class,
+			'value' => TypeEnum::FLOAT,
+		];
+		yield 'TypeEnum::BOOLEAN' => [
+			'enumClassName' => TypeEnum::class,
+			'value' => TypeEnum::BOOLEAN,
+		];
+		yield 'TypeEnum::NULL' => [
+			'enumClassName' => TypeEnum::class,
+			'value' => TypeEnum::NULL,
+		];
 	}
 
-	public function testGetValue(): void
+	/**
+	 * @dataProvider validEnumValueDataProvider
+	 *
+	 * @param string $enumClassName
+	 * @param mixed $value
+	 */
+	public function testGet(
+		string $enumClassName,
+		$value
+	): void
 	{
-		$review = StatusEnum::get(StatusEnum::REVIEW);
-		Assert::assertSame(StatusEnum::REVIEW, $review->getValue());
+		$enum = $enumClassName::get($value);
+		Assert::assertInstanceOf($enumClassName, $enum);
+	}
+
+	/**
+	 * @dataProvider validEnumValueDataProvider
+	 *
+	 * @param string $enumClassName
+	 * @param mixed $value
+	 */
+	public function testGetValue(
+		string $enumClassName,
+		$value
+	): void
+	{
+		$enum = $enumClassName::get($value);
+		Assert::assertSame($value, $enum->getValue());
 	}
 
 	public function testSameInstances(): void
@@ -237,40 +286,6 @@ class EnumTest extends \PHPUnit\Framework\TestCase
 				'PUBLISHED' => StatusEnum::PUBLISHED,
 			], $e->getAvailableValues());
 		}
-	}
-
-	/**
-	 * @return mixed[][]|\Generator
-	 */
-	public function validTypeDataProvider(): Generator
-	{
-		yield 'integer' => [
-			'value' => TypeEnum::INTEGER,
-		];
-		yield 'string' => [
-			'value' => TypeEnum::STRING,
-		];
-		yield 'float' => [
-			'value' => TypeEnum::FLOAT,
-		];
-		yield 'boolean' => [
-			'value' => TypeEnum::BOOLEAN,
-		];
-		yield 'null' => [
-			'value' => TypeEnum::NULL,
-		];
-	}
-
-	/**
-	 * @dataProvider validTypeDataProvider
-	 *
-	 * @param mixed $value
-	 */
-	public function testValidTypes($value): void
-	{
-		$enum = TypeEnum::get($value);
-		Assert::assertInstanceOf(TypeEnum::class, $enum);
-		Assert::assertSame($enum->getValue(), $value);
 	}
 
 	public function testDuplicateSpecifiedValues(): void

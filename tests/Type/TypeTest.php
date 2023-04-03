@@ -43,7 +43,7 @@ class TypeTest extends \Consistence\TestCase
 	/**
 	 * @return mixed[][]
 	 */
-	public function typeChecksProvider(): array
+	public function hasTypeProvider(): array
 	{
 		return array_merge(
 			$this->typesProvider(),
@@ -153,7 +153,7 @@ class TypeTest extends \Consistence\TestCase
 	}
 
 	/**
-	 * @dataProvider typeChecksProvider
+	 * @dataProvider hasTypeProvider
 	 *
 	 * @param mixed $value
 	 * @param string $expectedTypes

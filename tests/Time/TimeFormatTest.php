@@ -253,27 +253,49 @@ class TimeFormatTest extends \PHPUnit\Framework\TestCase
 	}
 
 	/**
-	 * @dataProvider validTimeDataProvider
-	 *
-	 * @param string $format
-	 * @param string $timeString
+	 * @return mixed[][]|\Generator
 	 */
-	public function testValidTimes(string $format, string $timeString): void
+	public function isValidTimeDataProvider(): Generator
 	{
-		Assert::assertTrue(TimeFormat::isValidTime($format, $timeString));
+		foreach ($this->validTimeDataProvider() as $caseName => $caseData) {
+			yield 'valid time, ' . $caseName => [
+				'format' => $caseData['format'],
+				'timeString' => $caseData['timeString'],
+				'expectedIsValidTime' => true,
+			];
+		}
+
+		foreach ($this->invalidTimeDataProvider() as $caseName => $caseData) {
+			yield 'invalid time, ' . $caseName => [
+				'format' => $caseData['format'],
+				'timeString' => $caseData['timeString'],
+				'expectedIsValidTime' => false,
+			];
+		}
 	}
 
 	/**
-	 * @dataProvider invalidTimeDataProvider
+	 * @dataProvider isValidTimeDataProvider
 	 *
 	 * @param string $format
 	 * @param string $timeString
+	 * @param bool $expectedIsValidTime
 	 */
-	public function testInvalidTimes(string $format, string $timeString): void
+	public function testIsValidTime(
+		string $format,
+		string $timeString,
+		bool $expectedIsValidTime
+	): void
 	{
-		Assert::assertFalse(
+		Assert::assertSame(
+			$expectedIsValidTime,
 			TimeFormat::isValidTime($format, $timeString),
-			sprintf('Expected that time %s given for format %s is invalid', $timeString, $format)
+			sprintf(
+				'Expected that time %s given for format %s is %s',
+				$timeString,
+				$format,
+				$expectedIsValidTime ? 'valid' : 'invalid'
+			)
 		);
 	}
 

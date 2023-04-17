@@ -20,7 +20,7 @@ jobs:
                 uses: 'actions/checkout@v3.3.0'
             -
                 name: 'Setup PHP ${{ env.CONSISTENCE_PHP_VERSION }}'
-                uses: 'shivammathur/setup-php@2.24.0'
+                uses: 'shivammathur/setup-php@2.25.0'
                 with:
                      php-version: '${{ env.CONSISTENCE_PHP_VERSION }}'
                      coverage: 'none'
@@ -55,7 +55,7 @@ jobs:
                 uses: 'actions/checkout@v3.3.0'
             -
                 name: 'Setup PHP ${{ matrix.php-version }}'
-                uses: 'shivammathur/setup-php@2.24.0'
+                uses: 'shivammathur/setup-php@2.25.0'
                 with:
                     php-version: '${{ matrix.php-version }}'
                     coverage: 'none'
@@ -82,7 +82,7 @@ jobs:
                 uses: 'actions/checkout@v3.3.0'
             -
                 name: 'Setup PHP ${{ env.CONSISTENCE_PHP_VERSION }}'
-                uses: 'shivammathur/setup-php@2.24.0'
+                uses: 'shivammathur/setup-php@2.25.0'
                 with:
                     php-version: '${{ env.CONSISTENCE_PHP_VERSION }}'
                     coverage: 'none'
@@ -110,7 +110,7 @@ jobs:
                 uses: 'actions/checkout@v3.3.0'
             -
                 name: 'Setup PHP ${{ env.CONSISTENCE_PHP_VERSION }}'
-                uses: 'shivammathur/setup-php@2.24.0'
+                uses: 'shivammathur/setup-php@2.25.0'
                 with:
                     php-version: '${{ env.CONSISTENCE_PHP_VERSION }}'
                     coverage: 'none'
@@ -148,7 +148,7 @@ jobs:
                 uses: 'actions/checkout@v3.3.0'
             -
                 name: 'Setup PHP ${{ matrix.php-version }}'
-                uses: 'shivammathur/setup-php@2.24.0'
+                uses: 'shivammathur/setup-php@2.25.0'
                 with:
                     php-version: '${{ matrix.php-version }}'
                     coverage: 'xdebug'

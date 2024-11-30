@@ -4,28 +4,13 @@ declare(strict_types = 1);
 
 namespace Consistence;
 
-class ObjectPrototypeTest extends \Consistence\TestCase
+class ObjectPrototypeTest extends \PHPUnit\Framework\TestCase
 {
 
-	/**
-	 * @return \Consistence\ObjectPrototype[][]
-	 */
-	public function consistenceObjectPrototypeProvider(): array
+	public function testMagicCall(): void
 	{
-		return [
-			[
-				new ConsistenceObjectPrototypeMock(),
-			],
-		];
-	}
+		$object = new ConsistenceObjectPrototypeMock();
 
-	/**
-	 * @dataProvider consistenceObjectPrototypeProvider
-	 *
-	 * @param \Consistence\ObjectPrototype $object
-	 */
-	public function testMagicCall(ObjectPrototype $object): void
-	{
 		$this->expectException(\Consistence\UndefinedMethodException::class);
 		$this->expectExceptionMessage('ConsistenceObjectPrototypeMock::getFoo()');
 
@@ -40,52 +25,40 @@ class ObjectPrototypeTest extends \Consistence\TestCase
 		ConsistenceObjectPrototypeMock::doStatic();
 	}
 
-	/**
-	 * @dataProvider consistenceObjectPrototypeProvider
-	 *
-	 * @param \Consistence\ObjectPrototype $object
-	 */
-	public function testMagicGet(ObjectPrototype $object): void
+	public function testMagicGet(): void
 	{
+		$object = new ConsistenceObjectPrototypeMock();
+
 		$this->expectException(\Consistence\UndefinedPropertyException::class);
 		$this->expectExceptionMessage('ConsistenceObjectPrototypeMock::$foo');
 
 		$object->foo;
 	}
 
-	/**
-	 * @dataProvider consistenceObjectPrototypeProvider
-	 *
-	 * @param \Consistence\ObjectPrototype $object
-	 */
-	public function testMagicSet(ObjectPrototype $object): void
+	public function testMagicSet(): void
 	{
+		$object = new ConsistenceObjectPrototypeMock();
+
 		$this->expectException(\Consistence\UndefinedPropertyException::class);
 		$this->expectExceptionMessage('ConsistenceObjectPrototypeMock::$foo');
 
 		$object->foo = 'bar';
 	}
 
-	/**
-	 * @dataProvider consistenceObjectPrototypeProvider
-	 *
-	 * @param \Consistence\ObjectPrototype $object
-	 */
-	public function testMagicIsset(ObjectPrototype $object): void
+	public function testMagicIsset(): void
 	{
+		$object = new ConsistenceObjectPrototypeMock();
+
 		$this->expectException(\Consistence\UndefinedPropertyException::class);
 		$this->expectExceptionMessage('ConsistenceObjectPrototypeMock::$foo');
 
 		isset($object->foo);
 	}
 
-	/**
-	 * @dataProvider consistenceObjectPrototypeProvider
-	 *
-	 * @param \Consistence\ObjectPrototype $object
-	 */
-	public function testMagicUnset(ObjectPrototype $object): void
+	public function testMagicUnset(): void
 	{
+		$object = new ConsistenceObjectPrototypeMock();
+
 		$this->expectException(\Consistence\UndefinedPropertyException::class);
 		$this->expectExceptionMessage('ConsistenceObjectPrototypeMock::$foo');
 

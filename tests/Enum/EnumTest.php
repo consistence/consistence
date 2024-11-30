@@ -4,168 +4,431 @@ declare(strict_types = 1);
 
 namespace Consistence\Enum;
 
-use Consistence\Type\ArrayType\ArrayType;
 use DateTimeImmutable;
+use Generator;
+use PHPUnit\Framework\Assert;
 
-class EnumTest extends \Consistence\TestCase
+class EnumTest extends \PHPUnit\Framework\TestCase
 {
 
-	public function testGet(): void
-	{
-		$review = StatusEnum::get(StatusEnum::REVIEW);
-		$this->assertInstanceOf(StatusEnum::class, $review);
-	}
-
-	public function testGetValue(): void
-	{
-		$review = StatusEnum::get(StatusEnum::REVIEW);
-		$this->assertSame(StatusEnum::REVIEW, $review->getValue());
-	}
-
-	public function testSameInstances(): void
-	{
-		$review1 = StatusEnum::get(StatusEnum::REVIEW);
-		$review2 = StatusEnum::get(StatusEnum::REVIEW);
-
-		$this->assertSame($review1, $review2);
-	}
-
-	public function testDifferentInstances(): void
-	{
-		$review = StatusEnum::get(StatusEnum::REVIEW);
-		$draft = StatusEnum::get(StatusEnum::DRAFT);
-
-		$this->assertNotSame($review, $draft);
-	}
-
-	public function testEquals(): void
-	{
-		$review1 = StatusEnum::get(StatusEnum::REVIEW);
-		$review2 = StatusEnum::get(StatusEnum::REVIEW);
-
-		$this->assertTrue($review1->equals($review2));
-	}
-
-	public function testNotEquals(): void
-	{
-		$review = StatusEnum::get(StatusEnum::REVIEW);
-		$draft = StatusEnum::get(StatusEnum::DRAFT);
-
-		$this->assertFalse($review->equals($draft));
-	}
-
-	public function testEqualsValue(): void
-	{
-		$review = StatusEnum::get(StatusEnum::REVIEW);
-
-		$this->assertTrue($review->equalsValue(StatusEnum::REVIEW));
-	}
-
-	public function testNotEqualsValue(): void
-	{
-		$review = StatusEnum::get(StatusEnum::REVIEW);
-
-		$this->assertFalse($review->equalsValue(StatusEnum::DRAFT));
-	}
-
-	public function testGetAvailableValues(): void
-	{
-		$this->assertEquals([
-			'DRAFT' => StatusEnum::DRAFT,
-			'REVIEW' => StatusEnum::REVIEW,
-			'PUBLISHED' => StatusEnum::PUBLISHED,
-		], StatusEnum::getAvailableValues());
-	}
-
-	public function testGetAvailableEnums(): void
-	{
-		$this->assertEquals([
-			'DRAFT' => StatusEnum::get(StatusEnum::DRAFT),
-			'REVIEW' => StatusEnum::get(StatusEnum::REVIEW),
-			'PUBLISHED' => StatusEnum::get(StatusEnum::PUBLISHED),
-		], StatusEnum::getAvailableEnums());
-	}
-
-	public function testIsValidValue(): void
-	{
-		$this->assertTrue(StatusEnum::isValidValue(StatusEnum::DRAFT));
-	}
-
-	public function testNotValidValue(): void
-	{
-		$this->assertFalse(StatusEnum::isValidValue(0));
-	}
-
 	/**
-	 * @return mixed[][]
+	 * @return mixed[][]|\Generator
 	 */
-	public function invalidTypesProvider(): array
+	public function validEnumValueDataProvider(): Generator
 	{
-		return [
-			[[]],
-			[new DateTimeImmutable()],
-			[static function (): void {
-				return;
-			}],
-			[fopen(__DIR__, 'r')],
+		yield 'StatusEnum::DRAFT' => [
+			'enumClassName' => StatusEnum::class,
+			'value' => StatusEnum::DRAFT,
+		];
+		yield 'StatusEnum::REVIEW' => [
+			'enumClassName' => StatusEnum::class,
+			'value' => StatusEnum::REVIEW,
+		];
+		yield 'TypeEnum::INTEGER' => [
+			'enumClassName' => TypeEnum::class,
+			'value' => TypeEnum::INTEGER,
+		];
+		yield 'TypeEnum::STRING' => [
+			'enumClassName' => TypeEnum::class,
+			'value' => TypeEnum::STRING,
+		];
+		yield 'TypeEnum::FLOAT' => [
+			'enumClassName' => TypeEnum::class,
+			'value' => TypeEnum::FLOAT,
+		];
+		yield 'TypeEnum::BOOLEAN' => [
+			'enumClassName' => TypeEnum::class,
+			'value' => TypeEnum::BOOLEAN,
+		];
+		yield 'TypeEnum::NULL' => [
+			'enumClassName' => TypeEnum::class,
+			'value' => TypeEnum::NULL,
 		];
 	}
 
 	/**
-	 * @return mixed[][]
+	 * @dataProvider validEnumValueDataProvider
+	 *
+	 * @param string $enumClassName
+	 * @param mixed $value
 	 */
-	public function invalidEnumValuesProvider(): array
+	public function testGet(
+		string $enumClassName,
+		$value
+	): void
 	{
-		return array_merge([
-			[0],
-			[1.5],
-			[false],
-			[true],
-			[null],
-		], array_values($this->invalidTypesProvider()));
+		$enum = $enumClassName::get($value);
+		Assert::assertInstanceOf($enumClassName, $enum);
 	}
 
 	/**
-	 * @dataProvider invalidEnumValuesProvider
+	 * @dataProvider validEnumValueDataProvider
 	 *
+	 * @param string $enumClassName
 	 * @param mixed $value
 	 */
-	public function testInvalidEnumValue($value): void
+	public function testGetValue(
+		string $enumClassName,
+		$value
+	): void
 	{
-		try {
-			StatusEnum::get($value);
-			$this->fail();
-		} catch (\Consistence\Enum\InvalidEnumValueException $e) {
-			$this->assertSame($value, $e->getValue());
-			$this->assertEquals([
-				'DRAFT' => StatusEnum::DRAFT,
-				'REVIEW' => StatusEnum::REVIEW,
-				'PUBLISHED' => StatusEnum::PUBLISHED,
-			], $e->getAvailableValues());
-			$this->assertSame(StatusEnum::class, $e->getEnumClassName());
+		$enum = $enumClassName::get($value);
+		Assert::assertSame($value, $enum->getValue());
+	}
+
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function compareDataProvider(): Generator
+	{
+		yield 'StatusEnum equal' => [
+			'enum1' => StatusEnum::get(StatusEnum::REVIEW),
+			'enum2' => StatusEnum::get(StatusEnum::REVIEW),
+			'equals' => true,
+		];
+		yield 'StatusEnum not equal' => [
+			'enum1' => StatusEnum::get(StatusEnum::REVIEW),
+			'enum2' => StatusEnum::get(StatusEnum::DRAFT),
+			'equals' => false,
+		];
+	}
+
+	/**
+	 * @dataProvider compareDataProvider
+	 *
+	 * @param \Consistence\Enum\Enum $enum1
+	 * @param \Consistence\Enum\Enum $enum2
+	 * @param bool $equals
+	 */
+	public function testSameInstances(
+		Enum $enum1,
+		Enum $enum2,
+		bool $equals
+	): void
+	{
+		Assert::assertSame($equals, $enum1 === $enum2);
+	}
+
+	/**
+	 * @dataProvider compareDataProvider
+	 *
+	 * @param \Consistence\Enum\Enum $enum1
+	 * @param \Consistence\Enum\Enum $enum2
+	 * @param bool $expectedEquals
+	 */
+	public function testEquals(
+		Enum $enum1,
+		Enum $enum2,
+		bool $expectedEquals
+	): void
+	{
+		Assert::assertSame($expectedEquals, $enum1->equals($enum2));
+	}
+
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function equalsValueDataProvider(): Generator
+	{
+		foreach ($this->compareDataProvider() as $caseName => $caseData) {
+			yield $caseName => [
+				'enum' => $caseData['enum1'],
+				'value' => $caseData['enum2']->getValue(),
+				'expectedEqualsValue' => $caseData['equals'],
+			];
 		}
 	}
 
-	public function testCheckValue(): void
+	/**
+	 * @dataProvider equalsValueDataProvider
+	 *
+	 * @param \Consistence\Enum\Enum $enum
+	 * @param mixed $value
+	 * @param bool $expectedEqualsValue
+	 */
+	public function testEqualsValue(
+		Enum $enum,
+		$value,
+		bool $expectedEqualsValue
+	): void
 	{
-		StatusEnum::checkValue(StatusEnum::DRAFT);
-		$this->ok();
+		Assert::assertSame($expectedEqualsValue, $enum->equalsValue($value));
 	}
 
-
-	public function testCheckInvalidValue(): void
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function enumAvailableValuesDataProvider(): Generator
 	{
-		try {
-			StatusEnum::checkValue('foo');
-			$this->fail();
-		} catch (\Consistence\Enum\InvalidEnumValueException $e) {
-			$this->assertSame('foo', $e->getValue());
-			$this->assertEquals([
+		yield 'StatusEnum' => [
+			'enumClassName' => StatusEnum::class,
+			'availableValues' => [
 				'DRAFT' => StatusEnum::DRAFT,
 				'REVIEW' => StatusEnum::REVIEW,
 				'PUBLISHED' => StatusEnum::PUBLISHED,
-			], $e->getAvailableValues());
-			$this->assertSame(StatusEnum::class, $e->getEnumClassName());
+			],
+			'availableEnums' => [
+				'DRAFT' => StatusEnum::get(StatusEnum::DRAFT),
+				'REVIEW' => StatusEnum::get(StatusEnum::REVIEW),
+				'PUBLISHED' => StatusEnum::get(StatusEnum::PUBLISHED),
+			],
+		];
+		yield 'FooEnum' => [
+			'enumClassName' => FooEnum::class,
+			'availableValues' => [
+				'FOO' => FooEnum::FOO,
+			],
+			'availableEnums' => [
+				'FOO' => FooEnum::get(FooEnum::FOO),
+			],
+		];
+	}
+
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function getAvailableValuesDataProvider(): Generator
+	{
+		foreach ($this->enumAvailableValuesDataProvider() as $caseName => $caseData) {
+			yield $caseName => [
+				'enumClassName' => $caseData['enumClassName'],
+				'expectedAvailableValues' => $caseData['availableValues'],
+			];
+		}
+	}
+
+	/**
+	 * @dataProvider getAvailableValuesDataProvider
+	 *
+	 * @param string $enumClassName
+	 * @param mixed[] $expectedAvailableValues
+	 */
+	public function testGetAvailableValues(
+		string $enumClassName,
+		array $expectedAvailableValues
+	): void
+	{
+		Assert::assertEquals($expectedAvailableValues, $enumClassName::getAvailableValues());
+	}
+
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function getAvailableEnumsDataProvider(): Generator
+	{
+		foreach ($this->enumAvailableValuesDataProvider() as $caseName => $caseData) {
+			yield $caseName => [
+				'enumClassName' => $caseData['enumClassName'],
+				'expectedAvailableEnums' => $caseData['availableEnums'],
+			];
+		}
+	}
+
+	/**
+	 * @dataProvider getAvailableEnumsDataProvider
+	 *
+	 * @param string $enumClassName
+	 * @param \Consistence\Enum\Enum[] $expectedAvailableEnums
+	 */
+	public function testGetAvailableEnums(
+		string $enumClassName,
+		array $expectedAvailableEnums
+	): void
+	{
+		Assert::assertEquals($expectedAvailableEnums, $enumClassName::getAvailableEnums());
+	}
+
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function invalidTypeDataProvider(): Generator
+	{
+		yield 'array' => [
+			'value' => [],
+		];
+		yield 'object' => [
+			'value' => new DateTimeImmutable(),
+		];
+		yield 'Closure' => [
+			'value' => static function (): void {
+				return;
+			},
+		];
+		yield 'resource' => [
+			'value' => fopen(__DIR__, 'r'),
+		];
+	}
+
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function invalidEnumValueDataProvider(): Generator
+	{
+		yield 'integer, which is not in available values' => [
+			'enumClassName' => StatusEnum::class,
+			'value' => 0,
+			'expectedAvailableValues' => [
+				'DRAFT' => StatusEnum::DRAFT,
+				'REVIEW' => StatusEnum::REVIEW,
+				'PUBLISHED' => StatusEnum::PUBLISHED,
+			],
+		];
+		yield 'float, which is not in available values' => [
+			'enumClassName' => StatusEnum::class,
+			'value' => 1.5,
+			'expectedAvailableValues' => [
+				'DRAFT' => StatusEnum::DRAFT,
+				'REVIEW' => StatusEnum::REVIEW,
+				'PUBLISHED' => StatusEnum::PUBLISHED,
+			],
+		];
+		yield 'false, which is not in available values' => [
+			'enumClassName' => StatusEnum::class,
+			'value' => false,
+			'expectedAvailableValues' => [
+				'DRAFT' => StatusEnum::DRAFT,
+				'REVIEW' => StatusEnum::REVIEW,
+				'PUBLISHED' => StatusEnum::PUBLISHED,
+			],
+		];
+		yield 'true, which is not in available values' => [
+			'enumClassName' => StatusEnum::class,
+			'value' => true,
+			'expectedAvailableValues' => [
+				'DRAFT' => StatusEnum::DRAFT,
+				'REVIEW' => StatusEnum::REVIEW,
+				'PUBLISHED' => StatusEnum::PUBLISHED,
+			],
+		];
+		yield 'null, which is not in available values' => [
+			'enumClassName' => StatusEnum::class,
+			'value' => null,
+			'expectedAvailableValues' => [
+				'DRAFT' => StatusEnum::DRAFT,
+				'REVIEW' => StatusEnum::REVIEW,
+				'PUBLISHED' => StatusEnum::PUBLISHED,
+			],
+		];
+		yield 'string, which is not in available values' => [
+			'enumClassName' => StatusEnum::class,
+			'value' => 'foo',
+			'expectedAvailableValues' => [
+				'DRAFT' => StatusEnum::DRAFT,
+				'REVIEW' => StatusEnum::REVIEW,
+				'PUBLISHED' => StatusEnum::PUBLISHED,
+			],
+		];
+
+		foreach ($this->invalidTypeDataProvider() as $caseName => $caseData) {
+			yield $caseName => [
+				'enumClassName' => StatusEnum::class,
+				'value' => $caseData['value'],
+				'expectedAvailableValues' => [
+					'DRAFT' => StatusEnum::DRAFT,
+					'REVIEW' => StatusEnum::REVIEW,
+					'PUBLISHED' => StatusEnum::PUBLISHED,
+				],
+			];
+		}
+	}
+
+	/**
+	 * @return mixed[][]|\Generator
+	 */
+	public function isValidValueDataProvider(): Generator
+	{
+		foreach ($this->validEnumValueDataProvider() as $caseName => $caseData) {
+			yield $caseName => [
+				'enumClassName' => $caseData['enumClassName'],
+				'value' => $caseData['value'],
+				'expectedIsValidValue' => true,
+			];
+		}
+
+		foreach ($this->invalidEnumValueDataProvider() as $caseName => $caseData) {
+			yield $caseName => [
+				'enumClassName' => $caseData['enumClassName'],
+				'value' => $caseData['value'],
+				'expectedIsValidValue' => false,
+			];
+		}
+	}
+
+	/**
+	 * @dataProvider isValidValueDataProvider
+	 *
+	 * @param string $enumClassName
+	 * @param mixed $value
+	 * @param bool $expectedIsValidValue
+	 */
+	public function testIsValidValue(
+		string $enumClassName,
+		$value,
+		bool $expectedIsValidValue
+	): void
+	{
+		Assert::assertSame($expectedIsValidValue, $enumClassName::isValidValue($value));
+	}
+
+	/**
+	 * @dataProvider invalidEnumValueDataProvider
+	 *
+	 * @param string $enumClassName
+	 * @param mixed $value
+	 * @param mixed[] $expectedAvailableValues
+	 */
+	public function testInvalidEnumValue(
+		string $enumClassName,
+		$value,
+		array $expectedAvailableValues
+	): void
+	{
+		try {
+			$enumClassName::get($value);
+			Assert::fail('Exception expected');
+		} catch (\Consistence\Enum\InvalidEnumValueException $e) {
+			Assert::assertSame($value, $e->getValue());
+			Assert::assertEquals($expectedAvailableValues, $e->getAvailableValues());
+			Assert::assertSame($enumClassName, $e->getEnumClassName());
+		}
+	}
+
+	/**
+	 * @dataProvider validEnumValueDataProvider
+	 *
+	 * @param string $enumClassName
+	 * @param mixed $value
+	 */
+	public function testCheckValue(
+		string $enumClassName,
+		$value
+	): void
+	{
+		$this->expectNotToPerformAssertions();
+
+		$enumClassName::checkValue($value);
+	}
+
+	/**
+	 * @dataProvider invalidEnumValueDataProvider
+	 *
+	 * @param string $enumClassName
+	 * @param mixed $value
+	 * @param mixed[] $expectedAvailableValues
+	 */
+	public function testCheckInvalidValue(
+		string $enumClassName,
+		$value,
+		array $expectedAvailableValues
+	): void
+	{
+		try {
+			$enumClassName::checkValue($value);
+			Assert::fail('Exception expected');
+		} catch (\Consistence\Enum\InvalidEnumValueException $e) {
+			Assert::assertSame($value, $e->getValue());
+			Assert::assertEquals($expectedAvailableValues, $e->getAvailableValues());
+			Assert::assertSame($enumClassName, $e->getEnumClassName());
 		}
 	}
 
@@ -176,28 +439,21 @@ class EnumTest extends \Consistence\TestCase
 		try {
 			$review->equals($foo);
 
-			$this->fail();
+			Assert::fail('Exception expected');
 		} catch (\Consistence\Enum\OperationSupportedOnlyForSameEnumException $e) {
-			$this->assertSame($review, $e->getExpected());
-			$this->assertSame($foo, $e->getGiven());
+			Assert::assertSame($review, $e->getExpected());
+			Assert::assertSame($foo, $e->getGiven());
 		}
-	}
-
-	public function testAvailableValuesFooEnum(): void
-	{
-		$this->assertEquals([
-			'FOO' => FooEnum::FOO,
-		], FooEnum::getAvailableValues());
 	}
 
 	public function testIgnoredConstant(): void
 	{
 		try {
 			StatusEnum::get('bar');
-			$this->fail();
+			Assert::fail('Exception expected');
 		} catch (\Consistence\Enum\InvalidEnumValueException $e) {
-			$this->assertSame('bar', $e->getValue());
-			$this->assertEquals([
+			Assert::assertSame('bar', $e->getValue());
+			Assert::assertEquals([
 				'DRAFT' => StatusEnum::DRAFT,
 				'REVIEW' => StatusEnum::REVIEW,
 				'PUBLISHED' => StatusEnum::PUBLISHED,
@@ -205,37 +461,30 @@ class EnumTest extends \Consistence\TestCase
 		}
 	}
 
-	/**
-	 * @return mixed[][]
-	 */
-	public function validTypesProvider(): array
-	{
-		return ArrayType::mapValuesByCallback(TypeEnum::getAvailableValues(), function ($value): array {
-			return [$value];
-		});
-	}
-
-	/**
-	 * @dataProvider validTypesProvider
-	 *
-	 * @param mixed $value
-	 */
-	public function testValidTypes($value): void
-	{
-		$enum = TypeEnum::get($value);
-		$this->assertInstanceOf(TypeEnum::class, $enum);
-		$this->assertSame($enum->getValue(), $value);
-	}
-
 	public function testDuplicateSpecifiedValues(): void
 	{
 		try {
 			DuplicateValuesEnum::get(DuplicateValuesEnum::BAZ);
-			$this->fail();
+			Assert::fail('Exception expected');
 		} catch (\Consistence\Enum\DuplicateValueSpecifiedException $e) {
-			$this->assertSame(DuplicateValuesEnum::FOO, $e->getValue());
-			$this->assertSame(DuplicateValuesEnum::class, $e->getClass());
+			Assert::assertSame(DuplicateValuesEnum::FOO, $e->getValue());
+			Assert::assertSame(DuplicateValuesEnum::class, $e->getClass());
 		}
+	}
+
+	/**
+	 * This test is here only because code executed in data providers is not counted as covered and since Enum
+	 * is implemented using flyweight pattern, each enum type's initialization can be done only once. Also, data
+	 * providers are executed before all tests, so the initialization of every enum used in data providers will always
+	 * be done there.
+	 *
+	 * This test ensures that there is at least one enum type constructed outside of data provider and therefore covered.
+	 * The enum type used here should not be used for any other test.
+	 */
+	public function testGetWithoutDataProvider(): void
+	{
+		$enum = CoverageEnum::get(CoverageEnum::COVERAGE);
+		Assert::assertInstanceOf(CoverageEnum::class, $enum);
 	}
 
 }

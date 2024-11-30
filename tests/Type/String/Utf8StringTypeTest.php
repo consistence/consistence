@@ -4,7 +4,9 @@ declare(strict_types = 1);
 
 namespace Consistence\Type\String;
 
-class Utf8StringTypeTest extends \Consistence\TestCase
+use PHPUnit\Framework\Assert;
+
+class Utf8StringTypeTest extends \PHPUnit\Framework\TestCase
 {
 
 	public function testStaticConstruct(): void
@@ -16,7 +18,7 @@ class Utf8StringTypeTest extends \Consistence\TestCase
 
 	public function testUtf8StringLength(): void
 	{
-		$this->assertSame(30, Utf8StringType::length('Žluťoučký kůň pěl ďábělské ódy'));
+		Assert::assertSame(30, Utf8StringType::length('Žluťoučký kůň pěl ďábělské ódy'));
 	}
 
 }

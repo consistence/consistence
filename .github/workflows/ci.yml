@@ -99,8 +99,8 @@ jobs:
                 name: 'Check coding standard'
                 run: 'bin/phing create-dirs cs || cat build/log/phpcs-checkstyle.xml | cs2pr'
 
-    composer-require-checker:
-        name: 'Composer require check'
+    composer-dependencies:
+        name: 'Composer dependencies'
         needs: 'lint'
         runs-on: 'ubuntu-latest'
 
@@ -123,8 +123,8 @@ jobs:
                 with:
                     dependency-versions: 'highest'
             -
-                name: 'Check missing Composer requires'
-                run: 'bin/phing composer-require-checker'
+                name: 'Analyze Composer dependencies'
+                run: 'bin/phing composer-dependencies'
 
     tests:
         name: 'Tests - PHP ${{ matrix.php-version }}, ${{ matrix.composer-dependencies }} dependencies'

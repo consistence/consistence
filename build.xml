@@ -11,7 +11,8 @@
 	<property name="path.bin" value="${path.root}/bin"/>
 	<property name="path.build.log" value="${path.build}/log"/>
 	<property name="path.composer.executable" value="composer"/>
-	<property name="path.composer-require-checker.executable" value="${path.bin}/composer-require-checker"/>
+	<property name="path.composer-dependency-analyser.config" value="${path.build}/composer-dependency-analyser.config.php"/>
+	<property name="path.composer-dependency-analyser.executable" value="${path.bin}/composer-dependency-analyser"/>
 	<property name="path.phpcs.executable" value="${path.bin}/phpcs"/>
 	<property name="path.phpcs.ruleset" value="${path.build}/cs-ruleset.xml"/>
 	<property name="path.phplint.executable" value="${path.bin}/parallel-lint"/>
@@ -29,7 +30,7 @@
 		phplint,
 		cs,
 		tests,
-		composer-require-checker
+		composer-dependencies
 	"/>
 
 	<target name="composer" depends="composer-validate">
@@ -43,13 +44,15 @@
 		</exec>
 	</target>
 
-	<target name="composer-require-checker">
+	<target name="composer-dependencies">
 		<exec
-			executable="${path.composer-require-checker.executable}"
+			executable="${path.composer-dependency-analyser.executable}"
 			logoutput="true"
 			passthru="true"
 			checkreturn="true"
-		/>
+		>
+			<arg value="--config=${path.composer-dependency-analyser.config}"/>
+		</exec>
 	</target>
 
 	<target name="composer-validate">
@@ -80,6 +83,7 @@
 			<arg value="--report=full"/>
 			<arg value="--report-checkstyle=${path.build.log}/phpcs-checkstyle.xml"/>
 			<arg value="-sp"/>
+			<arg path="${path.build}"/>
 			<arg path="${path.src}"/>
 			<arg path="${path.tests}"/>
 		</exec>

@@ -4,21 +4,23 @@ declare(strict_types = 1);
 
 namespace Consistence\Annotation;
 
-class AnnotationFieldTest extends \Consistence\TestCase
+use PHPUnit\Framework\Assert;
+
+class AnnotationFieldTest extends \PHPUnit\Framework\TestCase
 {
 
 	public function testCreate(): void
 	{
 		$annotationFiled = new AnnotationField('lorem', 'ipsum');
-		$this->assertSame('lorem', $annotationFiled->getName());
-		$this->assertSame('ipsum', $annotationFiled->getValue());
+		Assert::assertSame('lorem', $annotationFiled->getName());
+		Assert::assertSame('ipsum', $annotationFiled->getValue());
 	}
 
 	public function testCreateWithoutValue(): void
 	{
 		$annotationFiled = new AnnotationField('lorem');
-		$this->assertSame('lorem', $annotationFiled->getName());
-		$this->assertNull($annotationFiled->getValue());
+		Assert::assertSame('lorem', $annotationFiled->getName());
+		Assert::assertNull($annotationFiled->getValue());
 	}
 
 }

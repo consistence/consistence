@@ -8,9 +8,11 @@ use ArrayObject;
 use Closure;
 use DateTimeImmutable;
 use DateTimeInterface;
+use Generator;
+use PHPUnit\Framework\Assert;
 use stdClass;
 
-class TypeTest extends \Consistence\TestCase
+class TypeTest extends \PHPUnit\Framework\TestCase
 {
 
 	public function testStaticConstruct(): void
@@ -21,153 +23,458 @@ class TypeTest extends \Consistence\TestCase
 	}
 
 	/**
-	 * @return mixed[][]
+	 * @return mixed[][]|\Generator
 	 */
-	public function typesProvider(): array
+	public function typeDataProvider(): Generator
 	{
-		return [
-			['foo', 'string'],
-			[1, 'int'],
-			[true, 'bool'],
-			[1.5, 'float'],
-			[[], 'array'],
-			[null, 'null'],
-			[new DateTimeImmutable(), DateTimeImmutable::class],
-			[static function (): void {
+		yield 'string' => [
+			'value' => 'foo',
+			'valueType' => 'string',
+		];
+		yield 'integer' => [
+			'value' => 1,
+			'valueType' => 'int',
+		];
+		yield 'boolean' => [
+			'value' => true,
+			'valueType' => 'bool',
+		];
+		yield 'float' => [
+			'value' => 1.5,
+			'valueType' => 'float',
+		];
+		yield 'array' => [
+			'value' => [],
+			'valueType' => 'array',
+		];
+		yield 'null' => [
+			'value' => null,
+			'valueType' => 'null',
+		];
+		yield 'object' => [
+			'value' => new DateTimeImmutable(),
+			'valueType' => DateTimeImmutable::class,
+		];
+		yield 'Closure' => [
+			'value' => static function (): void {
 				return;
-			}, Closure::class],
-			[fopen(__DIR__, 'r'), 'resource'],
+			},
+			'valueType' => Closure::class,
+		];
+		yield 'resource' => [
+			'value' => fopen(__DIR__, 'r'),
+			'valueType' => 'resource',
 		];
 	}
 
 	/**
-	 * @return mixed[][]
+	 * @return mixed[][]|\Generator
 	 */
-	public function typeChecksProvider(): array
+	public function hasTypeDataProvider(): Generator
 	{
-		return array_merge(
-			$this->typesProvider(),
-			[
-				[null, 'NULL'],
-				[1, 'string|int'],
-				[1, 'string|integer'],
-				['foo', 'string|int'],
-				[2, 'null|int'],
-				[2, 'null|integer'],
-				[true, 'null|bool'],
-				[false, 'bool|null'],
-				[null, 'null|int'],
-				[null, 'NULL|int'],
-				[null, 'NULL|integer'],
-				[DateTimeImmutable::class, 'DateTimeImmutable|string'],
-				[new DateTimeImmutable(), 'DateTimeImmutable|string'],
-				[new DateTimeImmutable(), 'object'],
-				['foo', 'object', false],
-				[1, 'mixed'],
-				['foo', 'mixed'],
-				[DateTimeImmutable::class, 'mixed'],
-				[1, 'string|mixed'],
-				[[], 'string[]'],
-				['foo', 'string[]', false],
-				[['foo'], 'string[]'],
-				[[1], 'string[]', false],
-				[['foo', 'bar'], 'string[]'],
-				[[], 'string[]|int[]'],
-				[['foo', 'bar'], 'string[]|int[]'],
-				[2, 'string[]|int'],
-				[[1, 2], 'string[]|int[]'],
-				[[new DateTimeImmutable()], 'object[]'],
-				[[new DateTimeImmutable(), new stdClass()], 'object[]'],
-				[[new DateTimeImmutable(), 'foo'], 'object[]', false],
-				[[1, 'foo'], 'mixed[]'],
-				[1, 'mixed[]', false],
-				[[1, 'foo'], 'mixed'],
-				[[[1, 2]], 'int[][]'],
-				[[[1, 2], [3, 4]], 'int[][]'],
-				[[[1, 2], [3, 4]], 'integer[][]'],
-				[[[1, 2], ['foo']], 'int[][]', false],
-				[[['foo']], 'int[][]', false],
-				[[1, 2], 'int[][]', false],
-				[new ArrayObject([]), 'string[]'],
-				[new ArrayObject(['foo']), 'string[]'],
-				[new ArrayObject([1]), 'string[]', false],
-				[new ArrayObject(['foo', 'bar']), 'string[]'],
-				[new ArrayObject([]), 'string[]|int[]'],
-				[new ArrayObject(['foo', 'bar']), 'string[]|int[]'],
-				[new ArrayObject([1, 2]), 'string[]|int[]'],
-				[new ArrayObject([new ArrayObject([1, 2])]), 'int[][]'],
-				[new ArrayObject([new ArrayObject([1, 2]), new ArrayObject([3, 4])]), 'int[][]'],
-				[new ArrayObject([new ArrayObject([1, 2]), new ArrayObject(['foo'])]), 'int[][]', false],
-				[new ArrayObject([new ArrayObject(['foo'])]), 'int[][]', false],
-				[new ArrayObject([1, 2]), 'int[][]', false],
-				[new ArrayObject([]), 'string[]'],
-				[new ArrayObject(['foo']), 'string[]'],
-				[new ArrayObject([1]), 'string[]', false],
-				[new ArrayObject(['foo', 'bar']), 'string[]'],
-				[new ArrayObject([]), 'string[]|int[]'],
-				[new ArrayObject(['foo', 'bar']), 'string[]|int[]'],
-				[new ArrayObject([1, 2]), 'string[]|int[]'],
-				[new ArrayObject([new ArrayObject([1, 2])]), 'int[][]'],
-				[new ArrayObject([new ArrayObject([1, 2]), new ArrayObject([3, 4])]), 'int[][]'],
-				[new ArrayObject([new ArrayObject([1, 2]), new ArrayObject(['foo'])]), 'int[][]', false],
-				[new ArrayObject([new ArrayObject(['foo'])]), 'int[][]', false],
-				[new ArrayObject([1, 2]), 'int[][]', false],
-				[[], 'int:string[]'],
-				['foo', 'int:string[]', false],
-				[['foo'], 'int:string[]'],
-				[[1], 'int:string[]', false],
-				[['foo', 'bar'], 'int:string[]'],
-				[[], 'int:string[]|int:int[]'],
-				[['foo', 'bar'], 'int:string[]|int:int[]'],
-				[[1, 2], 'int:string[]|int:int[]'],
-				[[1, 'foo'], 'int:mixed[]'],
-				[1, 'int:mixed[]', false],
-				[[[1, 2]], 'int:int:int[][]'],
-				[[[1, 2], [3, 4]], 'int:int:int[][]'],
-				[[[1, 2], ['foo']], 'int:int:int[][]', false],
-				[[['foo']], 'int[][]', false],
-				[[1, 2], 'int[][]', false],
-				[new ArrayObject([]), 'int:string[]'],
-				[new ArrayObject(['foo']), 'int:string[]'],
-				[new ArrayObject([1]), 'int:string[]', false],
-				[new ArrayObject(['foo', 'bar']), 'int:string[]'],
-				[new ArrayObject([]), 'int:string[]|int:int[]'],
-				[new ArrayObject(['foo', 'bar']), 'int:string[]|int:int[]'],
-				[new ArrayObject([1, 2]), 'int:string[]|int:int[]'],
-				[new ArrayObject([new ArrayObject([1, 2])]), 'int:int:int[][]'],
-				[new ArrayObject([new ArrayObject([1, 2]), new ArrayObject([3, 4])]), 'int:int:int[][]'],
-				[new ArrayObject([new ArrayObject([1, 2]), new ArrayObject(['foo'])]), 'int:int:int[][]', false],
-				[new ArrayObject([new ArrayObject(['foo'])]), 'int:int:int[][]', false],
-				[new ArrayObject([1, 2]), 'int:int:int[][]', false],
-				[['foo' => 'bar'], 'string:string[]'],
-				[['foo', 'bar'], 'string:string[]', false],
-				[['foo', 'bar'], 'string:string[]|int:string[]'],
-				[['foo' => 'bar'], 'string:string[]|int:string[]'],
-				[['foo' => ['bar']], 'string:int:string[][]'],
-				[['foo' => ['bar']], 'string:string:string[][]', false],
-				[[['foo' => 'bar']], 'int:string:string[][]'],
-				[[['foo' => 'bar']], 'int:int:string[][]', false],
-				[['foo' => ['bar']], 'string:string[][]'],
-				[['foo' => ['bar']], 'int:string[][]', false],
-				[['foo' => ['bar']], 'mixed:int:string[][]'],
-				[['foo' => ['bar']], 'mixed:string:string[][]', false],
-			]
-		);
+		foreach ($this->typeDataProvider() as $caseName => $caseData) {
+			yield $caseName => [
+				'value' => $caseData['value'],
+				'expectedTypes' => $caseData['valueType'],
+			];
+		}
+
+		yield 'null uppercase' => [
+			'value' => null,
+			'expectedTypes' => 'NULL',
+		];
+		yield 'integer is string or int' => [
+			'value' => 1,
+			'expectedTypes' => 'string|int',
+		];
+		yield 'integer is string or integer' => [
+			'value' => 1,
+			'expectedTypes' => 'string|integer',
+		];
+		yield 'string is string or int' => [
+			'value' => 'foo',
+			'expectedTypes' => 'string|int',
+		];
+		yield 'integer is null or int' => [
+			'value' => 2,
+			'expectedTypes' => 'null|int',
+		];
+		yield 'integer is null or integer' => [
+			'value' => 2,
+			'expectedTypes' => 'null|integer',
+		];
+		yield 'boolean is null or bool' => [
+			'value' => true,
+			'expectedTypes' => 'null|bool',
+		];
+		yield 'boolean is bool or null' => [
+			'value' => false,
+			'expectedTypes' => 'bool|null',
+		];
+		yield 'null is null or int' => [
+			'value' => null,
+			'expectedTypes' => 'null|int',
+		];
+		yield 'null is null (uppercase) or int' => [
+			'value' => null,
+			'expectedTypes' => 'NULL|int',
+		];
+		yield 'null is null (uppercase) or integer - uppercase' => [
+			'value' => null,
+			'expectedTypes' => 'NULL|integer',
+		];
+		yield 'string is class or string' => [
+			'value' => DateTimeImmutable::class,
+			'expectedTypes' => 'DateTimeImmutable|string',
+		];
+		yield 'object is class of object or string' => [
+			'value' => new DateTimeImmutable(),
+			'expectedTypes' => 'DateTimeImmutable|string',
+		];
+		yield 'object is object' => [
+			'value' => new DateTimeImmutable(),
+			'expectedTypes' => 'object',
+		];
+		yield 'string is not object' => [
+			'value' => 'foo',
+			'expectedTypes' => 'object',
+			'result' => false,
+		];
+		yield 'integer is mixed' => [
+			'value' => 1,
+			'expectedTypes' => 'mixed',
+		];
+		yield 'string is mixed' => [
+			'value' => 'foo',
+			'expectedTypes' => 'mixed',
+		];
+		yield 'string containing class name is mixed' => [
+			'value' => DateTimeImmutable::class,
+			'expectedTypes' => 'mixed',
+		];
+		yield 'integer is string or mixed' => [
+			'value' => 1,
+			'expectedTypes' => 'string|mixed',
+		];
+		yield 'empty array is iterable<string>' => [
+			'value' => [],
+			'expectedTypes' => 'string[]',
+		];
+		yield 'string is not iterable<string>' => [
+			'value' => 'foo',
+			'expectedTypes' => 'string[]',
+			'result' => false,
+		];
+		yield 'array<integer, string> is iterable<string>' => [
+			'value' => ['foo'],
+			'expectedTypes' => 'string[]',
+		];
+		yield 'array<integer, integer> is not iterable<string>' => [
+			'value' => [1],
+			'expectedTypes' => 'string[]',
+			'result' => false,
+		];
+		yield 'array<integer, string> with multiple strings is iterable<string>' => [
+			'value' => ['foo', 'bar'],
+			'expectedTypes' => 'string[]',
+		];
+		yield 'empty array is iterable<string> or iterable<int>' => [
+			'value' => [],
+			'expectedTypes' => 'string[]|int[]',
+		];
+		yield 'array<integer, string> is iterable<string> or iterable<int>' => [
+			'value' => ['foo', 'bar'],
+			'expectedTypes' => 'string[]|int[]',
+		];
+		yield 'integer is iterable<string> or int' => [
+			'value' => 2,
+			'expectedTypes' => 'string[]|int',
+		];
+		yield 'array<integer, integer> is iterable<string> or iterable<int>' => [
+			'value' => [1, 2],
+			'expectedTypes' => 'string[]|int[]',
+		];
+		yield 'array<integer, DateTimeImmutable> is iterable<object>' => [
+			'value' => [new DateTimeImmutable()],
+			'expectedTypes' => 'object[]',
+		];
+		yield 'array<integer, object> is iterable<object>' => [
+			'value' => [new DateTimeImmutable(), new stdClass()],
+			'expectedTypes' => 'object[]',
+		];
+		yield 'array<integer, object|string> is not iterable<object>' => [
+			'value' => [new DateTimeImmutable(), 'foo'],
+			'expectedTypes' => 'object[]',
+			'result' => false,
+		];
+		yield 'array<integer, integer|string> is iterable<mixed>' => [
+			'value' => [1, 'foo'],
+			'expectedTypes' => 'mixed[]',
+		];
+		yield 'integer is not iterable<mixed>' => [
+			'value' => 1,
+			'expectedTypes' => 'mixed[]',
+			'result' => false,
+		];
+		yield 'array<integer, integer|string> is mixed' => [
+			'value' => [1, 'foo'],
+			'expectedTypes' => 'mixed',
+		];
+		yield 'array<integer, array<integer, integer>> is iterable<iterable<int>>' => [
+			'value' => [[1, 2]],
+			'expectedTypes' => 'int[][]',
+		];
+		yield 'array<integer, array<integer, integer>> with multiple array<integer, integer> is iterable<iterable<int>>' => [
+			'value' => [[1, 2], [3, 4]],
+			'expectedTypes' => 'int[][]',
+		];
+		yield 'array<integer, array<integer, integer>> with multiple array<integer, integer> is iterable<iterable<integer>>' => [
+			'value' => [[1, 2], [3, 4]],
+			'expectedTypes' => 'integer[][]',
+		];
+		yield 'array<integer, array<integer, integer>|array<integer, string>> is not iterable<iterable<int>>' => [
+			'value' => [[1, 2], ['foo']],
+			'expectedTypes' => 'int[][]',
+			'result' => false,
+		];
+		yield 'array<integer, array<integer, string>> is not iterable<iterable<int>>' => [
+			'value' => [['foo']],
+			'expectedTypes' => 'int[][]',
+			'result' => false,
+		];
+		yield 'array<integer, integer> is not iterable<iterable<int>>' => [
+			'value' => [1, 2],
+			'expectedTypes' => 'int[][]',
+			'result' => false,
+		];
+		yield 'empty ArrayObject is iterable<string>' => [
+			'value' => new ArrayObject([]),
+			'expectedTypes' => 'string[]',
+		];
+		yield 'ArrayObject<integer, string> is iterable<string>' => [
+			'value' => new ArrayObject(['foo']),
+			'expectedTypes' => 'string[]',
+		];
+		yield 'ArrayObject<integer, integer> is not iterable<string>' => [
+			'value' => new ArrayObject([1]),
+			'expectedTypes' => 'string[]',
+			'result' => false,
+		];
+		yield 'ArrayObject<integer, string> with multiple strings is iterable<string>' => [
+			'value' => new ArrayObject(['foo', 'bar']),
+			'expectedTypes' => 'string[]',
+		];
+		yield 'empty ArrayObject is iterable<string> or iterable<int>' => [
+			'value' => new ArrayObject([]),
+			'expectedTypes' => 'string[]|int[]',
+		];
+		yield 'ArrayObject<integer, string> is iterable<string> or iterable<int>' => [
+			'value' => new ArrayObject(['foo', 'bar']),
+			'expectedTypes' => 'string[]|int[]',
+		];
+		yield 'ArrayObject<integer, integer> is iterable<string> or iterable<int>' => [
+			'value' => new ArrayObject([1, 2]),
+			'expectedTypes' => 'string[]|int[]',
+		];
+		yield 'ArrayObject<ArrayObject<integer, integer>> is iterable<iterable<int>>' => [
+			'value' => new ArrayObject([new ArrayObject([1, 2])]),
+			'expectedTypes' => 'int[][]',
+		];
+		yield 'ArrayObject<ArrayObject<integer, integer>> with multiple ArrayObject<integer, integer> is iterable<iterable<int>>' => [
+			'value' => new ArrayObject([new ArrayObject([1, 2]), new ArrayObject([3, 4])]),
+			'expectedTypes' => 'int[][]',
+		];
+		yield 'ArrayObject<integer, ArrayObject<integer, integer>|ArrayObject<integer, string>> is not iterable<iterable<int>>' => [
+			'value' => new ArrayObject([new ArrayObject([1, 2]), new ArrayObject(['foo'])]),
+			'expectedTypes' => 'int[][]',
+			'result' => false,
+		];
+		yield 'ArrayObject<integer, ArrayObject<integer, string>> is not iterable<iterable<int>>' => [
+			'value' => new ArrayObject([new ArrayObject(['foo'])]),
+			'expectedTypes' => 'int[][]',
+			'result' => false,
+		];
+		yield 'ArrayObject<integer, integer> is not iterable<iterable<int>>' => [
+			'value' => new ArrayObject([1, 2]),
+			'expectedTypes' => 'int[][]',
+			'result' => false,
+		];
+		yield 'empty array is iterable<int, string>' => [
+			'value' => [],
+			'expectedTypes' => 'int:string[]',
+		];
+		yield 'string is not iterable<int, string>' => [
+			'value' => 'foo',
+			'expectedTypes' => 'int:string[]',
+			'result' => false,
+		];
+		yield 'array<integer, string> is iterable<int, string>' => [
+			'value' => ['foo'],
+			'expectedTypes' => 'int:string[]',
+		];
+		yield 'array<integer, integer> is not iterable<int, string>' => [
+			'value' => [1],
+			'expectedTypes' => 'int:string[]',
+			'result' => false,
+		];
+		yield 'array<integer, string> with multiple strings is iterable<int, string>' => [
+			'value' => ['foo', 'bar'],
+			'expectedTypes' => 'int:string[]',
+		];
+		yield 'empty array is iterable<int, string> or iterable<int, int>' => [
+			'value' => [],
+			'expectedTypes' => 'int:string[]|int:int[]',
+		];
+		yield 'array<integer, string> is iterable<int, string> or iterable<int, int>' => [
+			'value' => ['foo', 'bar'],
+			'expectedTypes' => 'int:string[]|int:int[]',
+		];
+		yield 'array<integer, integer> is iterable<int, string> or iterable<int, int>' => [
+			'value' => [1, 2],
+			'expectedTypes' => 'int:string[]|int:int[]',
+		];
+		yield 'array<integer, integer|string> is iterable<int, mixed>' => [
+			'value' => [1, 'foo'],
+			'expectedTypes' => 'int:mixed[]',
+		];
+		yield 'integer is not iterable<int, mixed>' => [
+			'value' => 1,
+			'expectedTypes' => 'int:mixed[]',
+			'result' => false,
+		];
+		yield 'array<integer, array<integer, integer>> is iterable<int, iterable<int, int>>' => [
+			'value' => [[1, 2]],
+			'expectedTypes' => 'int:int:int[][]',
+		];
+		yield 'array<integer, array<integer, integer>> with multiple array<integer, integer> is iterable<int, iterable<int, int>>' => [
+			'value' => [[1, 2], [3, 4]],
+			'expectedTypes' => 'int:int:int[][]',
+		];
+		yield 'array<integer, array<integer, integer>|array<integer, string>> is not iterable<int, iterable<int, int>>' => [
+			'value' => [[1, 2], ['foo']],
+			'expectedTypes' => 'int:int:int[][]',
+			'result' => false,
+		];
+		yield 'empty ArrayObject is iterable<int, string>' => [
+			'value' => new ArrayObject([]),
+			'expectedTypes' => 'int:string[]',
+		];
+		yield 'ArrayObject<integer, string> is iterable<int, string>' => [
+			'value' => new ArrayObject(['foo']),
+			'expectedTypes' => 'int:string[]',
+		];
+		yield 'ArrayObject<integer, integer> is not iterable<int, string>' => [
+			'value' => new ArrayObject([1]),
+			'expectedTypes' => 'int:string[]',
+			'result' => false,
+		];
+		yield 'ArrayObject<integer, string> with multiple strings is iterable<int, string>' => [
+			'value' => new ArrayObject(['foo', 'bar']),
+			'expectedTypes' => 'int:string[]',
+		];
+		yield 'empty ArrayObject is iterable<int, string> or iterable<int, int>' => [
+			'value' => new ArrayObject([]),
+			'expectedTypes' => 'int:string[]|int:int[]',
+		];
+		yield 'ArrayObject<integer, string> is iterable<int, string> or iterable<int, int>' => [
+			'value' => new ArrayObject(['foo', 'bar']),
+			'expectedTypes' => 'int:string[]|int:int[]',
+		];
+		yield 'ArrayObject<integer, integer> is iterable<int, string> or iterable<int, int>' => [
+			'value' => new ArrayObject([1, 2]),
+			'expectedTypes' => 'int:string[]|int:int[]',
+		];
+		yield 'ArrayObject<integer, ArrayObject<integer, integer>> is iterable<int, iterable<int, int>>' => [
+			'value' => new ArrayObject([new ArrayObject([1, 2])]),
+			'expectedTypes' => 'int:int:int[][]',
+		];
+		yield 'ArrayObject<integer, ArrayObject<integer, integer>> with multiple ArrayObject<integer, integer> is iterable<int, iterable<int, int>>' => [
+			'value' => new ArrayObject([new ArrayObject([1, 2]), new ArrayObject([3, 4])]),
+			'expectedTypes' => 'int:int:int[][]',
+		];
+		yield 'ArrayObject<integer, ArrayObject<integer, integer>|ArrayObject<integer, string>> is not iterable<int, iterable<int, int>>' => [
+			'value' => new ArrayObject([new ArrayObject([1, 2]), new ArrayObject(['foo'])]),
+			'expectedTypes' => 'int:int:int[][]',
+			'result' => false,
+		];
+		yield 'ArrayObject<integer, ArrayObject<integer, string>> is not iterable<int, iterable<int, int>>' => [
+			'value' => new ArrayObject([new ArrayObject(['foo'])]),
+			'expectedTypes' => 'int:int:int[][]',
+			'result' => false,
+		];
+		yield 'ArrayObject<integer, integer> is not iterable<int, iterable<int, int>>' => [
+			'value' => new ArrayObject([1, 2]),
+			'expectedTypes' => 'int:int:int[][]',
+			'result' => false,
+		];
+		yield 'array<string, string> is iterable<string, string>' => [
+			'value' => ['foo' => 'bar'],
+			'expectedTypes' => 'string:string[]',
+		];
+		yield 'array<integer, string> is not iterable<string, string>' => [
+			'value' => ['foo', 'bar'],
+			'expectedTypes' => 'string:string[]',
+			'result' => false,
+		];
+		yield 'array<integer, string> is iterable<string, string> or iterable<int, string>' => [
+			'value' => ['foo', 'bar'],
+			'expectedTypes' => 'string:string[]|int:string[]',
+		];
+		yield 'array<string, string> is iterable<string, string> or iterable<int, string>' => [
+			'value' => ['foo' => 'bar'],
+			'expectedTypes' => 'string:string[]|int:string[]',
+		];
+		yield 'array<string, array<integer, string>> is iterable<string, iterable<int, string>>' => [
+			'value' => ['foo' => ['bar']],
+			'expectedTypes' => 'string:int:string[][]',
+		];
+		yield 'array<string, array<integer, string>> is not iterable<string, iterable<string, string>>' => [
+			'value' => ['foo' => ['bar']],
+			'expectedTypes' => 'string:string:string[][]',
+			'result' => false,
+		];
+		yield 'array<integer, array<string, string>> is iterable<int, iterable<string, string>>' => [
+			'value' => [['foo' => 'bar']],
+			'expectedTypes' => 'int:string:string[][]',
+		];
+		yield 'array<integer, array<string, string>> is not iterable<int, iterable<int, string>> ' => [
+			'value' => [['foo' => 'bar']],
+			'expectedTypes' => 'int:int:string[][]',
+			'result' => false,
+		];
+		yield 'array<string, array<integer, string>> is iterable<string, iterable<string>>' => [
+			'value' => ['foo' => ['bar']],
+			'expectedTypes' => 'string:string[][]',
+		];
+		yield 'array<string, array<integer, string>> is not iterable<int, iterable<string>>' => [
+			'value' => ['foo' => ['bar']],
+			'expectedTypes' => 'int:string[][]',
+			'result' => false,
+		];
+		yield 'array<string, array<integer, string>> is iterable<mixed, iterable<int, string>>' => [
+			'value' => ['foo' => ['bar']],
+			'expectedTypes' => 'mixed:int:string[][]',
+		];
+		yield 'array<string, array<integer, string>> is not iterable<mixed, iterable<string, string>>' => [
+			'value' => ['foo' => ['bar']],
+			'expectedTypes' => 'mixed:string:string[][]',
+			'result' => false,
+		];
 	}
 
 	/**
-	 * @dataProvider typesProvider
+	 * @dataProvider typeDataProvider
 	 *
-	 * @param mixed $type
-	 * @param string $expected
+	 * @param mixed $value
+	 * @param string $valueType
 	 */
-	public function testTypes($type, string $expected): void
+	public function testTypes($value, string $valueType): void
 	{
-		$this->assertSame($expected, Type::getType($type));
+		Assert::assertSame($valueType, Type::getType($value));
 	}
 
 	/**
-	 * @dataProvider typeChecksProvider
+	 * @dataProvider hasTypeDataProvider
 	 *
 	 * @param mixed $value
 	 * @param string $expectedTypes
@@ -175,49 +482,42 @@ class TypeTest extends \Consistence\TestCase
 	 */
 	public function testHasType($value, string $expectedTypes, bool $result = true): void
 	{
-		$this->assertSame($result, Type::hasType($value, $expectedTypes));
+		Assert::assertSame($result, Type::hasType($value, $expectedTypes));
 	}
 
 	public function testCheckTypeOk(): void
 	{
+		$this->expectNotToPerformAssertions();
+
 		Type::checkType('foo', 'string');
-		$this->ok();
-	}
-
-	public function testCheckTypeException(): void
-	{
-		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
-		$this->expectExceptionMessage('[string] given');
-
-		Type::checkType('foo', 'int');
 	}
 
 	/**
-	 * @dataProvider typesProvider
+	 * @dataProvider typeDataProvider
 	 *
 	 * @param mixed $value
 	 * @param string $valueType
 	 */
-	public function testCheckTypeExceptionValues($value, string $valueType): void
+	public function testCheckTypeException($value, string $valueType): void
 	{
 		try {
 			Type::checkType($value, 'Foo');
-			$this->fail();
+			Assert::fail('Exception expected');
 		} catch (\Consistence\InvalidArgumentTypeException $e) {
-			$this->assertSame($value, $e->getValue());
-			$this->assertSame($valueType, $e->getValueType());
-			$this->assertSame('Foo', $e->getExpectedTypes());
+			Assert::assertSame($value, $e->getValue());
+			Assert::assertSame($valueType, $e->getValueType());
+			Assert::assertSame('Foo', $e->getExpectedTypes());
 		}
 	}
 
 	public function testAllowSubtypes(): void
 	{
-		$this->assertTrue(Type::hasType(new DateTimeImmutable(), DateTimeInterface::class));
+		Assert::assertTrue(Type::hasType(new DateTimeImmutable(), DateTimeInterface::class));
 	}
 
 	public function testDisallowSubtypes(): void
 	{
-		$this->assertFalse(Type::hasType(new DateTimeImmutable(), DateTimeInterface::class, Type::SUBTYPES_DISALLOW));
+		Assert::assertFalse(Type::hasType(new DateTimeImmutable(), DateTimeInterface::class, Type::SUBTYPES_DISALLOW));
 	}
 
 }

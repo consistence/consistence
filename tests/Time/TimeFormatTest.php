@@ -7,16 +7,18 @@ namespace Consistence\Time;
 use DateTime;
 use DateTimeImmutable;
 use DateTimeZone;
+use Generator;
+use PHPUnit\Framework\Assert;
 
-class TimeFormatTest extends \Consistence\TestCase
+class TimeFormatTest extends \PHPUnit\Framework\TestCase
 {
 
 	public function testCreateDateTimeFromTimestamp(): void
 	{
 		$original = new DateTime();
 		$converted = TimeFormat::createDateTimeFromTimestamp($original->getTimestamp());
-		$this->assertSame($original->getTimestamp(), $converted->getTimestamp());
-		$this->assertEquals($original->getTimezone(), $converted->getTimezone());
+		Assert::assertSame($original->getTimestamp(), $converted->getTimestamp());
+		Assert::assertEquals($original->getTimezone(), $converted->getTimezone());
 	}
 
 	public function testCreateDateTimeFromTimestampWithCustomTimezone(): void
@@ -26,16 +28,16 @@ class TimeFormatTest extends \Consistence\TestCase
 
 		$converted = TimeFormat::createDateTimeFromTimestamp($original->getTimestamp(), $timezone);
 
-		$this->assertSame($original->getTimestamp(), $converted->getTimestamp());
-		$this->assertEquals($timezone, $converted->getTimezone());
+		Assert::assertSame($original->getTimestamp(), $converted->getTimestamp());
+		Assert::assertEquals($timezone, $converted->getTimezone());
 	}
 
 	public function testCreateDateTimeImmutableFromTimestamp(): void
 	{
 		$original = new DateTimeImmutable();
 		$converted = TimeFormat::createDateTimeImmutableFromTimestamp($original->getTimestamp());
-		$this->assertSame($original->getTimestamp(), $converted->getTimestamp());
-		$this->assertEquals($original->getTimezone(), $converted->getTimezone());
+		Assert::assertSame($original->getTimestamp(), $converted->getTimestamp());
+		Assert::assertEquals($original->getTimezone(), $converted->getTimezone());
 	}
 
 	public function testCreateDateTimeImmutableFromTimestampWithCustomTimezone(): void
@@ -45,165 +47,260 @@ class TimeFormatTest extends \Consistence\TestCase
 
 		$converted = TimeFormat::createDateTimeImmutableFromTimestamp($original->getTimestamp(), $timezone);
 
-		$this->assertSame($original->getTimestamp(), $converted->getTimestamp());
-		$this->assertEquals($timezone, $converted->getTimezone());
+		Assert::assertSame($original->getTimestamp(), $converted->getTimestamp());
+		Assert::assertEquals($timezone, $converted->getTimezone());
 	}
 
 	public function testCreateDateTimeFromDateTimeInterface(): void
 	{
 		$original = new DateTimeImmutable();
 		$converted = TimeFormat::createDateTimeFromDateTimeInterface($original);
-		$this->assertInstanceOf(DateTime::class, $converted);
-		$this->assertEquals($original, $converted);
-		$this->assertEquals($original->getTimezone(), $converted->getTimezone());
+		Assert::assertInstanceOf(DateTime::class, $converted);
+		Assert::assertEquals($original, $converted);
+		Assert::assertEquals($original->getTimezone(), $converted->getTimezone());
 	}
 
 	public function testCreateDateTimeImmutableFromDateTimeInterface(): void
 	{
 		$original = new DateTime();
 		$converted = TimeFormat::createDateTimeImmutableFromDateTimeInterface($original);
-		$this->assertInstanceOf(DateTimeImmutable::class, $converted);
-		$this->assertEquals($original, $converted);
-		$this->assertEquals($original->getTimezone(), $converted->getTimezone());
+		Assert::assertInstanceOf(DateTimeImmutable::class, $converted);
+		Assert::assertEquals($original, $converted);
+		Assert::assertEquals($original->getTimezone(), $converted->getTimezone());
 	}
 
 	/**
-	 * @return string[][]
+	 * @return string[][]|\Generator
 	 */
-	public function validTimesProvider(): array
+	public function validTimeDataProvider(): Generator
 	{
-		return [
-			['H:i', '02:00'],
-			['Y-m-d', '2016-01-02'],
-			['Y-m-d', '2016-02-29'],
-			['Y-n-j', '2016-1-2'],
-			[TimeFormat::ISO8601, '2016-03-21T14:30:32+0100'],
-			[TimeFormat::ISO8601_TIMEZONE_WITH_COLON, '2016-03-21T14:30:32+01:00'],
-			['Y-m-d\TH:i:se', '2016-03-21T14:30:32Z'],
-			['Y-m-d H:i:s e', '2016-03-21 14:30:00 Europe/Prague'],
-			['Y-m-d H:i:s T', '2016-03-21 14:30:00 CEST'],
-			[TimeFormat::ISO8601, '2016-03-21T14:30:32-0100'],
-			[TimeFormat::ISO8601_WITH_MICROSECONDS, '2016-03-21T14:30:32.000001+0100'],
-			[TimeFormat::ISO8601_WITH_MICROSECONDS, '2016-03-21T14:30:32.100000+0100'],
-			[TimeFormat::ISO8601_WITH_MICROSECONDS, '2016-03-21T14:30:32.123456+0100'],
-			[TimeFormat::ISO8601_WITH_MICROSECONDS, '2016-03-21T14:30:32.999999+0100'],
+		yield 'hour:minute' => [
+			'format' => 'H:i',
+			'timeString' => '02:00',
+		];
+		yield 'year-month-day' => [
+			'format' => 'Y-m-d',
+			'timeString' => '2016-01-02',
+		];
+		yield 'year-month-day, leap year' => [
+			'format' => 'Y-m-d',
+			'timeString' => '2016-02-29',
+		];
+		yield 'year-month-day without leading zeros' => [
+			'format' => 'Y-n-j',
+			'timeString' => '2016-1-2',
+		];
+		yield 'ISO8601 with +1 hour offset without colon' => [
+			'format' => TimeFormat::ISO8601,
+			'timeString' => '2016-03-21T14:30:32+0100',
+		];
+		yield 'ISO8601 with +1 hour offset with colon' => [
+			'format' => TimeFormat::ISO8601_TIMEZONE_WITH_COLON,
+			'timeString' => '2016-03-21T14:30:32+01:00',
+		];
+		yield 'year-month-dayThour:minute:second with Zulu offset' => [
+			'format' => 'Y-m-d\TH:i:se',
+			'timeString' => '2016-03-21T14:30:32Z',
+		];
+		yield 'year-month-day hour:minute:second with timezone identifier separated by whitespace' => [
+			'format' => 'Y-m-d H:i:s e',
+			'timeString' => '2016-03-21 14:30:00 Europe/Prague',
+		];
+		yield 'year-month-day hour:minute:second with timezone abbreviation' => [
+			'format' => 'Y-m-d H:i:s T',
+			'timeString' => '2016-03-21 14:30:00 CEST',
+		];
+		yield 'ISO8601 with -1 hour offset without colon' => [
+			'format' => TimeFormat::ISO8601,
+			'timeString' => '2016-03-21T14:30:32-0100',
+		];
+		yield 'ISO8601 with microseconds - first microsecond' => [
+			'format' => TimeFormat::ISO8601_WITH_MICROSECONDS,
+			'timeString' => '2016-03-21T14:30:32.000001+0100',
+		];
+		yield 'ISO8601 with microseconds - first 1/10 of a second' => [
+			'format' => TimeFormat::ISO8601_WITH_MICROSECONDS,
+			'timeString' => '2016-03-21T14:30:32.100000+0100',
+		];
+		yield 'ISO8601 with microseconds - middle microsecond' => [
+			'format' => TimeFormat::ISO8601_WITH_MICROSECONDS,
+			'timeString' => '2016-03-21T14:30:32.123456+0100',
+		];
+		yield 'ISO8601 with microseconds - last microsecond' => [
+			'format' => TimeFormat::ISO8601_WITH_MICROSECONDS,
+			'timeString' => '2016-03-21T14:30:32.999999+0100',
 		];
 	}
 
 	/**
-	 * @return string[][]
+	 * @return string[][]|\Generator
 	 */
-	public function invalidTimesForFormatProvider(): array
+	public function invalidTimeForFormatDataProvider(): Generator
 	{
-		return [
-			['', TimeFormat::ISO8601, 'empty string'],
-			['H:i', '02;30', 'containing different hour-minute separator'],
-			['H:i', '2:30', 'missing leading zero in hour'],
-			['Y-m-d', '2016-1-2', 'there are missing zeroes at the beginning of day and month'],
-			[TimeFormat::ISO8601_TIMEZONE_WITH_COLON, '2016-03-21T14:30:32+0100', '`:` is required as timezone hour:minute separator'],
-			['s.u', '25.2', 'microseconds must have 6 digits'],
-			['s.u', '25.1234567', 'microseconds must have 6 digits'],
+		yield 'empty string' => [
+			'format' => TimeFormat::ISO8601,
+			'timeString' => '',
+		];
+		yield 'containing different hour-minute separator' => [
+			'format' => 'H:i',
+			'timeString' => '02;30',
+		];
+		yield 'missing leading zero in hour' => [
+			'format' => 'H:i',
+			'timeString' => '2:30',
+		];
+		yield 'there are missing zeroes at the beginning of day and month' => [
+			'format' => 'Y-m-d',
+			'timeString' => '2016-1-2',
+		];
+		yield '`:` is missing as timezone hour:minute separator' => [
+			'format' => TimeFormat::ISO8601_TIMEZONE_WITH_COLON,
+			'timeString' => '2016-03-21T14:30:32+0100',
+		];
+		yield 'microseconds must have 6 digits, there are too few' => [
+			'format' => 's.u',
+			'timeString' => '25.2',
+		];
+		yield 'microseconds must have 6 digits, there are too many' => [
+			'format' => 's.u',
+			'timeString' => '25.1234567',
 		];
 	}
 
 	/**
-	 * @return string[][]
+	 * @return string[][]|\Generator
 	 */
-	public function nonExistingTimesProvider(): array
+	public function nonExistingTimeDataProvider(): Generator
 	{
-		return [
-			['H:i', '25:00', 'there is no 25th hour in the day'],
-			['Y-m-d', '2015-02-29', 'this day does not exist when not in leap year'],
-			['Y-m-d H:i:s e', '2016-03-27 02:30:00 Europe/Prague', 'this time does not exist, the time is moving to DST, skipping from 2:00 to 3:00'],
+		yield 'there is no 25th hour in the day' => [
+			'format' => 'H:i',
+			'timeString' => '25:00',
+		];
+		yield 'this day does not exist when not in leap year' => [
+			'format' => 'Y-m-d',
+			'timeString' => '2015-02-29',
+		];
+		yield 'this time does not exist, the time is moving to DST, skipping from 2:00 to 3:00' => [
+			'format' => 'Y-m-d H:i:s e',
+			'timeString' => '2016-03-27 02:30:00 Europe/Prague',
 		];
 	}
 
 	/**
-	 * @return string[][]
+	 * @return string[][]|\Generator
 	 */
-	public function invalidTimesProvider(): array
+	public function invalidTimeDataProvider(): Generator
 	{
-		return array_merge(
-			$this->invalidTimesForFormatProvider(),
-			$this->nonExistingTimesProvider()
-		);
+		foreach ($this->invalidTimeForFormatDataProvider() as $caseName => $caseData) {
+			yield $caseName => [
+				'format' => $caseData['format'],
+				'timeString' => $caseData['timeString'],
+			];
+		}
+
+		foreach ($this->nonExistingTimeDataProvider() as $caseName => $caseData) {
+			yield $caseName => [
+				'format' => $caseData['format'],
+				'timeString' => $caseData['timeString'],
+			];
+		}
 	}
 
 	/**
-	 * @dataProvider validTimesProvider
+	 * @dataProvider validTimeDataProvider
 	 *
 	 * @param string $format
 	 * @param string $timeString
 	 */
 	public function testCheckValidTimes(string $format, string $timeString): void
 	{
+		$this->expectNotToPerformAssertions();
+
 		TimeFormat::checkTime($format, $timeString);
-		$this->ok();
 	}
 
 	/**
-	 * @dataProvider invalidTimesForFormatProvider
+	 * @dataProvider invalidTimeForFormatDataProvider
 	 *
 	 * @param string $format
 	 * @param string $timeString
-	 * @param string $reason
 	 */
-	public function testCheckInvalidTimes(string $format, string $timeString, string $reason): void
+	public function testCheckInvalidTimes(string $format, string $timeString): void
 	{
 		try {
 			TimeFormat::checkTime($format, $timeString);
-			$this->fail(sprintf('Exception was expected for time %s given for format %s, because %s', $timeString, $format, $reason));
+			Assert::fail(sprintf('Exception was expected for time %s given for format %s', $timeString, $format));
 		} catch (\Consistence\Time\TimeDoesNotMatchFormatException $e) {
-			$this->assertSame($format, $e->getFormat());
-			$this->assertSame($timeString, $e->getTimeString());
+			Assert::assertSame($format, $e->getFormat());
+			Assert::assertSame($timeString, $e->getTimeString());
 		}
 	}
 
 	/**
-	 * @dataProvider nonExistingTimesProvider
+	 * @dataProvider nonExistingTimeDataProvider
 	 *
 	 * @param string $format
 	 * @param string $timeString
-	 * @param string $reason
 	 */
-	public function testCheckNonExistingTimes(string $format, string $timeString, string $reason): void
+	public function testCheckNonExistingTimes(string $format, string $timeString): void
 	{
 		try {
 			TimeFormat::checkTime($format, $timeString);
-			$this->fail(sprintf('Exception was expected for time %s given for format %s, because %s', $timeString, $format, $reason));
+			Assert::fail(sprintf('Exception was expected for time %s given for format %s', $timeString, $format));
 		} catch (\Consistence\Time\TimeDoesNotExistException $e) {
-			$this->assertSame($timeString, $e->getTimeString());
+			Assert::assertSame($timeString, $e->getTimeString());
 		}
 	}
 
 	/**
-	 * @dataProvider validTimesProvider
-	 *
-	 * @param string $format
-	 * @param string $timeString
+	 * @return mixed[][]|\Generator
 	 */
-	public function testValidTimes(string $format, string $timeString): void
+	public function isValidTimeDataProvider(): Generator
 	{
-		$this->assertTrue(TimeFormat::isValidTime($format, $timeString));
+		foreach ($this->validTimeDataProvider() as $caseName => $caseData) {
+			yield 'valid time, ' . $caseName => [
+				'format' => $caseData['format'],
+				'timeString' => $caseData['timeString'],
+				'expectedIsValidTime' => true,
+			];
+		}
+
+		foreach ($this->invalidTimeDataProvider() as $caseName => $caseData) {
+			yield 'invalid time, ' . $caseName => [
+				'format' => $caseData['format'],
+				'timeString' => $caseData['timeString'],
+				'expectedIsValidTime' => false,
+			];
+		}
 	}
 
 	/**
-	 * @dataProvider invalidTimesProvider
+	 * @dataProvider isValidTimeDataProvider
 	 *
 	 * @param string $format
 	 * @param string $timeString
-	 * @param string $reason
+	 * @param bool $expectedIsValidTime
 	 */
-	public function testInvalidTimes(string $format, string $timeString, string $reason): void
+	public function testIsValidTime(
+		string $format,
+		string $timeString,
+		bool $expectedIsValidTime
+	): void
 	{
-		$this->assertFalse(
+		Assert::assertSame(
+			$expectedIsValidTime,
 			TimeFormat::isValidTime($format, $timeString),
-			sprintf('Expected that time %s given for format %s is invalid, because %s', $timeString, $format, $reason)
+			sprintf(
+				'Expected that time %s given for format %s is %s',
+				$timeString,
+				$format,
+				$expectedIsValidTime ? 'valid' : 'invalid'
+			)
 		);
 	}
 
 	/**
-	 * @dataProvider validTimesProvider
+	 * @dataProvider validTimeDataProvider
 	 *
 	 * @param string $format
 	 * @param string $timeString
@@ -216,8 +313,8 @@ class TimeFormatTest extends \Consistence\TestCase
 			new DateTimeZone('UTC')
 		);
 
-		$this->assertInstanceOf(DateTime::class, $time);
-		$this->assertSame(DateTime::createFromFormat(
+		Assert::assertInstanceOf(DateTime::class, $time);
+		Assert::assertSame(DateTime::createFromFormat(
 			$format,
 			$timeString,
 			new DateTimeZone('UTC')
@@ -226,17 +323,16 @@ class TimeFormatTest extends \Consistence\TestCase
 
 	public function testCreateDateTimeWithDefaultTimezone(): void
 	{
-		$this->assertInstanceOf(DateTime::class, TimeFormat::createDateTimeFromFormat('Y', '2016'));
+		Assert::assertInstanceOf(DateTime::class, TimeFormat::createDateTimeFromFormat('Y', '2016'));
 	}
 
 	/**
-	 * @dataProvider invalidTimesProvider
+	 * @dataProvider invalidTimeDataProvider
 	 *
 	 * @param string $format
 	 * @param string $timeString
-	 * @param string $reason
 	 */
-	public function testCreateInvalidDateTime(string $format, string $timeString, string $reason): void
+	public function testCreateInvalidDateTime(string $format, string $timeString): void
 	{
 		try {
 			TimeFormat::createDateTimeFromFormat(
@@ -245,14 +341,14 @@ class TimeFormatTest extends \Consistence\TestCase
 				new DateTimeZone('UTC')
 			);
 
-			$this->fail(sprintf('Exception was expected for time %s given for format %s, because %s', $timeString, $format, $reason));
+			Assert::fail(sprintf('Exception was expected for time %s given for format %s', $timeString, $format));
 		} catch (\Consistence\Time\InvalidTimeForFormatException $e) {
-			$this->assertSame($timeString, $e->getTimeString());
+			Assert::assertSame($timeString, $e->getTimeString());
 		}
 	}
 
 	/**
-	 * @dataProvider validTimesProvider
+	 * @dataProvider validTimeDataProvider
 	 *
 	 * @param string $format
 	 * @param string $timeString
@@ -265,8 +361,8 @@ class TimeFormatTest extends \Consistence\TestCase
 			new DateTimeZone('UTC')
 		);
 
-		$this->assertInstanceOf(DateTimeImmutable::class, $time);
-		$this->assertSame(DateTimeImmutable::createFromFormat(
+		Assert::assertInstanceOf(DateTimeImmutable::class, $time);
+		Assert::assertSame(DateTimeImmutable::createFromFormat(
 			$format,
 			$timeString,
 			new DateTimeZone('UTC')
@@ -275,17 +371,16 @@ class TimeFormatTest extends \Consistence\TestCase
 
 	public function testCreateDateTimeImmutableWithDefaultTimezone(): void
 	{
-		$this->assertInstanceOf(DateTimeImmutable::class, TimeFormat::createDateTimeImmutableFromFormat('Y', '2016'));
+		Assert::assertInstanceOf(DateTimeImmutable::class, TimeFormat::createDateTimeImmutableFromFormat('Y', '2016'));
 	}
 
 	/**
-	 * @dataProvider invalidTimesProvider
+	 * @dataProvider invalidTimeDataProvider
 	 *
 	 * @param string $format
 	 * @param string $timeString
-	 * @param string $reason
 	 */
-	public function testCreateInvalidDateTimeImmutable(string $format, string $timeString, string $reason): void
+	public function testCreateInvalidDateTimeImmutable(string $format, string $timeString): void
 	{
 		try {
 			TimeFormat::createDateTimeImmutableFromFormat(
@@ -294,9 +389,9 @@ class TimeFormatTest extends \Consistence\TestCase
 				new DateTimeZone('UTC')
 			);
 
-			$this->fail(sprintf('Exception was expected for time %s given for format %s, because %s', $timeString, $format, $reason));
+			Assert::fail(sprintf('Exception was expected for time %s given for format %s', $timeString, $format));
 		} catch (\Consistence\Time\InvalidTimeForFormatException $e) {
-			$this->assertSame($timeString, $e->getTimeString());
+			Assert::assertSame($timeString, $e->getTimeString());
 		}
 	}
 

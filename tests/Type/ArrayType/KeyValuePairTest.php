@@ -4,23 +4,29 @@ declare(strict_types = 1);
 
 namespace Consistence\Type\ArrayType;
 
-class KeyValuePairTest extends \Consistence\TestCase
+use PHPUnit\Framework\Assert;
+
+class KeyValuePairTest extends \PHPUnit\Framework\TestCase
 {
 
 	public function testConstruct(): void
 	{
 		$pair = new KeyValuePair(0, 'foo');
-		$this->assertInstanceOf(KeyValuePair::class, $pair);
-		$this->assertSame(0, $pair->getKey());
-		$this->assertSame('foo', $pair->getValue());
+		Assert::assertInstanceOf(KeyValuePair::class, $pair);
+		Assert::assertSame(0, $pair->getKey());
+		Assert::assertSame('foo', $pair->getValue());
 	}
 
 	public function testConstructInvalidKey(): void
 	{
-		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
-		$this->expectExceptionMessage('int|string expected');
-
-		new KeyValuePair([], 'foo');
+		try {
+			new KeyValuePair([], 'foo');
+			Assert::fail('Exception expected');
+		} catch (\Consistence\InvalidArgumentTypeException $e) {
+			Assert::assertSame([], $e->getValue());
+			Assert::assertSame('array', $e->getValueType());
+			Assert::assertSame('int|string', $e->getExpectedTypes());
+		}
 	}
 
 }
